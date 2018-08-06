@@ -1,0 +1,1 @@
+# 存放开发过程中自己写的静态资源（image, css, js等，如：shop.css, car.png, roomListUtil.js）
