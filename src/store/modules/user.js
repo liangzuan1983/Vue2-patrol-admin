@@ -55,6 +55,7 @@ const user = {
           const data = response.data
           commit('SET_USERID', data.userId)
           commit('SET_TOKEN', data.token)
+          commit('SET_NAME', data.userName)
           setToken(response.data.token)
           resolve()
         }).catch(error => {
@@ -74,10 +75,10 @@ const user = {
 
           if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
             commit('SET_ROLES', data.roles)
+            commit('SET_NAME', data.name)
           } else {
             reject('getInfo: roles must be a non-null array !')
           }
-          commit('SET_USERID', data.userId)
           // commit('SET_NAME', data.name)
           // commit('SET_AVATAR', data.avatar)
           // commit('SET_INTRODUCTION', data.introduction)
@@ -105,7 +106,7 @@ const user = {
     // 登出
     LogOut({ commit, state }) {
       return new Promise((resolve, reject) => {
-        logout(state.token).then(() => {
+        logout().then(() => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           removeToken()

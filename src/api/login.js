@@ -1,6 +1,6 @@
 import request from '@/utils/request'
-import md5 from 'md5-node'
-import qs from 'qs'
+import md5 from 'md5-node' // rule: the password must be encrypted with MD5
+import qs from 'qs' // submit as formData for Example: a=1&b=3&c=aaa
 
 export function loginByUsername(username, password) {
   const login_data = {
@@ -17,14 +17,14 @@ export function loginByUsername(username, password) {
 
 export function logout() {
   return request({
-    url: '/login/logout',
-    method: 'post'
+    url: '/api/logout',
+    method: 'delete'
   })
 }
 
 export function getUserInfo(token) {
   return request({
-    url: '/api/getInfo',
+    url: '/api/getRoles',
     method: 'get',
     params: { token }
   })

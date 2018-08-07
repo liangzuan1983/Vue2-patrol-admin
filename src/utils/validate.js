@@ -41,3 +41,12 @@ export function validateEmail(email) {
   return re.test(email)
 }
 
+/**
+ * validate hostname
+ * @param ip
+ * @return {boolean}
+ */
+export function validateIP(ip) {
+  const re = /^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){3}$/
+  return re.test(ip)
+}

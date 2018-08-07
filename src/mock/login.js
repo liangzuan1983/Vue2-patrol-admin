@@ -1,4 +1,4 @@
-import { param2Obj, getQueryObject } from '@/utils'
+import { getQueryObject } from '@/utils'
 // import querystring from 'querystring'
 
 const userMap = {
@@ -23,7 +23,7 @@ const userMap = {
       userId: 4
     }
   },
-  '4-adsadasdasddad': {
+  'token': {
     'ret': 1,
     'data': {
       'userId': 4,
@@ -38,9 +38,9 @@ export default {
     return userMap[username]
   },
   getUserInfo: config => {
-    const { token } = param2Obj(config.url)
-    if (userMap[token]) {
-      return userMap[token]
+    // const { token } = param2Obj(config.url)
+    if (userMap['token']) {
+      return userMap['token']
     } else {
       return false
     }
