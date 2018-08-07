@@ -38,6 +38,9 @@ export default {
         }
       }
     },
+    /**
+     * calculate the offsetLeft of the scrollPane, and animate to it
+     */
     moveToTarget($target) {
       const $container = this.$refs.scrollContainer
       const $containerWidth = $container.offsetWidth

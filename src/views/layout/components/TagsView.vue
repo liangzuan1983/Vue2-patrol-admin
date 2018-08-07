@@ -1,8 +1,13 @@
 <template>
   <div class="tags-view-container">
     <scroll-pane class='tags-view-wrapper' ref='scrollPane'>
-      <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)"
-        :to="tag" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
+      <router-link 
+        ref='tag' 
+        class="tags-view-item" 
+        v-for="tag in Array.from(visitedViews)" 
+        :class="isActive(tag)?'active':''" 
+        :to="tag" :key="tag.path" 
+        @contextmenu.prevent.native="openMenu(tag,$event)">
         {{generateTitle(tag.title)}}
         <span class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
       </router-link>
@@ -70,6 +75,7 @@ export default {
     },
     moveToCurrentTag() {
       const tags = this.$refs.tag
+      // after the tagview is created, go into the new target
       this.$nextTick(() => {
         for (const tag of tags) {
           if (tag.to.path === this.$route.path) {

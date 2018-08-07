@@ -19,7 +19,7 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" src="/src/assets/images/native/avatar.gif">
+          <img class="user-avatar" src="/src/assets/images/native/avatar-logo.png">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -115,7 +115,8 @@ export default {
         .user-avatar {
           width: 40px;
           height: 40px;
-          border-radius: 10px;
+          border-radius: 50%;
+          background-color: #40c4d6
         }
         .el-icon-caret-bottom {
           position: absolute;
