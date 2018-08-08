@@ -14,38 +14,38 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="告警类型">
+      <el-table-column align="center" label="告警代码">
         <template slot-scope="scope">
           <span>{{scope.row.alarmType}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="默认图片" width="250px">
+      <!-- <el-table-column align="center" label="默认图片" width="250px">
         <template slot-scope="scope">
           <span>{{scope.row.defaultPic}}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" label="告警等级">
         <template slot-scope="scope">
-          <svg-icon v-for="n in +scope.row.alarmLevel" icon-class="star" class="meta-item__icon" v-bind:class="{ 'icon-error': +scope.row.alarmLevel === 3 }" :key="n"></svg-icon>
+          <svg-icon v-for="n in +scope.row.alarmLevel" icon-class="star" class="meta-item__icon" v-bind:class="scope.row.alarmLevel | alarmLevelClass" :key="n"></svg-icon>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="有效时长">
+      <el-table-column align="center" label="有效时长（s）">
         <template slot-scope="scope">
           <span>{{scope.row.effectiveTime}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="显示图标">
+      <el-table-column align="center" label="显示图标" width="90px">
         <template slot-scope="scope">
-          <svg-icon v-if="scope.row.iconDisplay" :icon-class="scope.row.iconDisplay" class="meta-item__icon"></svg-icon>
+          <svg-icon v-if="scope.row.iconDisplay" :icon-class="scope.row.iconDisplayClass" class="meta-item__icon"></svg-icon>
           <span v-else>暂无图标</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="联动低点距离">
+      <el-table-column align="center" label="联动低点距离（m）" width="150px">
         <template slot-scope="scope">
           <span>{{scope.row.linkageDistance}}</span>
         </template>
@@ -88,44 +88,47 @@
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="closeOnClickModel" width="600px">
-      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="100px" style="width: 450px; margin-left:50px;">
+      <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="告警名称" prop="alarmName">
           <el-input v-model.trim="temp.alarmName"></el-input>
         </el-form-item>
-        <el-form-item label="告警类型" prop="alarmType">
+        <el-form-item label="告警代码" prop="alarmType">
           <el-input v-model.number="temp.alarmType" type="number"></el-input>
         </el-form-item>
 
-        <el-form-item label="默认图片" prop="defaultPic">
+        <!-- <el-form-item label="默认图片" prop="defaultPic">
           <el-input v-model.trim="temp.defaultPic"></el-input>
+        </el-form-item> -->
+
+        <el-form-item label="告警等级" prop="alarmLevel">
+          <el-rate style="margin-top:8px;" 
+          v-model="temp.alarmLevel" 
+          :colors="alarmLevelOption.colors"
+          :low-threshold="1" 
+          :high-threshold="3" 
+          :max='3'
+          show-text
+          :texts="alarmLevelOption.texts"
+          :text-color="alarmLevelOption.textColor"></el-rate>
+        </el-form-item>
+       
+        <el-form-item label="告警图标" prop="iconDisplay"> 
+          <el-select class="filter-item" v-model="temp.iconDisplay" placeholder="请选择" >
+            <el-option v-for="item in alarmIconOption" :key="item.key" :label="item.iconClass" :value="item.key">
+              <svg-icon :icon-class="item.iconClass"></svg-icon>
+            </el-option>
+          </el-select>
+          <svg-icon v-if="temp.iconDisplay" :icon-class="iconDisplayClass"></svg-icon>
         </el-form-item>
 
-        <el-row>
-          <el-col :span="10">
-            <el-form-item label="告警等级" prop="alarmLevel">
-              <el-select class="filter-item" v-model="temp.alarmLevel" placeholder="请选择">
-                <el-option v-for="item in alarmLevelOption" :key="item.key" :label="item.label" :value="item.key">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12" :offset="2">
-            <el-form-item label="告警图标" prop="iconDisplay"> 
-              <el-select class="filter-item" v-model="temp.iconDisplay" placeholder="请选择">
-                <el-option v-for="item in alarmIconOption" :key="item.key" :label="item.iconClass" :value="item.key">
-                  <svg-icon :icon-class="item.iconClass"></svg-icon>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-
         <el-form-item label="有效时长" prop="effectiveTime">
-          <el-input v-model.number="temp.effectiveTime" type="number" placeholder="单位为秒（s）"></el-input>
+          <el-input v-model.number="temp.effectiveTime">
+            <span slot="suffix">单位：秒</span>
+          </el-input>
         </el-form-item>
 
          <el-form-item label="联动低点距离" prop="linkageDistance">
-          <el-input v-model.trim="temp.linkageDistance"></el-input>
+          <el-input v-model.trim="temp.linkageDistance"><span slot="suffix">单位：米</span></el-input>
         </el-form-item>
 
           <p>温馨提示：&nbsp;&nbsp;<font class="icon-success">绿色</font>&nbsp;代表<q>启动</q>，<font class="icon-default">浅灰色</font>&nbsp;代表<q>关闭</q></p>
@@ -207,6 +210,7 @@ export default {
         defaultPic: '',
         effectiveTime: null,
         iconDisplay: null,
+        iconDisplayClass: null,
         linkage: 0,
         linkageDistance: null,
         linkageRobot: 0,
@@ -219,11 +223,11 @@ export default {
         update: '编辑',
         create: '创建'
       },
-      alarmLevelOption: [
-        { key: 1, label: '1' },
-        { key: 2, label: '2' },
-        { key: 3, label: '3' }
-      ],
+      alarmLevelOption: {
+        colors: ['#67C23A', '#E6A23C', '#F56C6C'],
+        texts: ['正常', '警告', '严重'],
+        textColor: '#909399'
+      },
       alarmIconOption: [
         { key: 1, iconClass: 'alarm' },
         { key: 2, iconClass: 'component' },
@@ -236,18 +240,28 @@ export default {
       rules: {
         alarmLevel: [{ required: true, message: '告警等级不为空', trigger: 'blur' }],
         alarmType: [{ required: true, message: '告警类型不能为空', trigger: 'blur' }],
-        effectiveTime: [{ required: true, message: '有效时长不能为空', trigger: 'blur' }]
+        effectiveTime: [
+          { required: true, message: '有效时长不能为空', trigger: 'blur' },
+          { type: 'number', message: '只能为数字', trigger: 'blur' }]
       }
     }
   },
+  // can not use this
   filters: {
     handleSwitch(bool) {
       if (+bool === 1) {
         return 'el-icon-success icon-success'
       }
       return 'el-icon-error icon-error'
+    },
+    alarmLevelClass(level) {
+      return {
+        'icon-error': +level === 3,
+        'icon-warm': +level === 2,
+        'icon-success': +level === 1
+      }
     }
-  }, // can not use this
+  },
   created() {
     this.getList()
   },
@@ -309,7 +323,7 @@ export default {
       })
     },
     handleUpdate(row) {
-      this.temp = this.handleIconDispaly(Object.assign({}, row), 'reverse') // copy obj
+      this.temp = Object.assign({}, row) // copy obj
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -359,23 +373,6 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
-    },
-    handleIconDispaly(obj, type) {
-      this.alarmIconOption.find((item) => {
-        if (type === 'reverse') {
-          if (item.iconClass === obj.iconDisplay) {
-            obj.iconDisplay = +item.key
-            return true
-          }
-        } else {
-          if (+item.key === +obj.iconDisplay) {
-            obj.iconDisplay = item.iconClass
-            return true
-          }
-        }
-        return false
-      })
-      return obj
     }
   },
   computed: {
@@ -383,9 +380,29 @@ export default {
       if (Array.isArray(this.list) && this.list.length > 0) {
         return this.list.map((key) => {
           const obj = Object.assign({}, key)
-          return this.handleIconDispaly(obj)
+          this.alarmIconOption.find((item) => {
+            if (+item.key === +obj.iconDisplay) {
+              obj.iconDisplayClass = item.iconClass
+              return true
+            }
+            return false
+          })
+          return obj
         })
       }
+    },
+    iconDisplayClass() {
+      const res = this.alarmIconOption.find((item) => {
+        if (+item.key === this.temp.iconDisplay) {
+          this.temp.iconDisplayClass = item.iconClass
+          return true
+        }
+        return false
+      })
+      if (res) {
+        return res.iconClass
+      }
+      return ''
     }
   }
 }
@@ -397,6 +414,9 @@ export default {
   }
   .icon-success {
     color: #67C23A !important;
+  }
+  .icon-warm {
+    color: #E6A23C !important;
   }
   .icon-default {
     color: #909399;

@@ -55,16 +55,17 @@ export const asyncRouterMap = [
     redirect: '/common-controller/subSystemConfig',
     name: 'common-controller',
     alwaysShow: true,
-    meta: { title: '基础配置', icon: 'configuration' },
+    meta: { title: 'common-controller', icon: 'configuration' },
     children: [
-      { path: 'subSystemConfig', component: () => import('@/views/common-controller/subSystemConfig'), name: 'subSystemConfig', meta: { title: '子系统配置' }}
+      { path: 'subSystemConfig', component: () => import('@/views/common-controller/subSystemConfig'), name: 'subSystemConfig', meta: { title: 'subSystemConfig' }}
+      // { path: 'subSystemConfig', component: () => import('@/views/common-controller/subSystemConfig'), name: 'subSystemConfig', meta: { title: 'subSystemConfig' }}
     ]
   },
   {
     path: '/alarm-controller',
     component: Layout,
     redirect: '/alarm-controller/alarmConfig',
-    children: [{ path: 'alarmConfig', component: () => import('@/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: '告警配置', icon: 'alarm', noCache: false }}]
+    children: [{ path: 'alarmConfig', component: () => import('@/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: 'alarmConfig', icon: 'alarm', noCache: false }}]
   },
   // {
   //   path: '/nested',

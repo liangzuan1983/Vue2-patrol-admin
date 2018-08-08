@@ -60,7 +60,12 @@ export default {
     exportZip: 'Export Zip',
     theme: 'Theme',
     clipboardDemo: 'Clipboard',
-    i18n: 'I18n'
+    i18n: 'I18n',
+
+    // 自定义业务
+    'common-controller': 'BasicConfig',
+    subSystemConfig: 'SubSystemConfig',
+    alarmConfig: 'AlarmConfig'
   },
   navbar: {
     logOut: 'Log Out',

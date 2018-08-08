@@ -1,6 +1,7 @@
 import Mock from 'mockjs'
-// import loginAPI from './login'
-// import common from './common-controller'
+import loginAPI from './login'
+import common from './common-controller'
+import alarm from './alarm-controller'
 // import articleAPI from './article'
 // import remoteSearchAPI from './remoteSearch'
 // import transactionAPI from './transaction'
@@ -10,21 +11,10 @@ import Mock from 'mockjs'
 // })
 
 // 登录相关
-// Mock.mock(/\/api\/login/, 'post', loginAPI.loginByUsername)
-// Mock.mock(/\/login\/logout/, 'post', loginAPI.logout)
-// Mock.mock(/\/api\/getInfo/, 'get', loginAPI.getUserInfo)
-// Mock.mock(/\/api\/selectSubSystemConfig/, 'get', common.selectSubSystemConfig)
-// 文章相关
-// Mock.mock(/\/article\/list/, 'get', articleAPI.getList)
-// Mock.mock(/\/article\/detail/, 'get', articleAPI.getArticle)
-// Mock.mock(/\/article\/pv/, 'get', articleAPI.getPv)
-// Mock.mock(/\/article\/create/, 'post', articleAPI.createArticle)
-// Mock.mock(/\/article\/update/, 'post', articleAPI.updateArticle)
-
-// 搜索相关
-// Mock.mock(/\/search\/user/, 'get', remoteSearchAPI.searchUser)
-
-// 账单相关
-// Mock.mock(/\/transaction\/list/, 'get', transactionAPI.getList)
+Mock.mock(/\/api\/login/, 'post', loginAPI.loginByUsername)
+Mock.mock(/\/login\/logout/, 'post', loginAPI.logout)
+Mock.mock(/\/api\/getRoles/, 'get', loginAPI.getUserInfo)
+Mock.mock(/\/api\/selectSubSystemConfig/, 'get', common.selectSubSystemConfig)
+Mock.mock(/\/api\/selectAlarmConfig/, 'get', alarm.selectAlarmConfig)
 
 export default Mock

@@ -7,7 +7,7 @@
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">添加</el-button>
     </div>
 
-    <el-table :data="list" v-loading="listLoading" border fit highlight-current-row style="width: 100%">
+    <el-table :data="handleList" v-loading="listLoading" border fit highlight-current-row style="width: 100%">
 
       <el-table-column align="center" label="子系统名称">
         <template slot-scope="scope">
@@ -122,6 +122,14 @@ export default {
       }
       callback()
     }
+
+    var _validatePort = (rule, value, callback) => {
+      if (+value > 65535) {
+        callback(new Error('端口号不能超出65535'))
+      }
+      callback()
+    }
+
     return {
       list: null,
       listLoading: true,
@@ -156,7 +164,8 @@ export default {
           { validator: _validateIP, trigger: 'blur' }],
         systemPort: [
           { required: true, message: '子系统端口不能为空', trigger: 'blur' },
-          { type: 'number', message: '只能为数字', trigger: 'blur' }]
+          { type: 'number', message: '只能为数字', trigger: 'blur' },
+          { validator: _validatePort, trigger: 'blur' }]
       }
     }
   },
@@ -264,6 +273,15 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
+    }
+  },
+  computed: {
+    handleList() {
+      if (!this.list) return
+      for (const i of this.list) {
+        i.systemPort = +i.systemPort
+      }
+      return this.list
     }
   }
 }
