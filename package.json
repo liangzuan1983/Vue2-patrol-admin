@@ -1,5 +1,5 @@
 {
-  "name": "patrolSystem",
+  "name": "patrol-system",
   "version": "1.0.0",
   "description": "based on vue admin.",
   "author": "LKen",
@@ -27,7 +27,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/LKen/Vue2-patrol-admin.git"
   },
   "bugs": {
     "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
