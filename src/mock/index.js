@@ -10,11 +10,16 @@ import alarm from './alarm-controller'
 //   timeout: '350-600'
 // })
 
-// 登录相关
+/* about login module */
 Mock.mock(/\/api\/login/, 'post', loginAPI.loginByUsername)
 Mock.mock(/\/login\/logout/, 'post', loginAPI.logout)
 Mock.mock(/\/api\/getRoles/, 'get', loginAPI.getUserInfo)
+
+// about subSystem module
 Mock.mock(/\/api\/selectSubSystemConfig/, 'get', common.selectSubSystemConfig)
+
+// about alarm module
 Mock.mock(/\/api\/selectAlarmConfig/, 'get', alarm.selectAlarmConfig)
+Mock.mock(/\/api\/selectAlarm/, 'get', alarm.selectAlarm)
 
 export default Mock

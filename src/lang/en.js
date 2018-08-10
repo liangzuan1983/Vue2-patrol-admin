@@ -61,11 +61,14 @@ export default {
     theme: 'Theme',
     clipboardDemo: 'Clipboard',
     i18n: 'I18n',
-
     // 自定义业务
     'common-controller': 'BasicConfig',
+    'alarm-controller': 'AlarmConfig',
     subSystemConfig: 'SubSystemConfig',
-    alarmConfig: 'AlarmConfig'
+    alarmConfig: 'AlarmConfig',
+    calibration: 'Calibration',
+    alarmMap: 'AlarmMap',
+    alarmSearch: 'AlarmSearch'
   },
   navbar: {
     logOut: 'Log Out',

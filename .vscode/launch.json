@@ -8,25 +8,25 @@
       "type": "chrome",
       "request": "launch",
       "name": "Vue Launch",
-      "url": "http://localhost:9527/#/dashboard",
+      "url": "http://localhost:9527/#/*",
       "webRoot": "${workspaceFolder}/src",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
         "webpack:///src/*": "${webRoot}/*"
       }
+    },
+    {
+      "type": "chrome",
+      "request": "attach",
+      "name": "Vue to Attach",
+      "port": 9222,
+      "webRoot": "${workspaceRoot}/src",
+      "url": "http://*:9527/#/*",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///src/*": "${webRoot}/*"
+      }
     }
-    // {
-    //   "type": "chrome",
-    //   "request": "attach",
-    //   "name": "Vue to Attach",
-    //   "port": 9222,
-    //   "webRoot": "${workspaceRoot}/src",
-    //   "url": "http://localhost:9527/#/*",
-    //   "sourceMaps": true,
-    //   "sourceMapPathOverrides": {
-    //     "webpack:///src/*": "${webRoot}/*"
-    //   }
-    // }
     // {
     //   "type": "chrome",
     //   "request": "attach",

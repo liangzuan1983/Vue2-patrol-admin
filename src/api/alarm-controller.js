@@ -34,3 +34,11 @@ export function deleteAlarmConfig(data) {
   })
 }
 
+export function selectAlarm(params) {
+  return request({
+    url: '/api/selectAlarm',
+    method: 'get',
+    params
+  })
+}
+

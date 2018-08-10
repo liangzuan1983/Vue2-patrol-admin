@@ -58,14 +58,37 @@ export const asyncRouterMap = [
     meta: { title: 'common-controller', icon: 'configuration' },
     children: [
       { path: 'subSystemConfig', component: () => import('@/views/common-controller/subSystemConfig'), name: 'subSystemConfig', meta: { title: 'subSystemConfig' }}
-      // { path: 'subSystemConfig', component: () => import('@/views/common-controller/subSystemConfig'), name: 'subSystemConfig', meta: { title: 'subSystemConfig' }}
     ]
   },
   {
     path: '/alarm-controller',
     component: Layout,
     redirect: '/alarm-controller/alarmConfig',
-    children: [{ path: 'alarmConfig', component: () => import('@/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: 'alarmConfig', icon: 'alarm', noCache: false }}]
+    name: 'alarm-controller',
+    meta: { title: 'alarm-controller', icon: 'alarm' },
+    children: [
+      { path: 'alarmConfig', component: () => import('@/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: 'alarmConfig', noCache: false }},
+      { path: 'alarmSearch', component: () => import('@/views/alarm-controller/alarmSearch'), name: 'alarmSearch', meta: { title: 'alarmSearch', noCache: false }}
+    ]
+  },
+  {
+    path: '/charts',
+    component: Layout,
+    redirect: '/charts/alarmMap',
+    name: 'charts',
+    alwaysShow: true,
+    meta: { title: 'charts', icon: 'map' },
+    children: [{ path: 'alarmMap', component: () => import('@/views/charts/alarmMap'), name: 'alarmMap', meta: { title: 'alarmMap', noCache: true }}]
+  },
+  {
+    path: '/icon',
+    component: Layout,
+    children: [{
+      path: 'index',
+      component: () => import('@/views/svg-icons/index'),
+      name: 'icons',
+      meta: { title: 'icons', icon: 'icon', noCache: true }
+    }]
   },
   // {
   //   path: '/nested',

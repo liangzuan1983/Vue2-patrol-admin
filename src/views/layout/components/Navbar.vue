@@ -5,13 +5,13 @@
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
     <div class="right-menu">
-      <!-- <error-log class="errLog-container right-menu-item"></error-log>
+      <!-- <error-log class="errLog-container right-menu-item"></error-log> -->
 
-      <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
+      <!-- <el-tooltip effect="dark" :content="$t('navbar.screenfull')" placement="bottom">
         <screenfull class="screenfull right-menu-item"></screenfull>
-      </el-tooltip>
+      </el-tooltip> -->
 
-      <lang-select class="international right-menu-item"></lang-select>
+      <!-- <lang-select class="international right-menu-item"></lang-select>
 
       <el-tooltip effect="dark" :content="$t('navbar.theme')" placement="bottom">
         <theme-picker class="theme-switch right-menu-item"></theme-picker>
@@ -40,6 +40,7 @@
 <script>
 import avatarLogo from '@/assets/images/native/avatar-logo.png'
 import { mapGetters } from 'vuex'
+// import Screenfull from '@/components/Screenfull'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
@@ -53,6 +54,7 @@ export default {
   components: {
     Breadcrumb,
     Hamburger,
+    // Screenfull,
     ErrorLog
   },
   computed: {

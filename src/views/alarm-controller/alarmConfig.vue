@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="告警类型" v-model="listQuery.alarmType">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="告警代码" v-model="listQuery.alarmType">
       </el-input>
       <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
       <el-button class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="el-icon-edit">添加</el-button>
@@ -45,12 +45,6 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="联动低点距离（m）" width="150px">
-        <template slot-scope="scope">
-          <span>{{scope.row.linkageDistance}}</span>
-        </template>
-      </el-table-column>
-
       <el-table-column align="center" label="必须确认">
         <template slot-scope="scope">
           <i :class="scope.row.mustConfirm | handleSwitch"></i>
@@ -68,6 +62,13 @@
           <i :class="scope.row.linkage | handleSwitch"></i>
         </template>
       </el-table-column>
+
+      <el-table-column align="center" label="联动低点距离（m）" width="150px">
+        <template slot-scope="scope">
+          <span>{{scope.row.linkageDistance ? scope.row.linkageDistance : 0}}</span>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="联动机器人">
         <template slot-scope="scope">
           <i :class="scope.row.linkageRobot | handleSwitch"></i>
@@ -128,7 +129,7 @@
         </el-form-item>
 
          <el-form-item label="联动低点距离" prop="linkageDistance">
-          <el-input v-model.trim="temp.linkageDistance"><span slot="suffix">单位：米</span></el-input>
+          <el-input v-model.trim="temp.linkageDistance" :disabled="+temp.linkage !== 1"><span slot="suffix">单位：米</span></el-input>
         </el-form-item>
 
           <p>温馨提示：&nbsp;&nbsp;<font class="icon-success">绿色</font>&nbsp;代表<q>启动</q>，<font class="icon-default">浅灰色</font>&nbsp;代表<q>关闭</q></p>
@@ -409,16 +410,20 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  $ERROR: #F56C6C;
+  $SUCCESS: #67C23A;
+  $WARM: #E6A23C;
+  $DEFAULT: #909399;
   .icon-error {
-    color: #F56C6C !important;
+    color: $ERROR !important;
   }
   .icon-success {
-    color: #67C23A !important;
+    color: $SUCCESS !important;
   }
   .icon-warm {
-    color: #E6A23C !important;
+    color: $WARM !important;
   }
   .icon-default {
-    color: #909399;
+    color: $DEFAULT;
   }
 </style>
