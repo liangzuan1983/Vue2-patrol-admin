@@ -65,11 +65,14 @@ export default {
     // 自定义业务
     'common-controller': '基础配置',
     'alarm-controller': '告警',
+    'gate-machine-controller': '门岗',
     subSystemConfig: '子系统配置',
     alarmConfig: '告警配置',
     calibration: '人员标定',
     alarmMap: '告警地图',
-    alarmSearch: '告警查询'
+    alarmSearch: '告警查询',
+
+    gateSearch: '门岗查询'
   },
   navbar: {
     logOut: '退出登录',

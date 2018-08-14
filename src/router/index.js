@@ -81,6 +81,16 @@ export const asyncRouterMap = [
     children: [{ path: 'alarmMap', component: () => import('@/views/charts/alarmMap'), name: 'alarmMap', meta: { title: 'alarmMap', noCache: true }}]
   },
   {
+    path: '/gate-machine-controller',
+    name: 'gate-machine-controller',
+    component: Layout,
+    redirect: '/gate-machine-controller/gateSearch',
+    meta: { title: 'gate-machine-controller', icon: 'alarm' },
+    children: [
+      { path: 'gateSearch', component: () => import('@/views/gate-machine-controller/gateSearch'), name: 'gateSearch', meta: { title: 'gateSearch', icon: 'gate', noCache: false }}
+    ]
+  },
+  {
     path: '/icon',
     component: Layout,
     children: [{

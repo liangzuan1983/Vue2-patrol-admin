@@ -64,11 +64,13 @@ export default {
     // 自定义业务
     'common-controller': 'BasicConfig',
     'alarm-controller': 'AlarmConfig',
+    'gate-machine-controller': 'GateMachineController',
     subSystemConfig: 'SubSystemConfig',
     alarmConfig: 'AlarmConfig',
     calibration: 'Calibration',
     alarmMap: 'AlarmMap',
-    alarmSearch: 'AlarmSearch'
+    alarmSearch: 'AlarmSearch',
+    gateSearch: 'GateSearch'
   },
   navbar: {
     logOut: 'Log Out',

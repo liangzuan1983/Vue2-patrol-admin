@@ -2,33 +2,30 @@
   <div class="app-container">
     <div class="filter-container">
       <div class="inline-timePick">
-        <span style="margin-right: 10px">开始时间段</span>
+        <span class="demonstration">开始时刻</span>
         <el-date-picker
           style="margin: 0 15px"
-          v-model="alarmStartPeriod"
-          type="datetimerange"
+          v-model="listQuery.alarmStartTimeBegin"
+          type="datetime"
+          placeholder="选择日期时间"
+          align="right"
           :picker-options="pickerOptions"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          align="center">
+          value-format='yyyy-MM-dd hh:mm:ss'>
         </el-date-picker>
       </div>
-
       <div class="inline-timePick">
-        <span style="margin-right: 10px">结束时间段</span>
+        <span class="demonstration">结束时刻</span>
         <el-date-picker
           style="margin: 0 15px"
-          v-model="alarmEndPeriod"
-          type="datetimerange"
+          v-model="listQuery.alarmStartTimeEnd"
+          type="datetime"
+          placeholder="选择日期时间"
+          align="right"
           :picker-options="pickerOptions"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          align="center">
+          value-format='yyyy-MM-dd hh:mm:ss'>
         </el-date-picker>
       </div>
-
+      
       <el-select v-model="listQuery.alarmType" v-loading="alarmTypeListLoading" filterable placeholder="请选择告警代码" class="filter-item" @change="handleFilter">
         <el-option
           v-for="item in alarmTypeAutoComplete"
@@ -37,11 +34,11 @@
           :value="item.value">
         </el-option>
       </el-select>
-
-      <el-button class="filter-item" type="primary" v-waves icon="el-icon-search" @click="handleFilter">搜索</el-button>
+      <el-button style="margin-left: 10px" class="filter-item" type="primary" size="" v-waves icon="el-icon-search" @click.native="handleFilter">搜索</el-button>
     </div>
 
     <div class="filter-container" style="padding-bottom: 35px">
+        <el-button style="float: right;margin-left: 10px" class="filter-item" type="success" size="small" v-waves @click.native="handleExcel"><svg-icon style="margin-right: 5px" icon-class="excel" />导出Excel</el-button>
         <el-radio-group
           style="" v-model="listQuery.unclosed" text-color="#67C23A" fill="#67C23A" @change="handleFilter">
           <el-radio :label="null">全选</el-radio>
@@ -117,12 +114,12 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="操作" fixed="right" width="200px">
+      <!-- <el-table-column align="center" label="操作" fixed="right" width="200px">
         <template slot-scope="scope">
           <el-button type="primary" @click='handleUpdate(scope.row)' size="small" icon="el-icon-edit">编辑</el-button>
           <el-button type="danger" @click="handleDelete(scope.$index, scope.row)" size="small" icon="el-icon-delete">删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <div class="pagination-container">
@@ -144,15 +141,11 @@ export default {
   data() {
     return {
       list: null,
-      alarmTypeList: null,
       listLoading: true,
-      alarmTypeListLoading: true,
       total: null,
-      alarmStartPeriod: '',
-      alarmEndPeriod: '',
       listQuery: {
         page: 1, // 当前页码
-        limit: 20,
+        limit: 10,
         unclosed: null,
         alarmType: undefined,
         alarmLevel: 1,
@@ -161,6 +154,10 @@ export default {
         alarmStopTimeBegin: null,
         alarmStopTimeEnd: null
       },
+      alarmTypeList: null,
+      alarmTypeListLoading: true,
+      alarmStartPeriod: '',
+      alarmEndPeriod: '',
       alarmLevelOption: {
         colors: ['#67C23A', '#E6A23C', '#F56C6C'],
         texts: ['正常', '警告', '严重'],
@@ -170,26 +167,23 @@ export default {
         shortcuts: [{
           text: '最近一周',
           onClick(picker) {
-            const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+            picker.$emit('pick', start)
           }
         }, {
           text: '最近一个月',
           onClick(picker) {
-            const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-            picker.$emit('pick', [start, end])
+            picker.$emit('pick', start)
           }
         }, {
           text: '最近三个月',
           onClick(picker) {
-            const end = new Date()
             const start = new Date()
             start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-            picker.$emit('pick', [start, end])
+            picker.$emit('pick', start)
           }
         }]
       }
@@ -229,22 +223,21 @@ export default {
       })
     },
     handleFilter() {
-      const { alarmStartPeriod, alarmEndPeriod, handleTimeFormat } = this
       this.listQuery.page = 1
-      handleTimeFormat(alarmStartPeriod, 'start') & handleTimeFormat(alarmEndPeriod, 'end')
       this.getList()
     },
-    handleTimeFormat(time, type) {
-      if (Array.isArray(time) && time.length > 0) {
-        if (type === 'start') {
-          this.listQuery.alarmStartTimeBegin = parseTime(time[0])
-          this.listQuery.alarmStartTimeEnd = parseTime(time[1])
-        } else {
-          this.listQuery.alarmStopTimeBegin = parseTime(time[0])
-          this.listQuery.alarmStopTimeEnd = parseTime(time[1])
-        }
-      }
-    },
+    // handleTimeFormat(time, type) {
+    //   console.log(time)
+    //   if (Array.isArray(time) && time.length > 0) {
+    //     if (type === 'start') {
+    //       this.listQuery.alarmStartTimeBegin = parseTime(time[0])
+    //       this.listQuery.alarmStartTimeEnd = parseTime(time[1])
+    //     } else {
+    //       this.listQuery.alarmStopTimeBegin = parseTime(time[0])
+    //       this.listQuery.alarmStopTimeEnd = parseTime(time[1])
+    //     }
+    //   }
+    // },
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
@@ -252,6 +245,9 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
+    },
+    handleExcel() {
+      return true
     }
   },
   computed: {
@@ -261,6 +257,7 @@ export default {
       const ac = alarmTypeList.map((item) => {
         return { label: item.alarmName, value: item.alarmType, id: item.id }
       })
+      ac.splice(0, 0, { label: '全部', value: null, id: '-1' })
       // 去重
       var r = []
       for (var i = 0, l = ac.length; i < l; i++) {

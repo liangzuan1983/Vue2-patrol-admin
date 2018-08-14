@@ -2,9 +2,7 @@ import Mock from 'mockjs'
 import loginAPI from './login'
 import common from './common-controller'
 import alarm from './alarm-controller'
-// import articleAPI from './article'
-// import remoteSearchAPI from './remoteSearch'
-// import transactionAPI from './transaction'
+import gate from './gate-machine-controller'
 
 // Mock.setup({
 //   timeout: '350-600'
@@ -21,5 +19,7 @@ Mock.mock(/\/api\/selectSubSystemConfig/, 'get', common.selectSubSystemConfig)
 // about alarm module
 Mock.mock(/\/api\/selectAlarmConfig/, 'get', alarm.selectAlarmConfig)
 Mock.mock(/\/api\/selectAlarm/, 'get', alarm.selectAlarm)
+
+Mock.mock(/\/api\/selectPassPersonInfo/, 'get', gate.selectPassPersonInfo)
 
 export default Mock
