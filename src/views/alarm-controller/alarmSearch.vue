@@ -38,7 +38,13 @@
     </div>
 
     <div class="filter-container" style="padding-bottom: 35px">
-        <el-button style="float: right;margin-left: 10px" class="filter-item" type="success" size="small" v-waves @click.native="handleExcel"><svg-icon style="margin-right: 5px" icon-class="excel" />导出Excel</el-button>
+        <el-button 
+        style="float: right;margin-left: 10px" 
+        class="filter-item" 
+        type="success" 
+        size="small" 
+        :loading="downloadLoading" 
+        v-waves @click.native="handleExcel"><svg-icon style="margin-right: 5px" icon-class="excel" />导出Excel</el-button>
         <el-radio-group
           style="" v-model="listQuery.unclosed" text-color="#67C23A" fill="#67C23A" @change="handleFilter">
           <el-radio :label="null">全选</el-radio>
@@ -131,8 +137,8 @@
 
 <script>
 import { selectAlarm, selectAlarmConfig } from '@/api/alarm-controller'
+import { parseTime, CapitalizeFirstLetter } from '@/utils'
 import waves from '@/directive/waves'
-import { parseTime } from '@/utils'
 export default {
   name: 'alarmSearch',
   directives: {
@@ -186,7 +192,10 @@ export default {
             picker.$emit('pick', start)
           }
         }]
-      }
+      },
+      downloadLoading: false,
+      filename: '告警查询',
+      autoWidth: true
     }
   },
   filters: {
@@ -226,18 +235,6 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    // handleTimeFormat(time, type) {
-    //   console.log(time)
-    //   if (Array.isArray(time) && time.length > 0) {
-    //     if (type === 'start') {
-    //       this.listQuery.alarmStartTimeBegin = parseTime(time[0])
-    //       this.listQuery.alarmStartTimeEnd = parseTime(time[1])
-    //     } else {
-    //       this.listQuery.alarmStopTimeBegin = parseTime(time[0])
-    //       this.listQuery.alarmStopTimeEnd = parseTime(time[1])
-    //     }
-    //   }
-    // },
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
@@ -247,7 +244,29 @@ export default {
       this.getList()
     },
     handleExcel() {
-      return true
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const field = ['id', 'alarmName', 'alarmType', 'alarmLevel', 'alarmValue', 'alarmBeginTime', 'alarmEndTime', 'confirmComment', 'sn', 'sourceSystemCode']
+        const list = this.list
+
+        const data = this.formatJson(field, list)
+        excel.export_json_to_excel({
+          header: field.map((key) => { return CapitalizeFirstLetter(key) }),
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'alarmBeginTime' || j === 'alarmEndTime') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     }
   },
   computed: {
@@ -273,36 +292,36 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  $ERROR: #F56C6C;
-  $SUCCESS: #67C23A;
-  $WARM: #E6A23C;
-  .inline-timePick {
-    display: inline-block;
-    margin-bottom: 10px;
-    vertical-align: middle;
-  }
-  .search-alarmLevel {
-    display: inline-flex;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    -ms-justify-content: center;
-    -webkit-justify-content: center;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    margin-left: 25px;
-    vertical-align: middle;
-    font-size: 14px;
-    line-height: 20px;
-    height: 20px;
-  }
-  .icon-error {
-    color: $ERROR !important;
-  }
-  .icon-success {
-    color: $SUCCESS !important;
-  }
-  .icon-warm {
-    color: $WARM !important;
-  }
+$ERROR: #F56C6C;
+$SUCCESS: #67C23A;
+$WARM: #E6A23C;
+.inline-timePick {
+  display: inline-block;
+  margin-bottom: 10px;
+  vertical-align: middle;
+}
+.search-alarmLevel {
+  display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -ms-justify-content: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  margin-left: 25px;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 20px;
+  height: 20px;
+}
+.icon-error {
+  color: $ERROR !important;
+}
+.icon-success {
+  color: $SUCCESS !important;
+}
+.icon-warm {
+  color: $WARM !important;
+}
 </style>

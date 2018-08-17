@@ -70,8 +70,8 @@ export default {
     alarmConfig: '告警配置',
     calibration: '人员标定',
     alarmMap: '告警地图',
+    alarmMapWPF: '告警地图',
     alarmSearch: '告警查询',
-
     gateSearch: '门岗查询'
   },
   navbar: {

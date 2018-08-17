@@ -10,11 +10,18 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      '/websocket': {
+        target: 'ws://192.168.41.54:2019',
+        ws: true,
+        secure: false,
+        logLevel: 'debug',
+        changeOrigin: true
+      },
       '/api': {
         target: 'http://192.168.41.54:2019',
         changeOrigin: true,
         pathRewrite: {'^\/api' : ''}
-      }
+      },
     },
 
     // Various Dev Server settings

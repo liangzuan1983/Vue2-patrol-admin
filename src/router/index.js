@@ -65,6 +65,7 @@ export const asyncRouterMap = [
     component: Layout,
     redirect: '/alarm-controller/alarmConfig',
     name: 'alarm-controller',
+    alwaysShow: true,
     meta: { title: 'alarm-controller', icon: 'alarm' },
     children: [
       { path: 'alarmConfig', component: () => import('@/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: 'alarmConfig', noCache: false }},
@@ -78,7 +79,10 @@ export const asyncRouterMap = [
     name: 'charts',
     alwaysShow: true,
     meta: { title: 'charts', icon: 'map' },
-    children: [{ path: 'alarmMap', component: () => import('@/views/charts/alarmMap'), name: 'alarmMap', meta: { title: 'alarmMap', noCache: true }}]
+    children: [
+      { path: 'alarmMap', component: () => import('@/views/charts/alarmMap'), name: 'alarmMap', meta: { title: 'alarmMap', noCache: true }},
+      { path: 'alarmMapWPF', component: () => import('@/views/charts/alarmMapWPF'), hidden: true, name: 'alarmMapWPF', meta: { title: 'alarmMapWPF', noCache: true }}
+    ]
   },
   {
     path: '/gate-machine-controller',

@@ -115,6 +115,7 @@ export function param2Obj(url) {
   return JSON.parse('{"' + decodeURIComponent(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}')
 }
 
+/* format the val to htmlContent */
 export function html2Text(val) {
   const div = document.createElement('div')
   div.innerHTML = val
@@ -268,4 +269,16 @@ export function deepClone(source) {
 
 export function uniqueArr(arr) {
   return Array.from(new Set(arr))
+}
+
+/* Capitalize first letter */
+export function CapitalizeFirstLetter(str) {
+  return str.replace(/\b\w/g, (t) => { return t.toUpperCase() })
+}
+/* Capitalize first letter and lower case */
+export function CapitalizeFirstLetter2(str) {
+  return str.replace(/\b\w+\b/g, (word) => {
+    const _lowerCaseWord = word.toLowerCase()
+    return _lowerCaseWord.substring(0, 1).toUpperCase() + _lowerCaseWord.substring(1)
+  })
 }

@@ -69,6 +69,7 @@ export default {
     alarmConfig: 'AlarmConfig',
     calibration: 'Calibration',
     alarmMap: 'AlarmMap',
+    alarmMapWPF: 'AlarmMap',
     alarmSearch: 'AlarmSearch',
     gateSearch: 'GateSearch'
   },

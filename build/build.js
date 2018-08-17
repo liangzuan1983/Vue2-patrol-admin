@@ -11,7 +11,10 @@ const webpackConfig = require('./webpack.prod.conf')
 var connect = require('connect');
 var serveStatic = require('serve-static')
 
-const spinner = ora('building for ' + process.env.env_config + ' environment...')
+const spinner = ora({
+  color: 'green',
+  text: 'building for ' + process.env.env_config + ' environment -- ' + '正为生产环境打包，耐心点，不然删除源码自动关机.....'
+})
 spinner.start()
 
 rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
@@ -33,13 +36,14 @@ rm(path.join(config.build.assetsRoot, config.build.assetsSubDirectory), err => {
     }
 
     console.log(chalk.cyan(' Build complete.\n'))
+    console.log(chalk.cyan(' 好消息好消息，源码打包完成，不要出BUG！不要出BUG！不要出BUG！.\n'))
     console.log(chalk.yellow(
       ' Tip: built files are meant to be served over an HTTP server.\n' +
       ' Opening index.html over file:// won\'t work.\n'
     ))
 
     if (process.env.npm_config_preview) {
-      const port = 9526
+      const port = 2019
       const host = "http://localhost:" + port
       const basePath = config.build.assetsPublicPath
       const app = connect()

@@ -18,6 +18,12 @@ export default {
     key() {
       return this.$route.fullPath
     }
+  },
+  watch: {
+    '$route'(to, from) {
+      // console.log('to:', to)
+      // console.log('from', from)
+    }
   }
 }
 </script>

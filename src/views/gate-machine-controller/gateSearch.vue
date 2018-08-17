@@ -36,8 +36,23 @@
         </el-option>
       </el-select>
 
+      <!-- <el-autocomplete
+        class="inline-input"
+        v-model="listQuery.cardNumber"
+        :fetch-suggestions="handleAutocomplete"
+        placeholder="请输入内容"
+        @select="handleSelect"
+      ></el-autocomplete> -->
+
       <el-button style="margin-left: 10px" class="filter-item" type="primary" size="" v-waves icon="el-icon-search" @click.native="handleFilter">搜索</el-button>
-      <el-button style="float: right;margin-left: 10px" class="filter-item" type="success" size="small" v-waves @click.native="handleExcel"><svg-icon style="margin-right: 5px" icon-class="excel" />导出Excel</el-button>
+      <el-button 
+        style="float: right;margin-left: 10px" 
+        class="filter-item" 
+        type="success" 
+        size="small" 
+        :loading="downloadLoading"
+        v-waves @click.native="handleExcel">
+        <svg-icon style="margin-right: 5px" icon-class="excel" />导出Excel</el-button>
     </div>
     
     <el-table :data="list" :row-key="rowKey" v-loading="listLoading" border fit highlight-current-row style="width: 100%">
@@ -98,7 +113,9 @@
       <el-table-column align="center" label="抓拍照">
         <template slot-scope="scope">
           <svg-icon v-if="!scope.row.catchPic" icon-class="pictureError" class="table-column-icon" />
-          <span v-else>{{scope.row.catchPic}}</span>
+          <div v-else class="list" :data-index="0">
+            <img class="table-column-icon" :src="scope.row.catchPic" @click="handleFancyBox($event)">
+          </div>
         </template>
       </el-table-column>
 
@@ -113,7 +130,9 @@
 
 <script>
 import { selectPassPersonInfo } from '@/api/gate-machine-controller'
+import { parseTime, CapitalizeFirstLetter } from '@/utils'
 import waves from '@/directive/waves'
+import fancyBox from './components/index'
 
 export default {
   name: 'gateSearch',
@@ -157,7 +176,10 @@ export default {
             picker.$emit('pick', start)
           }
         }]
-      }
+      },
+      downloadLoading: false,
+      filename: '门岗查询',
+      autoWidth: true
     }
   },
   created() {
@@ -189,7 +211,7 @@ export default {
       that.listLoading = true
       that.cardNumberListLoading = true
       return new Promise(function(resolve, reject) {
-        selectPassPersonInfo().then(response => {
+        selectPassPersonInfo(Object.assign({}, that.listQuery, { limit: 50 })).then(response => {
           that.cardNumberList = response.data.content
           that.list = response.data.content.slice(0, that.listQuery.limit)
           that.total = response.data.totalElements
@@ -204,7 +226,29 @@ export default {
       this.getList()
     },
     handleExcel() {
-      return true
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        const field = ['id', 'cardNumber', 'forWhat', 'followNum', 'forWhatOut', 'followNumOut', 'enterDoorTIME', 'outerDoorTIME', 'enterPlace', 'outerPlace', 'catchPic']
+        const list = this.list
+        const data = this.formatJson(field, list)
+
+        excel.export_json_to_excel({
+          header: field.map((key) => { return CapitalizeFirstLetter(key) }),
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'enterDoorTIME' || j === 'outerDoorTIME') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     },
     handleSizeChange(val) {
       this.listQuery.limit = val
@@ -213,7 +257,29 @@ export default {
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
+    },
+    handleFancyBox(event) {
+      const item = { width: 800, height: 500, url: event.currentTarget.src }
+      fancyBox(event.currentTarget, [].concat(item))
     }
+    // handleAutocomplete(queryString, cb) {
+    //   var cardNumberList = this.cardNumberAutoComplete()
+    //   var results = queryString ? cardNumberList.filter(this.createFilter(queryString)) : cardNumberList
+    //   // 调用 callback 返回建议列表的数据
+    //   results = [
+    //     { value: '三全鲜食（北新泾店）', address: '长宁区新渔路144号' },
+    //     { value: 'Hot honey 首尔炸鸡（仙霞路）', address: '上海市长宁区淞虹路661号' }
+    //   ]
+    //   cb(results)
+    // },
+    // createFilter(queryString) {
+    //   return (restaurant) => {
+    //     return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+    //   }
+    // },
+    // handleSelect(item) {
+    //   console.log(item)
+    // }
   },
   computed: {
     cardNumberAutoComplete() {
@@ -242,6 +308,7 @@ export default {
   width: 1.4rem;
   height: 1.4rem;
   color: #999;
+  cursor: pointer;
 }
 .inline-timePick {
   display: inline-block;
