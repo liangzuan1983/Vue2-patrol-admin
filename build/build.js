@@ -13,7 +13,7 @@ var serveStatic = require('serve-static')
 
 const spinner = ora({
   color: 'green',
-  text: 'building for ' + process.env.env_config + ' environment -- ' + '正为生产环境打包，耐心点，不然删除源码自动关机.....'
+  text: 'building for ' + process.env.env_config + ' environment -- ' + '正为生产环境打包，耐心点，不然会删除源码自动关机噢.....'
 })
 spinner.start()
 

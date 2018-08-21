@@ -14,7 +14,7 @@
         @click.native="handleAlarmClick($event, item.longitude, item.latitude)">
         <div :style="{width: alarmIcon.width + 'px', height: alarmIcon.height + 'px'}">
           <!-- <svg-icon v-if="show" v-bind:class="item.alarmLevel | alarmLevelClass" :style="{width: alarmIcon.width + 'px', height: alarmIcon.height + 'px'}" icon-class="alarm"></svg-icon> -->
-          <img :src="item.alarmLevel | alarmLevelClass" :style="{width: alarmIcon.width + 'px', height: alarmIcon.height + 'px'}" alt="">
+          <img :src="item.alarmLevel | alarmLevelClass" alt="">
           <!-- <span>{{ item.alarmName }}</span> -->
         </div>
       </my-overlay>
@@ -25,45 +25,35 @@
 
 <script>
 import { getToken } from '@/utils/auth' // getToken from cookie
-import BaiduMap from 'vue-baidu-map'
-import Vue from 'vue'
-import robotIcon from '@/assets/images/native/robot_online.png'
+
 import MyOverlay from './components/myOverlay.vue'
-// import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
-// import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
+import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
+import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
+
 import MySocket from './mixin/websocket'
-// import WebSocketMixin from './mixin/websocket'
+
+import robotIcon from '@/assets/images/native/robot_online.png'
+import alarmLevel_1 from '@/assets/images/native/alarmLevel-1.png'
+import alarmLevel_2 from '@/assets/images/native/alarmLevel-2.png'
+import alarmLevel_3 from '@/assets/images/native/alarmLevel-3.png'
 
 const APP_KEY = 'CdheGAoG7cgw72buOCzctrBoyuGtf7u7'
 const ALARM_TYPE = 1 // 告警信息
 const STATUS_TYPE = 2 // 机器人状态信息
 
-Vue.use(BaiduMap, {
-  /* ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
-  ak: APP_KEY
-})
-
 export default {
   name: 'alarmMap',
   components: {
-    MyOverlay
-    // BaiduMap,
-    // BmMarker,
+    MyOverlay,
+    BaiduMap,
+    BmMarker
   },
   created() {
     var that = this
-    if (
-      '-ms-scroll-limit' in document.documentElement.style &&
-      '-ms-ime-align' in document.documentElement.style
-    ) { // detect it's IE11
-      window.addEventListener('hashchange', function(event) {
-        var currentPath = window.location.hash.slice(1)
-        console.log(currentPath)
-        // if (store.state.route.path !== currentPath) {
-        that.$router.push(currentPath)
-        // }
-      }, false)
-    }
+
+    /* just for WPF */
+    this.$root.$el.style['overflow'] = 'hidden'
+
     /* global LOCAL_ROOT */
     const url = `ws:${LOCAL_ROOT}/websocket`
     this.ws = new MySocket({
@@ -92,7 +82,6 @@ export default {
       close(websocket) {}
     })
   },
-  // mixins: [WebSocketMixin],
   data() {
     return {
       APP_KEY,
@@ -101,7 +90,7 @@ export default {
         lat: 23.181357
       },
       robotList: [], // [{ lng: 113.462954, lat: 23.181357, id: 12 }],
-      alarmList: [{ 'linkageDistance': '', 'alarmLevel': 2, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.6℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 09: 35.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 655, 'longitude': 113.46375, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'alarmLevel': 3, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.7℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 11: 04.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 656, 'longitude': 113.4627905, 'latitude': 23.181015, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.9℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 13: 23.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 657, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 14: 29.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 658, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 15: 32.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 659, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 17: 41.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 660, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '28.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 59: 18.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 661, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.1℃', 'Key': '告警值' }, { 'Value': '2018-08-15 15: 08: 52.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 662, 'longitude': 113.46273, 'latitude': 23.180798, 'type': 1 }],
+      alarmList: [], // [{ 'linkageDistance': '', 'alarmLevel': 2, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.6℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 09: 35.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 655, 'longitude': 113.46375, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'alarmLevel': 3, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.7℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 11: 04.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 656, 'longitude': 113.4627905, 'latitude': 23.181015, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.9℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 13: 23.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 657, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 14: 29.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 658, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 15: 32.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 659, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 17: 41.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 660, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '28.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 59: 18.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 661, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.1℃', 'Key': '告警值' }, { 'Value': '2018-08-15 15: 08: 52.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 662, 'longitude': 113.46273, 'latitude': 23.180798, 'type': 1 }],
       robotIcon: {
         url: robotIcon,
         size: { width: 24, height: 24 },
@@ -119,7 +108,6 @@ export default {
       ws: null,
       wsMessage: null, // public param
       isLeavePage: false
-      // show: false
     }
   },
   filters: {
@@ -127,20 +115,15 @@ export default {
       let url = ''
       switch (level) {
         case 1:
-          url = '/src/assets/images/native/alarmLevel-1.png'
+          url = alarmLevel_1
           break
         case 2:
-          url = '/src/assets/images/native/alarmLevel-2.png'
+          url = alarmLevel_2
           break
         default:
-          url = '/src/assets/images/native/alarmLevel-3.png'
+          url = alarmLevel_3
       }
       return url
-      // return {
-      //   'icon-error': +level === 3,
-      //   'icon-warm': +level === 2,
-      //   'icon-success': +level === 1
-      // }
     }
   },
   methods: {
@@ -272,6 +255,10 @@ export default {
     }).then(() => {
       // that.isLeavePage = true
       this.ws.close(100, '正常关闭')
+
+      /* just for WPF */
+      this.$root.$el.style['overflow'] = 'visible'
+
       next()
     }, () => {
       next(false)
@@ -293,7 +280,6 @@ export default {
   padding: 0 !important;
   margin: 0 !important;
   z-index: 2000;
-  overflow: hidden !important;
   .bm-view {
     position: relative;
     width: 100%;

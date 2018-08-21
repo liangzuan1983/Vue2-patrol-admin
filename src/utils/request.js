@@ -60,8 +60,16 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
+    var message = null
+    switch (error.code) {
+      case 'ECONNABORTED':
+        message = '远程连接失败，请求超时，请检测网络配置...'
+        break
+      default:
+        message = error.message
+    }
     Message({
-      message: error.message,
+      message,
       type: 'error',
       duration: 5 * 1000
     })

@@ -2,14 +2,14 @@
   <transition name="fancy">
     <div v-show="visible" class="fancy-box-mask">
       <div ref="fancyBoxWrapper" class="fancy-box-image-wrapper">
-        <div v-for="(image, index) in prev" :key="index" :style="{ webkitTransform: 'translate3d(-'+ (index+1)*image.scaleWidth +'px, 0, 0)' }">
-          <div :style="{ webkitTransform: 'translate3d(0, '+ image.y +'px, 0)' }"><img :style="{ width: ''+ image.w +'px' }" :src="image.url"></div>
+        <div v-for="(image, index) in prev" :key="index" :style="{ webkitTransform: 'translate3d(-'+ (index+1)*image.scaleWidth +'px, 0, 0)', msTransform: 'translate3d(-'+ (index+1)*image.scaleWidth +'px, 0, 0)' }">
+          <div :style="{ webkitTransform: 'translate3d(0, '+ image.y +'px, 0)', msTransform: 'translate3d(0, '+ image.y +'px, 0)' }"><img :style="{ width: ''+ image.w +'px' }" :src="image.url"></div>
         </div>
         <div>
-          <div :style="activeStyle"><img :style="activeImageStyle" :src="activeUrl"></div>
+          <div class="chu" :style="activeStyle"><img :style="activeImageStyle" :src="activeUrl"></div>
         </div>
-        <div v-for="(image, index) in next" :key="index" :style="{ webkitTransform: 'translate3d('+ (index+1)*image.scaleWidth +'px, 0, 0)' }">
-          <div :style="{ webkitTransform: 'translate3d(0, '+ image.y +'px, 0)' }"><img :style="{ width: ''+ image.w +'px' }" :src="image.url"></div>
+        <div v-for="(image, index) in next" :key="index" :style="{ webkitTransform: 'translate3d('+ (index+1)*image.scaleWidth +'px, 0, 0)', msTransform: 'translate3d('+ (index+1)*image.scaleWidth +'px, 0, 0)' }">
+          <div :style="{ webkitTransform: 'translate3d(0, '+ image.y +'px, 0)', msTransform: 'translate3d(0, '+ image.y +'px, 0)' }"><img :style="{ width: ''+ image.w +'px' }" :src="image.url"></div>
         </div>
       </div>
     </div>

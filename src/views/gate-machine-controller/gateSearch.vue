@@ -27,22 +27,23 @@
         </el-date-picker>
       </div>
 
-      <el-select v-model="listQuery.cardNumber" v-loading="cardNumberListLoading" filterable placeholder="请选择告警代码" class="filter-item" @change="handleFilter">
+      <!-- <el-select v-model="listQuery.cardNumber" v-loading="cardNumberListLoading" filterable placeholder="请输入门禁卡号" class="filter-item" @change="handleFilter">
         <el-option
           v-for="item in cardNumberAutoComplete"
           :key="item.id"
           :label="item.label"
           :value="item.value">
         </el-option>
-      </el-select>
+      </el-select> -->
 
-      <!-- <el-autocomplete
+      <el-autocomplete
         class="inline-input"
         v-model="listQuery.cardNumber"
         :fetch-suggestions="handleAutocomplete"
-        placeholder="请输入内容"
+        placeholder="请输入门禁卡号"
         @select="handleSelect"
-      ></el-autocomplete> -->
+        @change="handleFilter"
+      ></el-autocomplete>
 
       <el-button style="margin-left: 10px" class="filter-item" type="primary" size="" v-waves icon="el-icon-search" @click.native="handleFilter">搜索</el-button>
       <el-button 
@@ -110,12 +111,16 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="抓拍照">
+      <el-table-column align="center" label="抓拍照" v-bind:loading="true">
         <template slot-scope="scope">
-          <svg-icon v-if="!scope.row.catchPic" icon-class="pictureError" class="table-column-icon" />
-          <div v-else class="list" :data-index="0">
-            <img class="table-column-icon" :src="scope.row.catchPic" @click="handleFancyBox($event)">
-          </div>
+          <!-- <svg-icon v-if="!scope.row.catchPic" icon-class="loading" class="table-column-icon" /> -->
+          
+          <i v-if="!scope.row.catchPic" style="font-size: 16px" class="el-icon-loading table-column-icon"></i>
+          <!-- <div v-else class="imageList">
+            <div class="list" :data-index="0">
+              <img class="table-column-img" :src="scope.row.catchPic" @click="handleFancyBox($event)">
+            </div>
+          </div> -->
         </template>
       </el-table-column>
 
@@ -132,7 +137,20 @@
 import { selectPassPersonInfo } from '@/api/gate-machine-controller'
 import { parseTime, CapitalizeFirstLetter } from '@/utils'
 import waves from '@/directive/waves'
-import fancyBox from './components/index'
+import Vue from 'vue'
+import vuePreview from '@/components/previewBox'
+
+// with parameters install
+Vue.use(vuePreview, {
+  mainClass: 'pswp--minimal--dark',
+  barsSize: { top: 0, bottom: 0 },
+  captionEl: false,
+  fullscreenEl: false,
+  shareEl: false,
+  bgOpacity: 0.85,
+  tapToClose: true,
+  tapToToggleControls: false
+})
 
 export default {
   name: 'gateSearch',
@@ -259,34 +277,30 @@ export default {
       this.getList()
     },
     handleFancyBox(event) {
-      const item = { width: 800, height: 500, url: event.currentTarget.src }
-      fancyBox(event.currentTarget, [].concat(item))
+      // const item = { width: 800, height: 500, url: event.currentTarget.src }
+      // fancyBox(event.currentTarget, [].concat(item))
+    },
+    handleAutocomplete(queryString, cb) {
+      var cardNumberList = this.cardNumberAutoComplete
+      var results = queryString ? cardNumberList.filter(this.createFilter(queryString)) : cardNumberList
+      // 调用 callback 返回建议列表的数据
+      cb(results)
+    },
+    createFilter(queryString) {
+      return (cardNumber) => {
+        return cardNumber.value && (cardNumber.value.toString().toLowerCase().indexOf(queryString.toLowerCase()) === 0)
+      }
+    },
+    handleSelect(item) {
+      this.handleFilter()
     }
-    // handleAutocomplete(queryString, cb) {
-    //   var cardNumberList = this.cardNumberAutoComplete()
-    //   var results = queryString ? cardNumberList.filter(this.createFilter(queryString)) : cardNumberList
-    //   // 调用 callback 返回建议列表的数据
-    //   results = [
-    //     { value: '三全鲜食（北新泾店）', address: '长宁区新渔路144号' },
-    //     { value: 'Hot honey 首尔炸鸡（仙霞路）', address: '上海市长宁区淞虹路661号' }
-    //   ]
-    //   cb(results)
-    // },
-    // createFilter(queryString) {
-    //   return (restaurant) => {
-    //     return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
-    //   }
-    // },
-    // handleSelect(item) {
-    //   console.log(item)
-    // }
   },
   computed: {
     cardNumberAutoComplete() {
       const { cardNumberList } = this
       if (!cardNumberList || cardNumberList.length <= 0) return []
       const ac = cardNumberList.map((item) => {
-        return { label: item.cardNumber, value: item.cardNumber, id: item.id }
+        return { label: item.cardNumber + '', value: item.cardNumber + '', id: item.id }
       })
       ac.splice(0, 0, { label: '全部', value: null, id: '-1' })
       // 去重
@@ -304,13 +318,20 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.table-column-icon {
+.table-column-img {
   width: 1.4rem;
   height: 1.4rem;
   color: #999;
   cursor: pointer;
+  vertical-align: middle;
 }
-.inline-timePick {
+
+.table-column-icon {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.inline-timePick, .inline-input {
   display: inline-block;
   margin-bottom: 10px;
   vertical-align: middle;

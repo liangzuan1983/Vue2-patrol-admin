@@ -8,19 +8,19 @@ Vue.directive('fancybox-thumbnail', {
     const style = el.getBoundingClientRect()
     const width = binding.value[0]
     const height = binding.value[1]
-    const radio = style.width / style.height
-    const type = width / height > radio ? 'height' : 'width'
+    const ratio = style.width / style.height
+    const type = width / height > ratio ? 'height' : 'width'
 
     el.firstElementChild.style[type] = '100%'
   }
 })
 
 export default (el, imageList) => {
-  imageList.forEach((n) => {
-    const hRatio = window.innerWidth / n.width
-    const vRatio = window.innerHeight / n.height
-    n.scaleWidth = window.innerWidth
-    n.fitRatio = hRatio < vRatio ? hRatio : vRatio
+  imageList.forEach((item) => {
+    const hRatio = window.innerWidth / item.width
+    const vRatio = window.innerHeight / item.height
+    item.scaleWidth = window.innerWidth
+    item.fitRatio = hRatio < vRatio ? hRatio : vRatio
   })
 
   const instance = new FancyBoxConstructor({

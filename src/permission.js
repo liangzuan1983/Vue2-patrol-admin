@@ -5,8 +5,6 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { getToken } from '@/utils/auth' // getToken from cookie
 
-console.log(router)
-
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 // permission judge function
@@ -60,6 +58,23 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
+  store.dispatch('href_variation', to)
   NProgress.done() // finish progress bar
 })
+
+/* ************************************* */
+/* compatibility with IE to manually change href non-responsive BUG
+/* ************************************* */
+if (
+  '-ms-scroll-limit' in document.documentElement.style &&
+  '-ms-ime-align' in document.documentElement.style
+) { // detect it's IE11
+  window.addEventListener('hashchange', function(event) {
+    var currentPath = window.location.hash.slice(1)
+    console.log(currentPath)
+    if (store.getters.currentPath !== currentPath) {
+      router.push(currentPath)
+    }
+  }, false)
+}

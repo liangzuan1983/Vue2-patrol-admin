@@ -32,9 +32,12 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json'],
+    //自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
+    extensions: ['*','.js', '.vue', '.json'],
     alias: {
       '@': resolve('src'),
+      'assets': resolve('src/assets'),
+      'photoswipe': resolve('node_modules/photoswipe')
     }
   },
   module: {
