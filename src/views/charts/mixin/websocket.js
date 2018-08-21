@@ -8,28 +8,32 @@
  * @param {Funtion} error
  * @param {Funtion} message
  */
+// const ERROR = 4
 const _initWebsocket = Symbol('_initWebsocket')
 const ws = Symbol('ws')
 
 /* eslint-disable no-unused-vars */
-class MySocket {
+export default class MySocket {
   [ws] = null;
 
-  closed = false;
+  closed = false; // close the process
 
   _opt = {
     url: null,
     reconnectionAttempts: 20,
-    timeout: 8000,
+    timeoutMs: 8000,
+    surplusAttempts: null,
     open: null,
     error: null,
     message: null,
-    close: null
+    close: null,
+    existingWebsocket: null
   }
 
   constructor(opt) {
     this._opt = Object.assign({}, this._opt, opt)
-    this._initWebsocket()
+    this._opt.surplusAttempts = this._opt.reconnectionAttempts
+    this[_initWebsocket](this._opt.reconnectionAttempts)
     return this
   }
 
@@ -44,23 +48,26 @@ class MySocket {
    *        and a failure/timeout causes rejection of the returned promise
    * @return {Promise}
    */
-  [_initWebsocket]() {
-    const { url, existingWebsocket, timeoutMs, reconnectionAttempts, open, error, message, close } = this._opt
+  [_initWebsocket](surplusAttempts) {
+    const { url, existingWebsocket, timeoutMs, open, error, message, close } = this._opt
     const self = this
 
     var hasReturned = false // Execution results for each callback
+    var clock = null
 
     var promise = new Promise((resolve, reject) => {
       /* close the process */
       if (self.closed) {
+        if (clock) {
+          clearTimeout(clock)
+        }
         reject()
       }
       /* open the interval for next new WebSocket */
-      setTimeout(function() {
+      clock = setTimeout(function() {
         /* if had Execution results not rejectInternal */
-        if (!hasReturned) {
-          console.info('opening websocket timed out: ' + url)
-          rejectInternal()
+        if (!hasReturned && !self.closed) {
+          handle()
         }
       }, timeoutMs)
       if (
@@ -71,60 +78,98 @@ class MySocket {
           existingWebsocket.close()
         }
         var websocket = new WebSocket(url)
-        websocket.onopen = function() {
-          if (hasReturned) {
-            websocket.close()
-          } else {
-            console.info('websocket to opened! url: ' + url)
-            if (typeof open === 'function') {
-              open()
-            }
-            resolve(websocket)
-          }
-        }
-        websocket.onclose = function() {
-          console.info('websocket closed! url: ' + url)
-          if (!hasReturned) {
-            setTimeout(function() {
-              rejectInternal(close)
-            }, timeoutMs)
-          } else {
-            rejectInternal(close)
-          }
-        }
-        websocket.onmessage = message
+        self[ws] = websocket
 
-        websocket.onerror = function() {
-          console.info('websocket error! url: ' + url)
-          if (!hasReturned) {
-            setTimeout(function() {
-              rejectInternal(error)
-            }, timeoutMs)
-          } else {
-            rejectInternal(error)
-          }
-        }
+        websocket.onopen = function() { hasReturned ? websocket.close() : handle() }
+        // websocket.onclose = function() { (!hasReturned) }
+        websocket.onmessage = message
+        // websocket.onerror = function() { (!hasReturned) }
       } else {
         resolve(existingWebsocket)
       }
 
-      function rejectInternal(fn) {
-        if (reconnectionAttempts <= 0) {
+      /**
+       * readyState handle
+       * @param {Number} readyState : 4 on behalf of timeout
+       */
+      function handle(type) {
+        if (surplusAttempts < 1) {
           reject()
-        } else if (!hasReturned) {
-          hasReturned = true
+        } else {
+          const status = type || websocket.readyState
+          switch (status) {
+            case WebSocket.CONNECTING:
+              console.info('Websocket timed out: ' + url)
+              if (typeof error === 'function') {
+                error.bind(self, websocket)()
+              }
+              if (typeof close === 'function') {
+                close.bind(self, websocket)()
+              }
+              reconnection()
+              break
+            case WebSocket.OPEN:
+              console.info('websocket to opened: url: ' + url)
+              if (typeof open === 'function') {
+                open.bind(self, websocket)()
+                websocket.onclose = function() {
+                  droppedReconnection.bind(self)()
+                }
+              }
+              resolve(websocket)
+              break
+            case WebSocket.CLOSING:
+              break
+            case WebSocket.CLOSED:
+              console.info('websocket error: url: ' + url)
+              if (typeof error === 'function') {
+                error.bind(self, websocket)()
+              }
+              console.info('websocket closed: url: ' + url)
+              if (typeof close === 'function') {
+                close.bind(self, websocket)()
+              }
+              reconnection()
+              break
+            default:
+              // ERROR 4
+              // reconnection()
+              break
+          }
+        }
+      }
+
+      /**
+       * ! Recursion
+       */
+      function reconnection() {
+        if (!hasReturned) {
+          hasReturned = true // had resullt ever callback
+          self._opt.surplusAttempts = surplusAttempts - 1
+          console.info(
+            'retrying connection to websocket! url: ' +
+              url +
+              ', remaining retries: ' +
+              (surplusAttempts - 1)
+          )
           if (self.closed) {
+            if (clock) {
+              clearTimeout(clock)
+            }
             reject()
           } else {
-            if (typeof fn === 'function') {
-              fn()
-            }
-            self._initWebsocket(url, null, timeoutMs, reconnectionAttempts - 1).then(
+            self[_initWebsocket](surplusAttempts - 1).then(
               resolve,
               reject
             )
           }
         }
+      }
+
+      function droppedReconnection() {
+        console.info('Websocket dropped: try to reconnect the url: ' + url)
+        this._opt.surplusAttempts = this._opt.reconnectionAttempts
+        this[_initWebsocket](this._opt.reconnectionAttempts)
       }
     })
 
@@ -141,175 +186,19 @@ class MySocket {
   }
 
   close(code, reason) {
-
-  }
-}
-
-// var a = new MySocket()
-// console.log('isLeavePage', a.isLeavePage)
-
-export default {
-  data() {
-    return {
-      socket: {
-        /* global LOCAL_ROOT */
-        url: `ws:${LOCAL_ROOT}/websocket`,
-        reconnectionAttempts: 50,
-        timeout: 10000
-      },
-      ws: null,
-      wsMessage: null,
-      isLeavePage: false
-    }
-  },
-  created() {
-    const { url, reconnectionAttempts, timeout } = this.socket
-    const that = this
-    this.isLeavePage = false
-
-    var fn = () => {
-      this.initWebsocket(url, null, timeout, reconnectionAttempts).then((websocket) => {
-        that.ws = websocket
-        websocket.onerror = fn
-        websocket.onmessage = this.handleWebSocket_msg
-      }, () => {})
-    }
-    fn()
-    // this.initWS()
-  },
-  methods: {
-    /**
-     * inits a websocket by a given url, returned promise resolves with initialized websocket, rejects after failure/timeout.
-     * do not close websocket directly, otherwise an error which is "WebSocket connection to 'ws://localhost:9527/weocket' failed: WebSocket is closed before the connection is established" will be reported
-     *
-     * @param url the websocket url to init
-     * @param existingWebsocket if passed and this passed websocket is already open, this existingWebsocket is resolved, no additional websocket is opened
-     * @param timeoutMs the timeout in milliseconds for opening the websocket
-     * @param numberOfRetries the number of times initializing the socket should be retried, if not specified or 0, no retries are made
-     *        and a failure/timeout causes rejection of the returned promise
-     * @return {Promise}
-     */
-    initWebsocket(url, existingWebsocket, timeoutMs = 1500, numberOfRetries = 0) {
-      var that = this
-      var hasReturned = false
-      var promise = new Promise((resolve, reject) => {
-        if (that.isLeavePage) {
-          reject()
-        }
+    const self = this
+    if (self[ws]) {
+      if (self[ws].readyState === WebSocket.OPEN) {
+        self[ws].send(JSON.stringify({ code, reason }))
         setTimeout(function() {
-          if (!hasReturned) {
-            console.info('Opening websocket timed out: ' + url)
-            rejectInternal()
+          if (self[ws].bufferedAmount === 0) {
+            self[ws].close()
           }
-        }, timeoutMs)
-        if (
-          !existingWebsocket ||
-          existingWebsocket.readyState !== existingWebsocket.OPEN
-        ) {
-          if (existingWebsocket) {
-            existingWebsocket.close()
-          }
-          var websocket = null
-          try {
-            websocket = new WebSocket(url)
-          } catch (err) {
-            console.info(err)
-          }
-
-          websocket.onopen = function() {
-            if (hasReturned) {
-              websocket.close()
-            } else {
-              console.info('Websocket to opened! url: ' + url)
-              that.$notify({
-                title: '建立数据连接',
-                message: '连接WebSocket成功',
-                type: 'success',
-                duration: 1000
-              })
-              resolve(websocket)
-            }
-          }
-          websocket.onclose = function() {
-            console.info('websocket closed! url: ' + url)
-            if (!hasReturned) {
-              setTimeout(function() {
-                rejectInternal()
-              }, timeoutMs)
-            } else {
-              rejectInternal()
-            }
-          }
-          websocket.onerror = function() {
-            console.info('websocket error! url: ' + url)
-            if (!hasReturned) {
-              setTimeout(function() {
-                rejectInternal()
-              }, timeoutMs)
-            } else {
-              rejectInternal()
-            }
-          }
-        } else {
-          resolve(existingWebsocket)
-        }
-
-        function rejectInternal() {
-          if (numberOfRetries <= 0) {
-            that.$notify({
-              title: '建立数据连接',
-              message: `连接WebSocket失败，请检查网络配置...`,
-              type: 'error',
-              duration: 10000
-            })
-            reject()
-          } else if (!hasReturned) {
-            hasReturned = true
-            console.info(
-              'retrying connection to websocket! url: ' +
-                url +
-                ', remaining retries: ' +
-                (numberOfRetries - 1)
-            )
-            if (that.isLeavePage) {
-              numberOfRetries = 0
-            } else {
-              that.$notify({
-                title: '建立数据连接',
-                message: `连接WebSocket失败/超时，正尝试(${that.socket.reconnectionAttempts - numberOfRetries + 1})重连...`,
-                type: 'error',
-                duration: 2000
-              })
-            }
-            // that.initWebsocket(url, null, timeoutMs, numberOfRetries - 1).then(
-            //   resolve,
-            //   reject
-            // )
-          }
-        }
-      })
-      promise.then(
-        function() {
-          hasReturned = true
-        },
-        function() {
-          hasReturned = true
-        }
-      )
-      return promise
-    },
-    handleWebSocket_msg(response) {
-      const { returnValue, data } = response
-      if (returnValue) {
-        this.wsMessage = JSON.parse(data)
+        }, 500)
+      } else {
+        self[ws].close()
       }
     }
-  },
-  watch: {
-    isLeavePage(val, oldVal) {
-      if (val) {
-        this.ws && this.ws.close()
-      }
-    }
+    this.closed = true
   }
 }

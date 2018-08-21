@@ -10,7 +10,7 @@
 </template>
 
 <script>
-// import BmOverlay from 'vue-baidu-map/components/overlays/overlay.vue'
+import BmOverlay from 'vue-baidu-map/components/overlays/overlay.vue'
 export default {
   name: 'MyOverlay',
   props: {
@@ -31,10 +31,6 @@ export default {
       required: true,
       type: Number,
       default: 24
-    },
-    show: {
-      type: Boolean,
-      default: false
     }
   },
   data() {
@@ -44,7 +40,7 @@ export default {
     }
   },
   components: {
-    // BmOverlay
+    BmOverlay
   },
   watch: {
     position: {
@@ -60,7 +56,6 @@ export default {
       const pixel = map.pointToOverlayPixel(new BMap.Point(lng, lat))
       el.style.left = pixel.x - this.iconWidth / 2 + 'px'
       el.style.top = pixel.y - this.iconHeight / 2 + 'px'
-      this.$emit('update:show', true)
     },
     handleClick(event) {
       /* highlight the currentTarget */
@@ -84,8 +79,8 @@ export default {
   overflow: hidden;
   box-shadow: 0 0 5px #777;
   text-align: center;
-  border-radius: 5px;
-  padding: 3px 5px;
+  border-radius: 50%;
+  padding: 5px;
   position: absolute;
   cursor: pointer;
   &.highlight {

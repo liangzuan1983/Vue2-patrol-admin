@@ -48,7 +48,12 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader?cacheDirectory',
-        include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
+        include: [
+          resolve('src'), 
+          resolve('test'), 
+          resolve('node_modules/webpack-dev-server/client'),
+          resolve('node_modules/vue-baidu-map/components')
+        ]
       },
       {
         test: /\.svg$/,

@@ -130,12 +130,21 @@ const webpackConfig = merge(baseWebpackConfig, {
         return context && (context.indexOf('xlsx') >= 0);
       }
     }),
-     // split codemirror into its own file
-     new webpack.optimize.CommonsChunkPlugin({
+    // split codemirror into its own file
+    new webpack.optimize.CommonsChunkPlugin({
       async: 'codemirror',
       minChunks(module) {
         var context = module.context;
         return context && (context.indexOf('codemirror') >= 0);
+      }
+    }),
+    // split codemirror into its own file
+    new webpack.optimize.CommonsChunkPlugin({
+      async: 'vue-baidu-map',
+      name: 'map',
+      minChunks(module) {
+        var context = module.context;
+        return context && (context.indexOf('vue-baidu-map') >= 0);
       }
     }),
 

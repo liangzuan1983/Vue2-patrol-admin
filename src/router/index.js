@@ -107,3 +107,7 @@ export const asyncRouterMap = [
   // some website which is not registered will be redirect to 404
   { path: '*', redirect: '/404', hidden: true }
 ]
+
+document.addEventListener('click', function() {
+  console.log(123)
+})

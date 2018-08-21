@@ -5,6 +5,8 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css'// progress bar style
 import { getToken } from '@/utils/auth' // getToken from cookie
 
+console.log(router)
+
 NProgress.configure({ showSpinner: false })// NProgress Configuration
 
 // permission judge function
