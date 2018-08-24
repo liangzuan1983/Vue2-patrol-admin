@@ -24,7 +24,7 @@
 
 ## 简介
 
-[vue-element-admin](http://panjiachen.github.io/vue-element-admin) 是一个后台集成解决方案，它基于 [vue](https://github.com/vuejs/vue) 和 [element](https://github.com/ElemeFE/element)。它使用了最新的前端技术栈，内置了i18国际化解决方案，动态路由，权限验证，提炼了典型的业务模型，提供了丰富的功能组件，它可以帮助你快速搭建企业级中后台产品原型。相信不管你的需求是什么，本项目都能帮助到你。
+[vue-element-admin](http://panjiachen.github.io/vue-element-admin) 是一个后台集成解决方案，它基于 [vue](https://github.com/vuejs/vue) 和 [element](https://github.com/ElemeFE/element)。它使用了最新的前端技术栈，内置了i18国际化解决方案，动态路由，权限验证，提炼了典型的业务模型，提供了丰富的功能组件，它可以帮助你快速搭建企业级中后台产品原型。相信不管你的需求是什么，都能帮助到你。本项目基于[vue-element-admin](http://panjiachen.github.io/vue-element-admin) 上，实现业务逻辑。
 
 - [在线访问](http://panjiachen.github.io/vue-element-admin)
 
@@ -38,24 +38,11 @@
 
 - [Gitee](https://panjiachen.gitee.io/vue-element-admin/) 国内用户可访问该地址在线预览
 
-**本项目的定位是后台集成方案，不适合当基础模板来开发。**
- - 模板建议使用: [vueAdmin-template](https://github.com/PanJiaChen/vueAdmin-template)  
- - 桌面端: [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
 
 ## 前序准备
 
 你需要在本地安装 [node](http://nodejs.org/) 和 [git](https://git-scm.com/)。本项目技术栈基于 [ES2015+](http://es6.ruanyifeng.com/)、[vue](https://cn.vuejs.org/index.html)、[vuex](https://vuex.vuejs.org/zh-cn/)、[vue-router](https://router.vuejs.org/zh-cn/) 、[axios](https://github.com/axios/axios) 和 [element-ui](https://github.com/ElemeFE/element)，所有的请求数据都使用[Mock.js](https://github.com/nuysoft/Mock)模拟，提前了解和学习这些知识会对使用本项目有很大的帮助。
 
-同时配套一个系列的教程文章，如何从零构建后一个完整的后台项目，建议大家先看完这些文章再来实践本项目
- - [手摸手，带你用 vue 撸后台 系列一(基础篇)](https://juejin.im/post/59097cd7a22b9d0065fb61d2)
- - [手摸手，带你用 vue 撸后台 系列二(登录权限篇)](https://juejin.im/post/591aa14f570c35006961acac)
- - [手摸手，带你用 vue 撸后台 系列三 (实战篇)](https://juejin.im/post/593121aa0ce4630057f70d35)
- - [手摸手，带你用 vue 撸后台 系列四(vueAdmin 一个极简的后台基础模板)](https://juejin.im/post/595b4d776fb9a06bbe7dba56)
- - [手摸手，带你封装一个 vue component](https://segmentfault.com/a/1190000009090836)
- - [手摸手，带你优雅的使用 icon](https://juejin.im/post/59bb864b5188257e7a427c09)
-
-
- 或者加入该群主 **[圈子](https://jianshiapp.com/circles/1209)** 楼主会经常分享一些技术相关的东西
 
  **如有问题请先看上述使用文档和文章，若不能满足，欢迎 issue 和 pr**
 
@@ -65,9 +52,6 @@
 
  **该项目不支持低版本浏览器(如ie)，有需求请自行添加polyfill [详情](https://github.com/PanJiaChen/vue-element-admin/wiki#babel-polyfill)**
 
- <p align="center">
-  <img width="900" src="https://wpimg.wallstcn.com/a5894c1b-f6af-456e-82df-1151da0839bf.png">
-</p>
 
 ## 功能
 ```
@@ -92,45 +76,18 @@
   - Screenfull全屏
   - 自适应收缩侧边栏
 
-- 编辑器
-  - 富文本
-  - Markdown
-  - JSON 等多格式
-
 - Excel
   - 导出excel
   - 导出zip
   - 导入excel
   - 前端可视化excel
 
-- 表格
-  - 动态表格
-  - 拖拽表格
-  - 树形表格
   - 内联编辑
 
 - 错误页面
   - 401
   - 404
 
-- 組件
-  - 头像上传
-  - 返回顶部
-  - 拖拽Dialog
-  - 拖拽看板
-  - 列表拖拽
-  - SplitPane
-  - Dropzone
-  - Sticky
-  - CountTo
-
-- 综合实例
-- 错误日志
-- Dashboard
-- 引导页
-- Echarts 图表
-- Clipboard(剪贴复制)
-- Markdown2html
 ```
 
 ## 开发
@@ -181,14 +138,4 @@ Detailed changes for each release are documented in the [release notes](https://
 ## Online Demo
 [在线 Demo](http://panjiachen.github.io/vue-element-admin)
 
-## Donate
-如果你觉得这个项目帮助到了你，你可以帮作者买一杯果汁表示鼓励 :tropical_drink:
-![donate](https://panjiachen.github.io/donate/donation.png)
-
-[Paypal Me](https://www.paypal.me/panfree23)
-
 ## License
-
-[MIT](https://github.com/PanJiaChen/vue-element-admin/blob/master/LICENSE)
-
-Copyright (c) 2017-present PanJiaChen

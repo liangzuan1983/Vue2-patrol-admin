@@ -26,7 +26,7 @@ English | [简体中文](./README.zh-CN.md)
 
 [vue-element-admin](http://panjiachen.github.io/vue-element-admin) is a front-end management background integration solution. It based on [vue](https://github.com/vuejs/vue) and use the UI Toolkit [element](https://github.com/ElemeFE/element).
 
-It is a magical vue admin based on the newest development stack of vue, built-in i18n solution, typical templates for enterprise applications, lots of awesome features. It helps you build a large complex Single-Page Applications. I believe whatever your needs are, this project will help you.
+It is a magical vue admin based on the newest development stack of vue, built-in i18n solution, typical templates for enterprise applications, lots of awesome features. It helps you build a large complex Single-Page Applications. I believe whatever your needs are, this project will help you. This project is based on [vue-element-admin](http://panjiachen.github.io/vue-element-admin) to realize business logic
 
 - [Preview](http://panjiachen.github.io/vue-element-admin)
 
@@ -40,10 +40,6 @@ It is a magical vue admin based on the newest development stack of vue, built-in
 
 - [Gitee](https://panjiachen.gitee.io/vue-element-admin/) 国内用户可访问该地址在线预览
 
-**This project is positioned as a background integration solution and is not suitable for secondary development as a basic template.**
-
- - Base template recommends using: [vueAdmin-template](https://github.com/PanJiaChen/vueAdmin-template)  
- - Desktop: [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
 
 ## Preparation
 
@@ -53,10 +49,6 @@ You need to install [node](http://nodejs.org/) and [git](https://git-scm.com/) l
  **This project does not support low version browsers (e.g. IE). Please add polyfill yourself if you need them.**
 
  **Note: This project uses element-ui@2.3.0+ version, so the minimum compatible vue@2.5.0+**
-
- <p align="center">
-  <img width="900" src="https://wpimg.wallstcn.com/a5894c1b-f6af-456e-82df-1151da0839bf.png">
-</p>
 
 ## Features
 ```
@@ -81,45 +73,16 @@ You need to install [node](http://nodejs.org/) and [git](https://git-scm.com/) l
   - Screenfull
   - Responsive Sidebar
 
-- Editor
-  - Rich Text Editor
-  - Markdown Editor
-  - JSON Editor
-
 - Excel
   - Export Excel
   - Export zip
   - Upload Excel
   - Visualization Excel
 
-- Table
-  - Dynamic Table
-  - Drag And Drop Table
-  - Tree Table
-  - Inline Edit Table
-
 - Error Page
   - 401
   - 404
 
-- Components
-  - Avatar Upload
-  - Back To Top
-  - Drag Dialog
-  - Drag Kanban
-  - Drag List
-  - SplitPane
-  - Dropzone
-  - Sticky
-  - CountTo
-
-- Advanced Example
-- Error Log
-- Dashboard
-- Guide Page
-- Echarts
-- Clipboard
-- Markdown to html
 ```
 
 ## Getting started
@@ -169,17 +132,6 @@ Detailed changes for each release are documented in the [release notes](https://
 ## Online Demo
 [Preview](http://panjiachen.github.io/vue-element-admin)
 
-## Donate
-If you find this project useful, you can buy author a glass of juice :tropical_drink:
-
-![donate](https://wpimg.wallstcn.com/bd273f0d-83a0-4ef2-92e1-9ac8ed3746b9.png)
-
-[Paypal Me](https://www.paypal.me/panfree23)
-
-[Buy me a coffee](https://www.buymeacoffee.com/Pan)
 
 ## License
 
-[MIT](https://github.com/PanJiaChen/vue-element-admin/blob/master/LICENSE)
-
-Copyright (c) 2017-present PanJiaChen
