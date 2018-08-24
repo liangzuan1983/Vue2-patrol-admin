@@ -19,7 +19,6 @@
 <script>
 import Vue from 'vue'
 import VueTouch from 'vue-touch'
-
 Vue.use(VueTouch)
 
 export default {
@@ -322,6 +321,7 @@ export default {
     getElWidth(el) {
       return el.getBoundingClientRect().width
     },
+    // 缩略图放大的倍数
     getZoomTransform(el) {
       return (
         this.getElWidth(el) /
@@ -335,12 +335,15 @@ export default {
           ? this.imageItems[this.imageIndex]
           : this.imageItems[index]
       return {
+        // 居中 左边距
         x: Math.round(
           (window.innerWidth - imageObj.width * imageObj.fitRatio) / 2
         ),
+        // 居中 顶边距
         y: Math.round(
           (window.innerHeight - imageObj.height * imageObj.fitRatio) / 2
         ),
+        // 自适应后的 width
         w: Math.round(imageObj.width * imageObj.fitRatio),
         scale: imageObj.width / window.innerWidth,
         widthFix: imageObj.width - window.innerWidth,

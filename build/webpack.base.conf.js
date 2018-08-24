@@ -33,11 +33,12 @@ module.exports = {
   },
   resolve: {
     //自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
-    extensions: ['*','.js', '.vue', '.json'],
+    extensions: ['*', '.js', '.vue', '.json'],
     alias: {
+      'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
       'assets': resolve('src/assets'),
-      'photoswipe': resolve('node_modules/photoswipe')
+      '@@': resolve('node_modules')
     }
   },
   module: {

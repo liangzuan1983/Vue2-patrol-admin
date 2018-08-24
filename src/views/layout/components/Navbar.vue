@@ -19,7 +19,7 @@
 
       <el-dropdown class="avatar-container right-menu-item" trigger="click">
         <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatarLogo" alt="logo">
+          <img class="user-avatar" src="~assets/images/native/avatar-logo.png" alt="logo">
           <i class="el-icon-caret-bottom"></i>
         </div>
         <el-dropdown-menu slot="dropdown">
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import avatarLogo from '@/assets/images/native/avatar-logo.png'
+// import avatarLogo from '@/assets/images/native/avatar-logo.png'
 import { mapGetters } from 'vuex'
 // import Screenfull from '@/components/Screenfull'
 import Breadcrumb from '@/components/Breadcrumb'
@@ -46,11 +46,6 @@ import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
 
 export default {
-  data() {
-    return {
-      avatarLogo
-    }
-  },
   components: {
     Breadcrumb,
     Hamburger,

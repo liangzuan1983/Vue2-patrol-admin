@@ -42,7 +42,8 @@ export default (el, imageList) => {
     const boundingClientRect = parent.getBoundingClientRect()
 
     instance.activeStyle = {
-      webkitTransform: `translate3d(${boundingClientRect.left}px, ${boundingClientRect.top}px, 0px) scale(${zoom})`
+      webkitTransform: `translate3d(${boundingClientRect.left}px, ${boundingClientRect.top}px, 0px) scale(${zoom})`,
+      msTransform: `translate3d(${boundingClientRect.left}px, ${boundingClientRect.top}px, 0px) scale(${zoom})`
     }
 
     if (instance.imageItems[instance.imageIndex].width < window.innerWidth) {
@@ -52,12 +53,14 @@ export default (el, imageList) => {
     }
 
     setTimeout(() => {
+      const c = instance.getCenter()
       instance.activeImageStyle = {
-        width: `${instance.getCenter().w}px`
+        width: `${c.w}px`
       }
 
       instance.activeStyle = {
-        webkitTransform: `translate3d(${instance.getCenter().x}px, ${instance.getCenter().y}px, 0px) scale(1)`
+        webkitTransform: `translate3d(${c.x}px, ${c.y}px, 0px) scale(1)`,
+        msTransform: `translate3d(${c.x}px, ${c.y}px, 0px) scale(1)`
       }
 
       instance.initDom()

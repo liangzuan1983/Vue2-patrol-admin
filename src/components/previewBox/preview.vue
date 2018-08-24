@@ -8,7 +8,7 @@
           itemscope
           itemtype="http://schema.org/ImageObject">
           <a :href="item.src" itemprop="contentUrl" :data-size="'' + item.w + 'x' + item.h">
-            <img :src="item.msrc" :alt="item.alt" itemprop="thumbnail"/>
+            <img :src="item.msrc" :width="item.mw ? item.mw : 'auto'" :alt="item.alt" itemprop="thumbnail"/>
           </a>
           <figcaption style="display: none" itemprop="caption description">{{item.title}}</figcaption>
         </figure>
@@ -54,7 +54,18 @@
   </div>
 </template>
 
-<style rel="stylesheet/scss" lang="scss">
-@import "~photoswipe/dist/photoswipe";
-@import "~photoswipe/dist/default-skin/default-skin.css";
+
+<style rel="stylesheet/less" lang="less" scoped>
+  .pswp {
+    z-index: 2000;
+  }
 </style>
+
+<script>
+import '@@/photoswipe/dist/photoswipe.css'
+import '@@/photoswipe/dist/default-skin/default-skin.css'
+export default {}
+</script>
+
+
+

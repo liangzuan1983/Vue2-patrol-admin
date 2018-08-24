@@ -80,3 +80,8 @@
     display: block
   }
 }
+
+// element ui table
+.el-pagination .el-select .el-input .el-input__inner, .el-pagination__editor.el-input .el-input__inner {
+  line-height: 28px;
+}

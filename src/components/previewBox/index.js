@@ -1,4 +1,4 @@
-import PreviewComponent from './preview.vue'
+import PreviewComponent from './preview'
 import PhotoSwipe from 'photoswipe/dist/photoswipe'
 import PhotoSwipeUIDefault from 'photoswipe/dist/photoswipe-ui-default'
 

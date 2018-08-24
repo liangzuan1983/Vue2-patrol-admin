@@ -3,7 +3,7 @@
     <baidu-map class="bm-view" :scroll-wheel-zoom="scrollWheelZoom" :center="center" :zoom="zoom" :ak="APP_KEY" @ready="handlerMap">
       <bm-marker v-for="item in robotList" :key="item.id"
         :icon="robotIcon"
-        :position="{lng: item.lng, lat: item.lat}">
+        :position="{lng: item.longitude, lat: item.latitude}">
       </bm-marker>
       <my-overlay
         v-for="item in _alarmList" :key="item.id"
@@ -90,7 +90,7 @@ export default {
         lng: 113.462954,
         lat: 23.181357
       },
-      robotList: [], // [{ lng: 113.462954, lat: 23.181357, id: 12 }],
+      robotList: [], // [{ longitude: 113.462954, latitude: 23.181357, id: 12 }],
       alarmList: [], // [{ 'linkageDistance': '', 'alarmLevel': 2, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.6℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 09: 35.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 655, 'longitude': 113.46375, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'alarmLevel': 3, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.7℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 11: 04.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 656, 'longitude': 113.4627905, 'latitude': 23.181015, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.9℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 13: 23.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 657, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 14: 29.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 658, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 15: 32.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 659, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 17: 41.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 660, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '28.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 59: 18.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 661, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.1℃', 'Key': '告警值' }, { 'Value': '2018-08-15 15: 08: 52.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 662, 'longitude': 113.46273, 'latitude': 23.180798, 'type': 1 }],
       robotIcon: {
         url: robotIcon,
@@ -193,19 +193,21 @@ export default {
   watch: {
     wsMessage: {
       handler(val, oldValue) {
-        console.log('wsmsg: ', val)
-
         const { flag, data } = val
         const { alarmList, robotList } = this
         if (Array.isArray(data) && data.length > 0) {
           for (const item of data) {
+            console.log('type', item.type)
             if (item.type === ALARM_TYPE) {
-              console.log(item)
+              console.log('ALARM_TYPE', item)
               deal(alarmList, item, flag)
             } else if (item.type === STATUS_TYPE) {
+              console.log('STATUS_TYPE', item)
               deal(robotList, item, flag)
             }
           }
+        } else if (typeof data === 'object') {
+          console.log('type', data.type)
         }
 
         function deal(list, obj, type) {
