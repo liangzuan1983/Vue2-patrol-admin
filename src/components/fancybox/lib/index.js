@@ -63,19 +63,24 @@ export default async(el, opt) => {
   const boundingClientRect = el.getBoundingClientRect()
   const c = instance.getCenter(0.8)
 
+  instance.width = c.w
+  instance.height = c.h
+
   instance.enterAndLeaveStyle = {
-    width: c.w + 'px',
-    height: c.h + 'px ',
     webkitTransform: `translate3d(${boundingClientRect.left}px, ${boundingClientRect.top}px, 0px) scale(${zoom})`,
     msTransform: `translate3d(${boundingClientRect.left}px, ${boundingClientRect.top}px, 0px) scale(${zoom})`
   }
 
   instance.activeStyle = {
-    width: c.w + 'px',
-    height: c.h + 'px ',
     webkitTransform: `translate3d(${c.x}px, ${c.y}px, 0px) scale(1)`,
     msTransform: `translate3d(${c.x}px, ${c.y}px, 0px) scale(1)`
   }
+
+  instance.position = Object.assign({}, instance.position, {
+    top: c.y,
+    left: c.x,
+    scale: 1
+  })
 
   instance.loadingPic = false
 

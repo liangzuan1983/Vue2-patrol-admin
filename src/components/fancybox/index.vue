@@ -5,7 +5,7 @@
           <svg-icon class="fancybox-thumbnails__loading" icon-class="loading"></svg-icon>
         </div>
         <a ref="fancyboxLink" key="loaded" v-else :href="url" class="fancybox-thumbnails__link" @click.prevent="HandleFancyBox($event)">
-          <img class="fancybox-thumbnails__img" :src="thumbnailsUrl || url">
+          <img class="fancybox-thumbnails__img" :src="thumbnailsUrl">
         </a>
       </transition>
     </div>
@@ -29,18 +29,17 @@ export default {
     return {
       thumbnail_Width: null,
       thumbnail_Height: null,
-      loadingPic: true,
-      thumbnailsUrl: this.msUrl ? this.msUrl : this.url
+      loadingPic: true
     }
   },
+  /* 只是第一次加载的时候调用 */
   mounted() {
+    this.loadingPic = true
     this.handleImage()
       .then((res) => {
         this.loadingPic = false
-        if (res.nodeName === 'IMG') {
-          this.thumbnail_Width = res.naturalWidth
-          this.thumbnail_Height = res.naturalHeight
-        }
+      }, () => {
+        this.loadingPic = true
       })
   },
   methods: {
@@ -49,6 +48,8 @@ export default {
       return new Promise((resolve, reject) => {
         const img = document.createElement('img')
         img.onload = (response) => {
+          self.thumbnail_Width = img.naturalWidth
+          self.thumbnail_Height = img.naturalHeight
           resolve(img)
         }
         img.onerre = (err) => {
@@ -56,7 +57,11 @@ export default {
         }
         // just simulate the asynchronization of loading image, can delete
         // setTimeout(function() {
-        img.src = self.thumbnailsUrl
+        if (self.thumbnailsUrl === '') {
+          reject()
+        } else {
+          img.src = self.thumbnailsUrl
+        }
         // }, 2000)
       })
     },
@@ -66,6 +71,23 @@ export default {
       fancyBoxMain(target, Object.assign({}, {
         url: this.url
       }))
+    }
+  },
+  computed: {
+    thumbnailsUrl() {
+      return this.msUrl ? this.msUrl : this.url
+    }
+  },
+  watch: {
+    /* watch the variation of url */
+    url(oldValue, newValue) {
+      this.loadingPic = true
+      this.handleImage()
+        .then((res) => {
+          this.loadingPic = false
+        }, () => {
+          this.loadingPic = true
+        })
     }
   }
 }

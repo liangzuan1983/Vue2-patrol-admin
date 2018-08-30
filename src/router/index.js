@@ -92,7 +92,7 @@ export const asyncRouterMap = [
     meta: { title: 'gate-machine-controller', icon: 'alarm' },
     children: [
       { path: 'gateSearch', component: () => import('@/views/gate-machine-controller/gateSearch'), name: 'gateSearch', meta: { title: 'gateSearch', icon: 'gate', noCache: false }},
-      { path: 'gateSearch2', component: () => import('@/views/gate-machine-controller/gateSearch2'), hidden: true, name: 'gateSearch2', meta: { title: 'gateSearch2', icon: 'gate', noCache: false }}
+      { path: 'gateSearch2', component: () => import('@/views/gate-machine-controller/gateSearch2'), hidden: false, name: 'gateSearch2', meta: { title: 'gateSearch2', icon: 'gate', noCache: false }}
     ]
   },
   {
