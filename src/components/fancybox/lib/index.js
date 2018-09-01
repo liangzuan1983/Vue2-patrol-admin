@@ -85,13 +85,5 @@ export default async(el, opt) => {
   instance.loadingPic = false
 
   // done after dom updated
-  Vue.nextTick(() => {
-
-    // instance.initDom()
-    // const boundingClientRect = parent.getBoundingClientRect()
-    // instance.activeStyle = {
-    //   webkitTransform: `translate3d(${boundingClientRect.left}px, ${boundingClientRect.top}px, 0px) scale(${zoom})`,
-    //   msTransform: `translate3d(${boundingClientRect.left}px, ${boundingClientRect.top}px, 0px) scale(${zoom})`
-    // }
-  })
+  // Vue.nextTick(() => {})
 }

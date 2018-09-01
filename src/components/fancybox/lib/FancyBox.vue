@@ -10,26 +10,26 @@
           <div v-else key="fancyboxImage">  
             <div>
               <img class="fancybox__img" :style="fixStyle" :src="activeUrl"
-              v-fancybox-drag
+              v-fancybox
               :width="width"
               :height="height"
-              draggable="true"
-              v-on:DOMMouseScroll.stop.prevent="handleMousewheel($event)"
-              v-on:mousewheel.stop.prevent="handleMousewheel($event)"
               >
             </div>
           </div>
         </transition>
-      </div>
+        <div class="fancybox__tool">
+          <svg-icon icon-class="close" v-on:click.prevent="handleTapClosed"></svg-icon>
+        </div>
+      </div>  
     </div>
   </transition>
 </template>
 
 <script>
-import fancyboxDrag from '@/directive/fancybox-drag'
+import fancybox from '@/directive/fancybox-drag'
 export default {
   name: 'fancy-box-main',
-  directives: { fancyboxDrag },
+  directives: { fancybox },
   props: {
     visible: {
       type: Boolean,
@@ -48,7 +48,6 @@ export default {
       ImgBase64: null,
       width: null,
       height: null,
-      timestamp: null,
       zoomRatio: 0.6, // 缩放速率
       position: {
         top: 0,
@@ -69,64 +68,11 @@ export default {
       }
       this.destroy()
     },
-    handleMousewheel(event) {
-      const evtTarget = event.target || event.srcElement
-      if (evtTarget.wheelTimeout) {
-        clearTimeout(evtTarget.wheelTimeout)
-      }
-      evtTarget.wheelTimeout = setTimeout(() => {
-        const TYPE = event.type
-        let delta
-        if (TYPE === 'DOMMouseScroll' || TYPE === 'wheel' || TYPE === 'mousewheel') {
-          delta = (event.wheelDelta) ? event.wheelDelta / 120 : -(event.detail || 0) / 3
-        }
-        const bool = delta === 0 ? 0 : ~~delta.toString().replace(/(-?).*/, '$11')
-        this.position = this.zoomAtPoint({
-          upOrDown: bool,
-          eventX: event.offsetX,
-          eventY: event.offsetY,
-          zoomRatio: this.zoomRatio,
-          ...this.position
-        })
-      }, 120)
-    },
     handleMouseDown(event) {
       console.info(event)
     },
     handleMouseMove(event) {
       console.info(event)
-    },
-    /**
-     * Based on the upper left corner of the image and make the image as the eventTarget,
-     * calculate the distance between the trigger point and the origin,
-     * times the preview zoom
-     * @param {Boolean} left the translateX of image
-     * @param {Boolean} top the translateY of image
-     * @param {Boolean} scale
-     * @param {Boolean} upOrDown
-     * @param {Boolean} zoomRatio
-     * @param {Number} eventX the event point`x offsetX
-     * @param {Number} eventY the event point`y offsetY
-     * *@return {Object} { left, top, scale }
-     */
-    zoomAtPoint({ left, top, scale, upOrDown, eventX, eventY, zoomRatio }) {
-      let __scale = (1 + (-zoomRatio * upOrDown)) * scale
-
-      /* minimum-scale = 1 */
-      if (__scale <= 1) {
-        __scale = 1
-        zoomRatio = ((__scale / scale) - 1) / -upOrDown
-      }
-
-      left += upOrDown * (zoomRatio) * (eventX * scale)
-      top += upOrDown * (zoomRatio) * (eventY * scale)
-
-      scale = __scale
-      return {
-        left,
-        top,
-        scale
-      }
     },
     destroy() {
       if (!this.visible) return
@@ -230,11 +176,13 @@ $svgHeight: 42px;
       width: 100%;
       height: 100%;
       user-select: none;
-      .fancybox__img {
+      img.fancybox__img {
         transform-origin: left top 0px;
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.22, 1);
         user-select: none;
-        cursor: -webkit-grab;
+        &.fangbox-moving {
+          transition: 0s;
+        }
       }
     }
     .fancybox__loading_spinner {
@@ -256,6 +204,23 @@ $svgHeight: 42px;
           stroke-linecap: round;
         }
       }
+    }
+    .fancybox__tool {
+          display: table-cell;
+          vertical-align: middle;
+          width: auto;
+          height: auto;
+          left: auto;
+          top: 20px;
+          right: 50px;
+        .svg-icon {
+          text-align: center;
+          vertical-align: middle;
+          width: 2.2rem;
+          height: 2.2rem;
+          color: #909399;
+          cursor: pointer;
+        }
     }
   }
 }

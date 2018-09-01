@@ -104,7 +104,6 @@
 
       <el-table-column align="center" width="120px" label="抓拍照" v-bind:loading="true">
         <template slot-scope="scope">
-          <!-- <i v-if="!scope.row.catchPic" style="font-size: 16px" class="el-icon-loading table-column-icon"></i> -->
           <fancyBox :url="scope.row.catchPic"></fancyBox>
         </template>
       </el-table-column>
