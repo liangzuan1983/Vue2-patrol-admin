@@ -82,7 +82,7 @@ export default {
     shadeAfterLeave() {
       this.$nextTick().then(() => {
         this.$refs.fancyBoxWrapper && document.body.removeChild(this.$refs.fancyBoxWrapper.parentNode)
-        this.$destroy.bind(this)
+        this.$destroy.bind(this)()
       })
     },
     fadeAfterEnter() {
