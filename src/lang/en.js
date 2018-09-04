@@ -71,7 +71,8 @@ export default {
     alarmMap: 'AlarmMap',
     alarmMapWPF: 'AlarmMap',
     alarmSearch: 'AlarmSearch',
-    gateSearch: 'GateSearch'
+    gateSearch: 'GateSearch',
+    test: 'TEXT'
   },
   navbar: {
     logOut: 'Log Out',

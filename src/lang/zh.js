@@ -72,7 +72,8 @@ export default {
     alarmMap: '告警地图',
     alarmMapWPF: '告警地图',
     alarmSearch: '告警查询',
-    gateSearch: '门岗查询'
+    gateSearch: '门岗查询',
+    test: '测试'
   },
   navbar: {
     logOut: '退出登录',
