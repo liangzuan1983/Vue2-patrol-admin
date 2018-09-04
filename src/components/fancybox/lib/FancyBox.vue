@@ -179,6 +179,7 @@ $svgHeight: 42px;
       img.fancybox__img {
         transform-origin: left top 0px;
         transition: transform 0.5s cubic-bezier(0.4, 0, 0.22, 1);
+        border-radius: 5px;
         user-select: none;
         &.fangbox-moving {
           transition: 0s;

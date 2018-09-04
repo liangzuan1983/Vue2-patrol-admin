@@ -27,15 +27,6 @@
         </el-date-picker>
       </div>
 
-      <!-- <el-select v-model="listQuery.cardNumber" v-loading="cardNumberListLoading" filterable placeholder="请输入门禁卡号" class="filter-item" @change="handleFilter">
-        <el-option
-          v-for="item in cardNumberAutoComplete"
-          :key="item.id"
-          :label="item.label"
-          :value="item.value">
-        </el-option>
-      </el-select> -->
-
       <el-autocomplete
         class="inline-input"
         v-model="listQuery.cardNumber"
@@ -111,22 +102,9 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="抓拍照" v-bind:loading="true">
+      <el-table-column align="center" width="120px" label="抓拍照" v-bind:loading="true">
         <template slot-scope="scope">
-          <!-- <svg-icon v-if="!scope.row.catchPic" icon-class="loading" class="table-column-icon" /> -->
-          
-          <i v-if="!scope.row.catchPic" style="font-size: 16px" class="el-icon-loading table-column-icon"></i>
-          <!-- <a v-else :href="scope.row.catchPic" class="glightbox">
-						<img class="table-column-img" :src="scope.row.catchPic">
-					</a> -->
-          <!-- <div v-else class="imageList">
-            <div class="list" :data-index="0">
-              <img class="table-column-img" :src="scope.row.catchPic" @click="handleFancyBox($event)">
-            </div>
-          </div> -->
-          <div class="previewBox" v-else >
-            <vue-preview :slides="scope.row.catchPic | catchPic"></vue-preview>
-          </div>
+          <fancyBox :url="scope.row.catchPic"></fancyBox>
         </template>
       </el-table-column>
 
@@ -143,43 +121,17 @@
 import { selectPassPersonInfo } from '@/api/gate-machine-controller'
 import { parseTime, CapitalizeFirstLetter } from '@/utils'
 import waves from '@/directive/waves'
-import fancyBox from './components'
-// import GLightbox from 'glightbox'
-// import 'glightbox/dist/css/glightbox.min.css'
-import Vue from 'vue'
-import vuePreview from '@/components/previewBox'
-
-// with parameters install
-Vue.use(vuePreview, {
-  mainClass: 'pswp--minimal--dark',
-  barsSize: { top: 0, bottom: 0 },
-  captionEl: false,
-  zoomEl: true,
-  fullscreenEl: true,
-  shareEl: false,
-  bgOpacity: 0.9,
-  tapToClose: true,
-  tapToToggleControls: true
-})
+import fancyBox from '@/components/fancybox'
 
 export default {
   name: 'gateSearch',
+  components: {
+    fancyBox
+  },
   directives: {
     waves
   },
-  filters: {
-    catchPic(picUrl) {
-      return [{
-        src: picUrl,
-        msrc: picUrl,
-        alt: '告警图片',
-        title: '告警图片',
-        w: 2880,
-        h: 1800,
-        mw: 24
-      }]
-    }
-  },
+  filters: {},
   data() {
     return {
       list: null,
@@ -299,10 +251,7 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
-    handleFancyBox(event) {
-      const item = { width: 2880, height: 1800, url: event.currentTarget.src }
-      fancyBox(event.currentTarget, [].concat(item))
-    },
+    handleFancyBox(event) {},
     handleAutocomplete(queryString, cb) {
       var cardNumberList = this.cardNumberAutoComplete
       var results = queryString ? cardNumberList.filter(this.createFilter(queryString)) : cardNumberList
@@ -344,7 +293,7 @@ export default {
 .table-column-img {
   width: 1.4rem;
   height: 1.4rem;
-  color: #a5a5a5;
+  color: #999;
   cursor: pointer;
   vertical-align: middle;
 }

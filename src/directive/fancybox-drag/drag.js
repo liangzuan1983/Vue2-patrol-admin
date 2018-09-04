@@ -14,7 +14,7 @@ export default {
     el.style.cssText += ';cursor:move;'
     // 获取原有属性 ie dom元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
     const getCSSStyle = (function() {
-      if (window.document.currentStyle) {
+      if (document.documentElement.currentStyle) {
         // IE fetching transfrom is matrix3d
         return (dom, attr) => dom.currentStyle[attr]
       } else {
@@ -25,6 +25,96 @@ export default {
         }
       }
     })()
+
+    const transitionEnd = (dom, callback) => {
+      const events = ['webkitTransitionEnd', 'transitionend', 'oTransitionEnd', 'MSTransitionEnd', 'msTransitionEnd']
+      let i
+      function fireCallBack(e) {
+        /* jshint validthis:true */
+        if (e.target !== this) return
+        callback.call(this, e)
+        for (i = 0; i < events.length; i++) {
+          // dom.off(events[i], fireCallBack)
+          removeEvent(dom, events[i], fireCallBack)
+        }
+      }
+      if (callback) {
+        for (i = 0; i < events.length; i++) {
+          // dom.on(events[i], fireCallBack)
+          addEvent(dom, events[i], fireCallBack)
+        }
+      }
+      return this
+    }
+
+    /**
+     * fetch the axis inside of transform from el
+     * @param {DOMElement} el
+     * @param {string} axis
+     */
+    const getTranslate = function(el, axis) {
+      var matrix, curTransform, curStyle, transformMatrix
+
+      // automatic axis detection
+      if (typeof axis === 'undefined') {
+        axis = 'x'
+      }
+
+      curStyle = window.getComputedStyle(el, null)
+      if (window.WebKitCSSMatrix) {
+      // Some old versions of Webkit choke when 'none' is passed; pass
+      // empty string instead in this case
+        transformMatrix = new window.WebKitCSSMatrix(curStyle.webkitTransform === 'none' ? '' : curStyle.webkitTransform)
+      } else {
+        transformMatrix = curStyle.MozTransform || curStyle.OTransform || curStyle.MsTransform || curStyle.msTransform || curStyle.transform || curStyle.getPropertyValue('transform').replace('translate(', 'matrix(1, 0, 0, 1,')
+        matrix = transformMatrix.toString().split(',')
+      }
+
+      if (axis === 'x') {
+      // Latest Chrome and webkits Fix
+        if (window.WebKitCSSMatrix) {
+          curTransform = transformMatrix.m41
+        } else if (matrix.length === 16) {
+          // Crazy IE10 Matrix
+          curTransform = parseFloat(matrix[12])
+        } else {
+          // Normal Browsers
+          curTransform = parseFloat(matrix[4])
+        }
+      }
+      if (axis === 'y') {
+      // Latest Chrome and webkits Fix
+        if (window.WebKitCSSMatrix) {
+          curTransform = transformMatrix.m42
+        } else if (matrix.length === 16) {
+          // Crazy IE10 Matrix
+          curTransform = parseFloat(matrix[13])
+        } else {
+          // Normal Browsers
+          curTransform = parseFloat(matrix[5])
+        }
+      }
+
+      return curTransform || 0
+    }
+
+    const _requestAnimationFrame = (callback) => {
+      if (window.requestAnimationFrame) return window.requestAnimationFrame(callback)
+      else if (window.webkitRequestAnimationFrame) return window.webkitRequestAnimationFrame(callback)
+      else if (window.mozRequestAnimationFrame) return window.mozRequestAnimationFrame(callback)
+      else {
+        return window.setTimeout(callback, 1000 / 60)
+      }
+    }
+
+    const _cancelAnimationFrame = function(id) {
+      if (window.cancelAnimationFrame) return window.cancelAnimationFrame(id)
+      else if (window.webkitCancelAnimationFrame) return window.webkitCancelAnimationFrame(id)
+      else if (window.mozCancelAnimationFrame) return window.mozCancelAnimationFrame(id)
+      else {
+        return window.clearTimeout(id)
+      }
+    }
 
     /**
      * format 'matirx(1, ?, ?, 1, 100, 100)' or 'matrix3d(4.8, 0, 0, 0, 0, 4.8, 0, 0, 0, 0, 1, 0, -367.2, -1033.2, 0, 1)'
@@ -325,12 +415,110 @@ export default {
       }
     }
 
+    const TWEEN = require('@/utils/tween.js')
+    const animate = (function(f) {
+      var value
+      var active = false
+      var accumulated = []
+
+      return async function accumulator() {
+        accumulated.push(arguments)
+        if (!active) {
+          active = true
+          while (accumulated.length) {
+            value = await f.apply(this, accumulated.shift())
+          }
+          active = false
+          return value
+        }
+      }
+    })(function(from, to, dom) {
+      return new Promise((resolve, reject) => {
+        if (from === undefined || to === undefined) {
+          return reject()
+        }
+        console.log('start')
+        /* first situation */
+        // do the animate transform(asynchronous)
+        // let animationSwitch
+        // function next(timer) {
+        //   animationSwitch = _requestAnimationFrame(next)
+        //   TWEEN.update(timer)
+        // }
+        // animationSwitch = _requestAnimationFrame(next)
+
+        // const start = Object.assign({}, from)
+        // const end = Object.assign({}, to)
+        // const tween = new TWEEN.Tween(start)
+        //   .to(end, 10)
+        //   .easing(TWEEN.Easing.Sinusoidal.InOut)
+        //   .onUpdate(function() {
+        //     console.log(start)
+        //     // dom.style.setProperty('webkitTransform', `translate3d(${start.left}px, ${start.top}px, 0px) scale(${start.scale})`)
+        //     // dom.style.setProperty('msTransform', `translate3d(${start.left}px, ${start.top}px, 0px) scale(${start.scale})`)
+
+        //     el.style['webkitTransform'] = `translate3d(${start.left}px, ${start.top}px, 0px) scale(${start.scale})`
+        //     el.style['msTransform'] = `translate3d(${start.left}px, ${start.top}px, 0px) scale(${start.scale})`
+        //   })
+        //   .onStop(function() {
+        //     console.log('end')
+        //   })
+        //   .onComplete(function() {
+        //     console.log('com')
+        //     _cancelAnimationFrame(animationSwitch)
+        //     return resolve()
+        //   })
+        //   .start() // Start the tween immediately.
+
+        /* second situation */
+        // let animationSwitch
+        // const scale = from.scale
+        // const left1 = from.left
+        // const top1 = from.top
+        // const left2 = to.left
+        // const top2 = to.top
+        // const d1 = left2 - left1
+        // const d2 = top2 - top1
+        // const step = Math.abs(d2) > Math.abs(d1) ? Math.abs(d2) : Math.abs(d1)
+        // // const bool = step === 0 ? 0 : ~~step.toString().replace(/(-?).*/, '$11')
+        // let i = 0
+
+        // const _next = () => {
+        //   if (++i < step) {
+        //     const left = i * d1 / step + left1
+        //     const top = i * d2 / step + top1
+        //     // dom.style.setProperty('webkitTransform', `translate3d(${left}px, ${top}px, 0px) scale(${scale})`)
+        //     // dom.style.setProperty('msTransform', `translate3d(${left}px, ${top}px, 0px) scale(${scale})`)
+        //     console.log(left, top)
+
+        //     dom.style['webkitTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
+        //     dom.style['msTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
+        //     animationSwitch = _requestAnimationFrame(_next)
+        //   } else {
+        //     console.log('end')
+        //     _cancelAnimationFrame(animationSwitch)
+        //     return resolve()
+        //   }
+        // }
+        // animationSwitch = _requestAnimationFrame(_next)
+
+        /* third situation */
+        const { left, top, scale } = to
+        dom.style['webkitTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
+        dom.style['msTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
+        console.log('end')
+        return resolve()
+      })
+    })
+
     let x_mousedown
     let y_mousedown
     let x_mouseup
     let y_mouseup
     let x_startPoint
     let y_startPoint
+    let x_currentPoint
+    let y_currentPoint
     let zoom_startPoint
     let move_direction
     let moveFlag = false
@@ -347,17 +535,32 @@ export default {
         moveFlag = true
         x_mousedown = e.screenX
         y_mousedown = e.screenY
+
+        /**
+         * !have a bug, sometime left, top and scale is undefined
+         */
         // when make the mouse down, calculate the distance between current Dom and visual window
-        const { left, top, scale } = parseMatrix(matchedMatrix(getCSSStyle(el, 'transform')))
-        x_startPoint = left
-        y_startPoint = top
+        const { left = 0, top = 0, scale = 1 } = parseMatrix(matchedMatrix(getCSSStyle(el, 'transform')))
+        x_startPoint = x_currentPoint = left
+        y_startPoint = y_currentPoint = top
         zoom_startPoint = scale
       }
     }
     const handleMousemove = (event) => {
       const e = event || window.event
+      // const evtTarget = e.target || e.srcElement
       if (moveFlag) {
-        el.classList.add('fangbox-moving')
+        // if (evtTarget.mousemoveTimeout) {
+        //   return false
+        // }
+        // evtTarget.mousemoveTimeout = setTimeout(() => {
+        //   evtTarget.mousemoveTimeout = null
+        // }, 10)
+
+        if (!el.classList.contains('fangbox-moving')) {
+          el.classList.add('fangbox-moving')
+        }
+
         const f = e.screenX
         const d = e.screenY
         const h = f - x_mousedown
@@ -367,8 +570,14 @@ export default {
         const top = +y_startPoint + g
         const scale = zoom_startPoint
 
-        el.style['webkitTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
-        el.style['msTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
+        /** 尝试解决补间动画的问题，但是效果不理想，可能理解不对 */
+        animate({ left: x_currentPoint, top: y_currentPoint, scale }, { left, top, scale }, el)
+          .then(() => {
+            x_currentPoint = left
+            y_currentPoint = top
+          })
+        // el.style['webkitTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
+        // el.style['msTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
 
         if (e.preventDefault) {
           e.preventDefault()
@@ -378,7 +587,6 @@ export default {
         return false
       }
     }
-
     const handleMouseup = (event) => {
       const e = event || window.event
 
@@ -407,12 +615,6 @@ export default {
         moveFlag = false
       }
     }
-    addEvent(el, 'mousedown.fancybox', handleMousedown, false)
-    // el.addEventListener('mousedown', handleMousedown, false)
-    addEvent(document, 'mousemove.fancybox', handleMousemove, false)
-    // document.addEventListener('mousemove', handleMousemove, false)
-    addEvent(document, 'mouseup.fancybox', handleMouseup, false)
-    // document.addEventListener('mouseup', handleMouseup, false)
     const handleMousewheel = (event) => {
       const e = event || window.event
       // when image is moving, no operation
@@ -453,6 +655,13 @@ export default {
       el.style['webkitTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
       el.style['msTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
     }
+
+    addEvent(el, 'mousedown.fancybox', handleMousedown, false)
+    // el.addEventListener('mousedown', handleMousedown, false)
+    addEvent(document, 'mousemove.fancybox', handleMousemove, false)
+    // document.addEventListener('mousemove', handleMousemove, false)
+    addEvent(document, 'mouseup.fancybox', handleMouseup, false)
+    // document.addEventListener('mouseup', handleMouseup, false)
     addEvent(el, 'mousewheel.fancybox', handleMousewheel, false)
   },
   unbind(el) {
