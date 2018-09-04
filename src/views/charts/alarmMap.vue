@@ -30,7 +30,9 @@ import MyOverlay from './components/myOverlay.vue'
 import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
 
-import MySocket from './mixin/websocket'
+// import MySocket from './mixin/websocket'
+
+import websocket from './mixin/websocket'
 
 import robotIcon from '@/assets/images/native/robot_online.png'
 import alarmLevel_1 from '@/assets/images/native/alarmLevel-1.png'
@@ -41,11 +43,6 @@ const APP_KEY = 'CdheGAoG7cgw72buOCzctrBoyuGtf7u7'
 const ALARM_TYPE = 1 // 告警信息
 const STATUS_TYPE = 2 // 机器人状态信息
 
-// Vue.use(BaiduMap, {
-//   /* ak 是在百度地图开发者平台申请的密钥 详见 http://lbsyun.baidu.com/apiconsole/key */
-//   ak: APP_KEY
-// })
-
 export default {
   name: 'alarmMap',
   components: {
@@ -53,36 +50,7 @@ export default {
     BaiduMap,
     BmMarker
   },
-  created() {
-    var that = this
-    /* global LOCAL_ROOT */
-    const url = `ws:${LOCAL_ROOT}/websocket`
-    this.ws = new MySocket({
-      url,
-      reconnectionAttempts: 50,
-      timeoutMs: 8000,
-      open: (websocket) => {
-        that.$notify({
-          title: '建立数据连接',
-          message: '连接WebSocket成功',
-          type: 'success',
-          duration: 1000
-        })
-      },
-      error(websocket) {
-        that.$notify({
-          title: '建立数据连接',
-          message: `连接WebSocket失败/超时，正尝试(${this._opt.surplusAttempts - 1})重连...`,
-          type: 'error',
-          duration: 2000
-        })
-      },
-      message: (response) => {
-        that.handleWebSocket_msg(response)
-      },
-      close(websocket) {}
-    })
-  },
+  mixins: [websocket],
   data() {
     return {
       APP_KEY,
@@ -107,9 +75,7 @@ export default {
       scrollWheelZoom: true,
       maploading: true,
       ws: null,
-      wsMessage: null, // public param
-      isLeavePage: false
-      // show: false
+      wsMessage: null // public param
     }
   },
   filters: {
@@ -164,12 +130,6 @@ export default {
     },
     centerAndZoom(lng, lat) {
       this.$map.centerAndZoom(new this.$BMap.Point(lng, lat), this.zoom)
-    },
-    handleWebSocket_msg(response) {
-      const { returnValue, data } = response
-      if (returnValue) {
-        this.wsMessage = JSON.parse(data)
-      }
     }
   },
   computed: {
@@ -262,8 +222,7 @@ export default {
         resolve()
       }
     }).then(() => {
-      // that.isLeavePage = true
-      this.ws.close(100, '正常关闭')
+      this.ws && this.ws.close(100, '正常关闭')
       next()
     }, () => {
       next(false)
@@ -301,8 +260,6 @@ $WARM: #e6a23c;
 .overlay-alarm {
   background-color: rgba(236, 245, 255, 0.73);
   svg, img {
-    // position: absolute;
-    // vertical-align: middle;
     position: relative;
     width: 100%;
     height: 100%;

@@ -12,8 +12,7 @@
 const _initWebsocket = Symbol('_initWebsocket')
 const ws = Symbol('ws')
 
-/* eslint-disable no-unused-vars */
-export default class MySocket {
+class MySocket {
   [ws] = null;
 
   closed = false; // close the process
@@ -200,5 +199,52 @@ export default class MySocket {
       }
     }
     this.closed = true
+  }
+}
+
+export default {
+  data() {
+    return {
+      ws: null,
+      wsMessage: null // public param
+    }
+  },
+  created() {
+    var that = this
+    /* global LOCAL_ROOT */
+    const url = `ws:${LOCAL_ROOT}/websocket`
+    this.ws = new MySocket({
+      url,
+      reconnectionAttempts: 50,
+      timeoutMs: 8000,
+      open: (websocket) => {
+        that.$notify({
+          title: '建立数据连接',
+          message: '连接WebSocket成功',
+          type: 'success',
+          duration: 1000
+        })
+      },
+      error(websocket) {
+        that.$notify({
+          title: '建立数据连接',
+          message: `连接WebSocket失败/超时，正尝试(${this._opt.surplusAttempts - 1})重连...`,
+          type: 'error',
+          duration: 2000
+        })
+      },
+      message: (response) => {
+        that.handleWebSocket_msg(response)
+      },
+      close(websocket) {}
+    })
+  },
+  methods: {
+    handleWebSocket_msg(response) {
+      const { returnValue, data } = response
+      if (returnValue) {
+        this.wsMessage = JSON.parse(data)
+      }
+    }
   }
 }
