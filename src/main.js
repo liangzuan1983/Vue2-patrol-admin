@@ -2,10 +2,10 @@ import Vue from 'vue'
 import 'normalize.css/normalize.css'// A modern alternative to CSS resets
 
 import Element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
+// import 'element-ui/lib/theme-chalk/index.css'
 
 /* when need to make the custom theme, open this */
-// import '@/styles/element-variables.scss'
+import '@/styles/element-variables.scss'
 
 import '@/styles/index.scss' // global css
 

@@ -41,7 +41,7 @@
     "connect": "3.6.6",
     "driver.js": "0.5.2",
     "dropzone": "5.2.0",
-    "echarts": "3.8.5",
+    "echarts": "^4.1.0",
     "element-theme": "^2.0.1",
     "element-theme-chalk": "^2.4.6",
     "element-ui": "2.3.2",

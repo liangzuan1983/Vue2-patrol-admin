@@ -28,12 +28,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
+$--background-color-base: #f5f7fa !default;
 .app-main {
   /*84 = navbar + tags-view = 50 +34 */
   min-height: calc(100vh - 84px);
   position: relative;
   overflow: hidden;
+  background-color: $--background-color-base;
 }
 </style>
 
