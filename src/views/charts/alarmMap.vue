@@ -92,11 +92,6 @@ export default {
           url = alarmLevel_3
       }
       return url
-      // return {
-      //   'icon-error': +level === 3,
-      //   'icon-warm': +level === 2,
-      //   'icon-success': +level === 1
-      // }
     }
   },
   methods: {
@@ -233,12 +228,24 @@ export default {
 
 <style rel='stylesheet/scss' lang='scss' scoped>
 .map-container {
-  position: relative;
   box-sizing: border-box;
   width: 100%;
+
+  position: relative;
   height: calc(100vh - 84px);
   padding: 25px;
-  .bm-view {
+  &.map-container-WPF {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 2000;
+  }
+   .bm-view {
     position: relative;
     width: 100%;
     height: 100%;

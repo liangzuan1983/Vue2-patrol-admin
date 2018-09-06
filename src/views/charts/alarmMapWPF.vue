@@ -24,6 +24,9 @@
 </template>
 
 <script>
+/**
+ * TODO WPF页面和PC页面功能上稍微有不同：1、全屏幕显示地图； 2、点击告警按钮的时候需要触发WPF上的监听的事件； 3、wpf点击图标时候需要往url后面添加参数，网页需要监听url变化从而移动到图标的定位点
+ */
 import { getToken } from '@/utils/auth' // getToken from cookie
 
 import MyOverlay from './components/myOverlay.vue'
@@ -51,6 +54,13 @@ export default {
     BmMarker
   },
   mixins: [websocket],
+  mounted() {
+    /* just for WPF */
+    this.$root.$el.style['overflow'] = 'hidden'
+    if (!this.$el.classList.contains('map-container-WPF')) {
+      this.$el.classList.add('map-container-WPF')
+    }
+  },
   data() {
     return {
       APP_KEY,
@@ -217,12 +227,12 @@ export default {
         resolve()
       }
     }).then(() => {
-      // that.isLeavePage = true
       this.ws.close(100, '正常关闭')
-
       /* just for WPF */
       this.$root.$el.style['overflow'] = 'visible'
-
+      if (this.$el.classList.contains('map-container-WPF')) {
+        this.$el.classList.remove('map-container-WPF')
+      }
       next()
     }, () => {
       next(false)
@@ -233,17 +243,23 @@ export default {
 
 <style rel='stylesheet/scss' lang='scss' scoped>
 .map-container {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
   box-sizing: border-box;
   width: 100%;
-  height: 100%;
-  padding: 0 !important;
-  margin: 0 !important;
-  z-index: 2000;
+
+  position: relative;
+  height: calc(100vh - 84px);
+  padding: 25px;
+  &.map-container-WPF {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    z-index: 2000;
+  }
   .bm-view {
     position: relative;
     width: 100%;
