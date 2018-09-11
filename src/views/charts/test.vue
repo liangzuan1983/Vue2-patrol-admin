@@ -1,5 +1,6 @@
 <template>
-  <div class='chart-container'>
+  <div class='chart-container' :style="calculateTransform" v-on:mousewheel.passive="handleMousewheel($event)" ref="chartContainer">
+    <div class="chart" :class="className" :id="id3" :style="{height:height,width:width}"></div>
     <div class="chart" :class="className" :id="id" :style="{height:height,width:width}"></div>
     <div class="chart" :class="className" :id="id2" :style="{height:height,width:width}"></div>
   </div>
@@ -31,11 +32,21 @@ export default {
   data() {
     return {
       chart: null,
-      id2: 'chart2'
+      id2: 'chart2',
+      id3: 'chart3',
+      scrollTop: 0
     }
   },
   mounted() {
     this.initChart()
+  },
+  computed: {
+    calculateTransform() {
+      return {
+        'webkitTransform': `translate3d(0px, ${this.scrollTop}px, 0px)`,
+        'msTransform': `translate3d(0px, ${this.scrollTop}px, 0px)`
+      }
+    }
   },
   methods: {
     initChart() {
@@ -111,6 +122,45 @@ export default {
         ]
       }
       chart2.setOption(option2)
+    },
+    handleMousewheel(event) {
+      const e = event || window.event
+      const TYPE = e.type
+      // const evtTarget = e.target || e.srcElement
+      let delta
+      if (TYPE === 'DOMMouseScroll' || TYPE === 'wheel' || TYPE === 'mousewheel') {
+        delta = (e.wheelDelta) ? e.wheelDelta / 120 : -(e.detail || 0) / 3
+      }
+      const bool = delta === 0 ? 0 : ~~delta.toString().replace(/(-?).*/, '$11')
+
+      const bubblingPath = e.path
+      let currentChart = null
+      let previewChart = null
+      let nextChart = null
+      if (Array.isArray(bubblingPath)) {
+        bubblingPath.some((elem) => {
+          if (elem.classList.contains('chart')) {
+            currentChart = elem
+            return true
+          }
+          return false
+        })
+      }
+
+      if (currentChart) {
+        previewChart = currentChart.previousElementSibling
+        nextChart = currentChart.nextElementSibling
+      }
+
+      if (bool < 0) {
+        if (nextChart) {
+          this.scrollTop = nextChart.offsetTop ? -nextChart.offsetTop : this.scrollTop
+        }
+      } else {
+        if (previewChart) {
+          this.scrollTop = previewChart.offsetTop ? -previewChart.offsetTop : this.scrollTop
+        }
+      }
     }
   }
 }
@@ -121,7 +171,8 @@ export default {
   position: relative;
   width: 100%;
   height: calc(100vh - 84px);
-  overflow-y: scroll;
+  transition: transform 0.3s cubic-bezier(.08,.93,.75,.95);
+  // overflow-y: scroll;
   .chart {
     position: relative;
     box-sizing: border-box;
