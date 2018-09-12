@@ -32,6 +32,7 @@ export default {
   data() {
     return {
       chart: null,
+      chart2: null,
       id2: 'chart2',
       id3: 'chart3',
       scrollTop: 0
@@ -98,7 +99,7 @@ export default {
       }
       this.chart.setOption(option)
 
-      const chart2 = echarts.init(document.getElementById(this.id2))
+      this.chart2 = echarts.init(document.getElementById(this.id2))
       const option2 = {
         legend: {},
         tooltip: {},
@@ -121,7 +122,7 @@ export default {
           { type: 'bar' }
         ]
       }
-      chart2.setOption(option2)
+      this.chart2.setOption(option2)
     },
     handleMousewheel(event) {
       const e = event || window.event
@@ -158,7 +159,7 @@ export default {
         }
       } else {
         if (previewChart) {
-          this.scrollTop = previewChart.offsetTop ? -previewChart.offsetTop : this.scrollTop
+          this.scrollTop = (previewChart.offsetTop || previewChart.offsetTop === 0) ? -previewChart.offsetTop : this.scrollTop
         }
       }
     }
@@ -171,7 +172,7 @@ export default {
   position: relative;
   width: 100%;
   height: calc(100vh - 84px);
-  transition: transform 0.3s cubic-bezier(.08,.93,.75,.95);
+  transition: transform 0.4s cubic-bezier(.08,.93,.75,.95);
   // overflow-y: scroll;
   .chart {
     position: relative;

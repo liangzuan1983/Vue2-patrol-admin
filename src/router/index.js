@@ -85,7 +85,7 @@ export const asyncRouterMap = [
       { path: 'keyboard', component: () => import('@/views/charts/keyboard'), name: 'keyboardChart', meta: { title: 'keyboardChart', noCache: true }},
       { path: 'line', component: () => import('@/views/charts/line'), name: 'lineChart', meta: { title: 'lineChart', noCache: true }},
       { path: 'mixchart', component: () => import('@/views/charts/mixChart'), name: 'mixChart', meta: { title: 'mixChart', noCache: true }},
-      { path: 'test', component: () => import('@/views/charts/test'), name: 'test', meta: { title: 'test', noCache: true }}
+      { path: 'test', component: () => import('@/views/charts/test'), name: 'test', meta: { title: 'test', noCache: false }}
     ]
   },
   {

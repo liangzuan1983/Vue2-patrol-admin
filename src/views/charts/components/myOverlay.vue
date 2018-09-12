@@ -1,8 +1,8 @@
 <template>
-   <bm-overlay
+  <bm-overlay
     class="bm-overlay-self"
     ref="customOverlay"
-    pane="floatPane"
+    :pane="MapPane"
     @click.native="handleClick($event)"
     @draw="draw">
     <slot></slot>
@@ -14,6 +14,11 @@ import BmOverlay from 'vue-baidu-map/components/overlays/overlay.vue'
 export default {
   name: 'MyOverlay',
   props: {
+    // http://lbsyun.baidu.com/cms/jsapi/reference/jsapi_reference_3_0.html#a3b1
+    MapPane: {
+      type: String,
+      default: 'floatPane'
+    },
     position: {
       required: true,
       type: Object,
@@ -60,7 +65,7 @@ export default {
     handleClick(event) {
       /* highlight the currentTarget */
       if (this.$refs.customOverlay.map) {
-        const floatPanes = Array.from(this.$refs.customOverlay.map.getPanes()['floatPane'].children)
+        const floatPanes = Array.from(this.$refs.customOverlay.map.getPanes()[this.MapPane].children)
         for (const item of floatPanes) {
           if (item.classList.contains('highlight')) {
             item.classList.remove('highlight')
@@ -77,7 +82,7 @@ export default {
 <style rel="stylesheet/scss" lang="scss" scoped>
 .bm-overlay-self {
   overflow: hidden;
-  box-shadow: 0 0 5px #777;
+  box-shadow: 0 0 5px #c3c3c3;
   text-align: center;
   border-radius: 50%;
   padding: 5px;

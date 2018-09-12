@@ -1,13 +1,11 @@
 <template>
-  <el-container class="map-container" ref="container" v-loading="maploading">
+  <el-container class="map-container map-container-WPF" ref="container" v-loading="maploading">
     <baidu-map class="bm-view" :scroll-wheel-zoom="scrollWheelZoom" :center="center" :zoom="zoom" :ak="APP_KEY" @ready="handlerMap">
-      <bm-marker v-for="item in robotList" :key="item.id"
-        :icon="robotIcon"
-        :position="{lng: item.longitude, lat: item.latitude}">
-      </bm-marker>
+      <!-- 为了让自定义的信息体 与 marker 处于同一层 便于设置zIndex 所以改为markerPane容器 -->
       <my-overlay
         v-for="item in _alarmList" :key="item.id"
         class="overlay-alarm"
+        MapPane="markerPane"
         :width="alarmIcon.width"
         :height="alarmIcon.height"
         :position="{lng: item.longitude, lat: item.latitude}"
@@ -19,6 +17,12 @@
         </div>
       </my-overlay>
 
+       <bm-marker v-for="item in robotList" 
+        :key="item.id"
+        :zIndex="1"
+        :icon="robotIcon"
+        :position="{lng: item.longitude, lat: item.latitude}">
+      </bm-marker>
     </baidu-map>
   </el-container>
 </template>
@@ -32,8 +36,6 @@ import { getToken } from '@/utils/auth' // getToken from cookie
 import MyOverlay from './components/myOverlay.vue'
 import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
-
-// import MySocket from './mixin/websocket'
 
 import websocket from './mixin/websocket'
 
@@ -57,9 +59,6 @@ export default {
   mounted() {
     /* just for WPF */
     this.$root.$el.style['overflow'] = 'hidden'
-    if (!this.$el.classList.contains('map-container-WPF')) {
-      this.$el.classList.add('map-container-WPF')
-    }
   },
   data() {
     return {
@@ -68,7 +67,7 @@ export default {
         lng: 113.462954,
         lat: 23.181357
       },
-      robotList: [], // [{ longitude: 113.462954, latitude: 23.181357, id: 12 }],
+      robotList: [], // [{ longitude: 113.46375, latitude: 23.180965, id: 12 }],
       alarmList: [], // [{ 'linkageDistance': '', 'alarmLevel': 2, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.6℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 09: 35.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 655, 'longitude': 113.46375, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'alarmLevel': 3, 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.7℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 11: 04.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 656, 'longitude': 113.4627905, 'latitude': 23.181015, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.9℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 13: 23.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 657, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 14: 29.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 658, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.0℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 15: 32.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 659, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '29.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 17: 41.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 660, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '28.8℃', 'Key': '告警值' }, { 'Value': '2018-08-15 14: 59: 18.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 661, 'longitude': 113.46275, 'latitude': 23.180965, 'type': 1 }, { 'linkageDistance': '', 'title': '普通告警', 'values': [{ 'Value': '高温告警', 'Key': '告警名称' }, { 'Value': '30.1℃', 'Key': '告警值' }, { 'Value': '2018-08-15 15: 08: 52.0', 'Key': '告警时间' }, { 'Value': '', 'Key': '告警区域' }], 'address': [], 'altitude': '', 'linkage': 0, 'Id': 662, 'longitude': 113.46273, 'latitude': 23.180798, 'type': 1 }],
       robotIcon: {
         url: robotIcon,
@@ -78,8 +77,8 @@ export default {
         }
       },
       alarmIcon: {
-        width: 24,
-        height: 24
+        width: 20,
+        height: 20
       },
       zoom: 19,
       scrollWheelZoom: true,
@@ -173,6 +172,13 @@ export default {
           }
         } else if (typeof data === 'object') {
           console.log('type', data.type)
+          if (data.type === ALARM_TYPE) {
+            console.log('ALARM_TYPE', data)
+            deal(alarmList, data, flag)
+          } else if (data.type === STATUS_TYPE) {
+            console.log('STATUS_TYPE', data)
+            deal(robotList, data, flag)
+          }
         }
 
         function deal(list, obj, type) {
@@ -230,9 +236,6 @@ export default {
       this.ws.close(100, '正常关闭')
       /* just for WPF */
       this.$root.$el.style['overflow'] = 'visible'
-      if (this.$el.classList.contains('map-container-WPF')) {
-        this.$el.classList.remove('map-container-WPF')
-      }
       next()
     }, () => {
       next(false)

@@ -55,7 +55,7 @@ export default {
         backgroundColor: '#344b58',
         title: {
           text: 'statistics',
-          x: '20',
+          x: 'center',
           top: '20',
           textStyle: {
             color: '#fff',
@@ -69,6 +69,7 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
+            type: 'cross',
             textStyle: {
               color: '#fff'
             }
@@ -83,13 +84,14 @@ export default {
           }
         },
         legend: {
-          x: '5%',
+          x: 'center',
           top: '10%',
           textStyle: {
             color: '#90979c'
           },
           data: ['female', 'male', 'average']
         },
+        // 是否启用拖拽重计算特性，默认关闭(即值为false)
         calculable: true,
         xAxis: [{
           type: 'category',
