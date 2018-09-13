@@ -6,11 +6,11 @@ const FancyBoxConstructor = Vue.extend(fancyBoxMain)
 
 export default async(el, opt) => {
   const instance = new FancyBoxConstructor({
-    el: document.createElement('div'),
+    // document.createElement('div'), mount to a DOMELement which will be replaced
     mounted() {
       this.visible = true
     }
-  })
+  }).$mount()
   document.body.appendChild(instance.$el)
 
   await new Promise((resolve, reject) => {

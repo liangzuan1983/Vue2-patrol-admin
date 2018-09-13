@@ -29,7 +29,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js') // js/[name].[chunkhash].js checkout the name of chunks
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
@@ -109,6 +109,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // in a separate chunk, similar to the vendor chunk
     // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
     new webpack.optimize.CommonsChunkPlugin({
+      // the name or list of names must match the name or names of the entry points that create the async chunks
       name: 'app',
       async: 'vendor-async',
       children: true,
@@ -138,11 +139,11 @@ const webpackConfig = merge(baseWebpackConfig, {
         return context && (context.indexOf('codemirror') >= 0);
       }
     }),
-    // split codemirror into its own file
+    // split vue-baidu-map into its own file
     new webpack.optimize.CommonsChunkPlugin({
       async: 'vue-baidu-map',
-      name: 'map',
-      minChunks(module) {
+      minChunks(module, count) {
+        // return module.context && module.context.includes('vue-baidu-map');
         var context = module.context;
         return context && (context.indexOf('vue-baidu-map') >= 0);
       }

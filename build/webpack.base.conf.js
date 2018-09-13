@@ -32,7 +32,9 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    //自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
+    /** 自动扩展文件后缀名，意味着我们require模块可以省略不写后缀名
+     *  '*' 允许extensions之外的全名称写法
+     */
     extensions: ['*', '.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',

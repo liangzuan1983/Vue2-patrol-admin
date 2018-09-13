@@ -11,6 +11,14 @@ import Layout from '@/views/layout/Layout'
 **/
 
 /**
+ * ! Router lazyload (Import)
+ * detail see: https://router.vuejs.org/zh/guide/advanced/lazy-loading.html
+ * ! Components are loaded on demand. All components under a routing are packaged in the same asynchronous chunk
+ * detail see: https://webpack.js.org/guides/code-splitting/
+ * for example: component: () => import(\/* webpackChunkName: 'commonChunk' *\/'@/views/login/index')
+ */
+
+/**
 * hidden: true                   if `hidden:true` will not show in the sidebar(default is false)
 * alwaysShow: true               if set true, will always show the root menu, whatever its child routes length
 *                                if not set alwaysShow, only more than one route under the children
@@ -97,6 +105,32 @@ export const asyncRouterMap = [
     children: [
       { path: 'gateSearch', component: () => import('@/views/gate-machine-controller/gateSearch'), name: 'gateSearch', meta: { title: 'gateSearch', icon: 'gate', noCache: false }}
       // { path: 'gateSearch2', component: () => import('@/views/gate-machine-controller/gateSearch2'), hidden: true, name: 'gateSearch2', meta: { title: 'gateSearch2', icon: 'gate', noCache: false }}
+    ]
+  },
+  {
+    path: '/components',
+    alwaysShow: true,
+    component: Layout,
+    redirect: 'noredirect',
+    name: 'component-demo',
+    meta: {
+      title: 'components',
+      icon: 'component'
+    },
+    children: [
+      // { path: 'tinymce', component: () => import('@/views/components-demo/tinymce'), hidden: true, name: 'tinymce-demo', meta: { title: 'tinymce' }},
+      // { path: 'markdown', component: () => import('@/views/components-demo/markdown'), hidden: true, name: 'markdown-demo', meta: { title: 'markdown' }},
+      // { path: 'json-editor', component: () => import('@/views/components-demo/jsonEditor'), hidden: true, name: 'jsonEditor-demo', meta: { title: 'jsonEditor' }},
+      // { path: 'splitpane', component: () => import('@/views/components-demo/splitpane'), hidden: true, name: 'splitpane-demo', meta: { title: 'splitPane' }},
+      // { path: 'avatar-upload', component: () => import('@/views/components-demo/avatarUpload'), hidden: true, name: 'avatarUpload-demo', meta: { title: 'avatarUpload' }},
+      // { path: 'dropzone', component: () => import('@/views/components-demo/dropzone'), hidden: true, name: 'dropzone-demo', meta: { title: 'dropzone' }},
+      // { path: 'sticky', component: () => import('@/views/components-demo/sticky'), hidden: true, name: 'sticky-demo', meta: { title: 'sticky' }},
+      // { path: 'count-to', component: () => import('@/views/components-demo/countTo'), hidden: true, name: 'countTo-demo', meta: { title: 'countTo' }},
+      // { path: 'mixin', component: () => import('@/views/components-demo/mixin'), hidden: true, name: 'componentMixin-demo', meta: { title: 'componentMixin' }},
+      // { path: 'back-to-top', component: () => import('@/views/components-demo/backToTop'), hidden: true, name: 'backToTop-demo', meta: { title: 'backToTop' }},
+      // { path: 'drag-dialog', component: () => import('@/views/components-demo/dragDialog'), hidden: true, name: 'dragDialog-demo', meta: { title: 'dragDialog' }},
+      // { path: 'dnd-list', component: () => import('@/views/components-demo/dndList'), hidden: true, name: 'dndList-demo', meta: { title: 'dndList' }},
+      { path: 'drag-kanban', component: () => import('@/views/components-demo/dragKanban'), name: 'dragKanban-demo', meta: { title: 'dragKanban' }}
     ]
   },
   {

@@ -1,5 +1,5 @@
 .DS_Store
-.svn
+
 node_modules/
 dist/
 npm-debug.log*
@@ -20,5 +20,9 @@ src/api
 *.ntvs*
 *.njsproj
 *.sln
+
+# SVN
+.svn
+target/
 
 package-lock.json
