@@ -136,9 +136,10 @@
 </template>
 
 <script>
-import { selectAlarm, selectAlarmConfig } from '@/api/alarm-controller'
+import { selectRobotAlarm, selectAlarmConfig } from '@/api/alarm-controller'
 import { parseTime, CapitalizeFirstLetter } from '@/utils'
 import waves from '@/directive/waves'
+import copyUrl from '@/components/Clipboard/copyUrl'
 export default {
   name: 'alarmSearch',
   directives: {
@@ -218,7 +219,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      selectAlarm(this.listQuery).then(response => {
+      selectRobotAlarm(this.listQuery).then(response => {
         this.list = response.data.content
         this.total = response.data.totalElements
         this.listLoading = false
@@ -244,20 +245,34 @@ export default {
       this.getList()
     },
     handleExcel() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const field = ['id', 'alarmName', 'alarmType', 'alarmLevel', 'alarmValue', 'alarmBeginTime', 'alarmEndTime', 'confirmComment', 'sn', 'sourceSystemCode']
-        const list = this.list
+      if (typeof window.external.videoCenter !== 'undefined') {
+        const h = this.$createElement
+        var self = this
+        self.$msgbox({
+          title: '提示',
+          message: h(copyUrl, { props: { text: window.location.href }}),
+          lockScroll: true,
+          closeOnClickModal: false,
+          confirmButtonText: '确定',
+          type: 'warning',
+          center: true
+        }).then(action => {}).catch(() => {})
+      } else {
+        this.downloadLoading = true
+        import('@/vendor/Export2Excel').then(excel => {
+          const field = ['id', 'alarmName', 'alarmType', 'alarmLevel', 'alarmValue', 'alarmBeginTime', 'alarmEndTime', 'confirmComment', 'sn', 'sourceSystemCode']
+          const list = this.list
 
-        const data = this.formatJson(field, list)
-        excel.export_json_to_excel({
-          header: field.map((key) => { return CapitalizeFirstLetter(key) }),
-          data,
-          filename: this.filename,
-          autoWidth: this.autoWidth
+          const data = this.formatJson(field, list)
+          excel.export_json_to_excel({
+            header: field.map((key) => { return CapitalizeFirstLetter(key) }),
+            data,
+            filename: this.filename,
+            autoWidth: this.autoWidth
+          })
+          this.downloadLoading = false
         })
-        this.downloadLoading = false
-      })
+      }
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
@@ -270,6 +285,9 @@ export default {
     }
   },
   computed: {
+    /**
+     * 按道理来说，alarmName alarmType应该是一一对应的
+     */
     alarmTypeAutoComplete() {
       const { alarmTypeList } = this
       if (!alarmTypeList || alarmTypeList.length <= 0) return []
@@ -281,7 +299,7 @@ export default {
       var r = []
       for (var i = 0, l = ac.length; i < l; i++) {
         for (var j = i + 1; j < l; j++) {
-          if (ac[i].value === ac[j].value) { j = ++i }
+          if (ac[i].label === ac[j].label) { j = ++i }
         }
         r.push(ac[i])
       }

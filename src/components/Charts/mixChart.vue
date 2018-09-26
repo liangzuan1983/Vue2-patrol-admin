@@ -89,6 +89,11 @@ export default {
           textStyle: {
             color: '#90979c'
           },
+          selected: {
+            'female': true,
+            'male': true,
+            'average': false
+          },
           data: ['female', 'male', 'average']
         },
         // 是否启用拖拽重计算特性，默认关闭(即值为false)

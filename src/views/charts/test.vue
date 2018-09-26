@@ -1,17 +1,20 @@
 <template>
   <div class='chart-container' :style="calculateTransform" v-on:mousewheel.passive="handleMousewheel($event)" ref="chartContainer">
-    <div class="chart" :class="className" :id="id3" :style="{height:height,width:width}"></div>
-    <div class="chart" :class="className" :id="id" :style="{height:height,width:width}"></div>
-    <div class="chart" :class="className" :id="id2" :style="{height:height,width:width}"></div>
+    <Chart id="chart3" width="100%" height="100%"></Chart>
+    <!-- <div class="chart" :class="className" :id="id" :style="{height:height,width:width}"></div>
+    <div class="chart" :class="className" :id="id2" :style="{height:height,width:width}"></div> -->
   </div>
 </template>
 
 <script>
 import echarts from 'echarts'
-import resize from '@/components/Charts/mixins/resize'
+import Chart from '@/components/Charts/myChart'
+
 export default {
   name: 'test',
-  mixins: [resize],
+  components: {
+    Chart
+  },
   props: {
     className: {
       type: String
@@ -34,7 +37,6 @@ export default {
       chart: null,
       chart2: null,
       id2: 'chart2',
-      id3: 'chart3',
       scrollTop: 0
     }
   },

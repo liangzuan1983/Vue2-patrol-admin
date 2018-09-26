@@ -118,10 +118,12 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
 import { selectPassPersonInfo } from '@/api/gate-machine-controller'
 import { parseTime, CapitalizeFirstLetter } from '@/utils'
 import waves from '@/directive/waves'
 import fancyBox from '@/components/fancybox'
+import copyUrl from '@/components/Clipboard/copyUrl'
 
 export default {
   name: 'gateSearch',
@@ -172,7 +174,8 @@ export default {
       },
       downloadLoading: false,
       filename: '门岗查询',
-      autoWidth: true
+      autoWidth: true,
+      copyUrl: 'http://localhost:9527/#/gate-machine-controller/gateSearch'
     }
   },
   created() {
@@ -219,20 +222,35 @@ export default {
       this.getList()
     },
     handleExcel() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const field = ['id', 'cardNumber', 'forWhat', 'followNum', 'forWhatOut', 'followNumOut', 'enterDoorTIME', 'outerDoorTIME', 'enterPlace', 'outerPlace', 'catchPic']
-        const list = this.list
-        const data = this.formatJson(field, list)
+      /* additional requirement for wpf */
+      if (typeof window.external.videoCenter !== 'undefined') {
+        const h = this.$createElement
+        var self = this
+        self.$msgbox({
+          title: '提示',
+          message: h(copyUrl, { props: { text: window.location.href }}),
+          lockScroll: true,
+          closeOnClickModal: false,
+          confirmButtonText: '确定',
+          type: 'warning',
+          center: true
+        }).then(action => {}).catch(() => {})
+      } else {
+        this.downloadLoading = true
+        import('@/vendor/Export2Excel').then(excel => {
+          const field = ['id', 'cardNumber', 'forWhat', 'followNum', 'forWhatOut', 'followNumOut', 'enterDoorTIME', 'outerDoorTIME', 'enterPlace', 'outerPlace', 'catchPic']
+          const list = this.list
+          const data = this.formatJson(field, list)
 
-        excel.export_json_to_excel({
-          header: field.map((key) => { return CapitalizeFirstLetter(key) }),
-          data,
-          filename: this.filename,
-          autoWidth: this.autoWidth
+          excel.export_json_to_excel({
+            header: field.map((key) => { return CapitalizeFirstLetter(key) }),
+            data,
+            filename: this.filename,
+            autoWidth: this.autoWidth
+          })
+          this.downloadLoading = false
         })
-        this.downloadLoading = false
-      })
+      }
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
