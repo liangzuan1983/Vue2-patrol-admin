@@ -211,8 +211,9 @@ export default {
   },
   created() {
     var that = this
-    /* global LOCAL_ROOT */
-    const url = `ws:${LOCAL_ROOT}/websocket`
+    // /* global LOCAL_ROOT */
+    const HOST = location.host
+    const url = `ws://${HOST}/websocket`
     this.ws = new MySocket({
       url,
       reconnectionAttempts: 50,
