@@ -46,14 +46,14 @@
         :loading="downloadLoading" 
         v-waves @click.native="handleExcel"><svg-icon style="margin-right: 5px" icon-class="excel" />导出Excel</el-button>
         <el-radio-group
-          style="" v-model="listQuery.unclosed" text-color="#67C23A" fill="#67C23A" @change="handleFilter">
+          class="filter-item" style="" v-model="listQuery.unclosed" text-color="#67C23A" fill="#67C23A" @change="handleFilter">
           <el-radio :label="null">全选</el-radio>
           <el-radio :label="0" fill="#67C23A">告警已关闭</el-radio>
           <el-radio :label="1">告警未关闭</el-radio>
         </el-radio-group>
-      <div class="search-alarmLevel">
+      <div class="search-alarmLevel filter-item">
         <span style="margin-right: 10px">告警等级</span>
-        <el-rate 
+        <el-rate
           v-model="listQuery.alarmLevel" 
           :colors="alarmLevelOption.colors"
           :low-threshold="1" 
@@ -62,6 +62,7 @@
           :texts="alarmLevelOption.texts"
           :text-color="alarmLevelOption.textColor"
           @change="handleFilter"></el-rate>
+        <span style="" @click="handleAlarmLevel">(&nbsp;选择全部&nbsp;)</span>
       </div>
     </div>
     
@@ -236,6 +237,10 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
+    handleAlarmLevel() {
+      this.listQuery.alarmLevel = null
+      this.handleFilter()
+    },
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
@@ -332,6 +337,14 @@ $WARM: #E6A23C;
   font-size: 14px;
   line-height: 20px;
   height: 20px;
+  span {
+    margin-left: 10px;
+    color: #777;
+    cursor: pointer;
+    &:hover {
+      color: #409EFF;
+    }
+  }
 }
 .icon-error {
   color: $ERROR !important;

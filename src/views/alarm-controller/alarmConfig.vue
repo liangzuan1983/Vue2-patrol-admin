@@ -84,7 +84,7 @@
     </el-table>
 
     <div class="pagination-container">
-      <el-pagination v-bind:small="true" background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="listQuery.page" :page-sizes="[10,20,30,50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
 
@@ -115,8 +115,9 @@
        
         <el-form-item label="告警图标" prop="iconDisplay"> 
           <el-select class="filter-item" v-model="temp.iconDisplay" placeholder="请选择" >
-            <el-option v-for="item in alarmIconOption" :key="item.key" :label="item.iconClass" :value="item.key">
+            <el-option v-for="item in alarmIconOption" :key="item.key" :label="item.label" :value="item.key">
               <svg-icon :icon-class="item.iconClass"></svg-icon>
+              <span style="margin-left: 5px">{{ item.label }}</span>
             </el-option>
           </el-select>
           <svg-icon v-if="temp.iconDisplay" :icon-class="iconDisplayClass"></svg-icon>
@@ -230,9 +231,32 @@ export default {
         textColor: '#909399'
       },
       alarmIconOption: [
-        { key: 1, iconClass: 'alarm' },
-        { key: 2, iconClass: 'component' },
-        { key: 3, iconClass: 'chart' }
+        { key: 1, iconClass: 'cheliangshibie', label: '车辆检测告警' },
+        { key: 2, iconClass: 'chushihua', label: '初始化失败告警' },
+        { key: 3, iconClass: 'dianliang', label: '电池充放电次数告警' },
+        { key: 4, iconClass: 'didianliang', label: '低电量告警' },
+        { key: 5, iconClass: 'dishidu', label: '低湿度告警' },
+        { key: 6, iconClass: 'gaoshidu', label: '高湿度告警' },
+        { key: 7, iconClass: 'eryanghuatan', label: '二氧化碳低浓度告警' },
+        { key: 8, iconClass: 'eryanghuatan', label: '二氧化碳高浓度告警' },
+        { key: 9, iconClass: 'diwen', label: '低温告警' },
+        { key: 10, iconClass: 'gaowen', label: '高温告警' },
+        { key: 11, iconClass: 'gispoison', label: '毒气告警' },
+        { key: 12, iconClass: 'liangshi', label: '粮食低温告警' },
+        { key: 13, iconClass: 'liangshi', label: '粮食高温告警' },
+        { key: 14, iconClass: 'moshengren', label: '陌生人告警' },
+        { key: 15, iconClass: 'rechengxiang', label: '人体感应告警' },
+        { key: 16, iconClass: 'rentishibie', label: '人体识别告警' },
+        { key: 17, iconClass: 'shineishidu', label: '室内低湿度告警' },
+        { key: 18, iconClass: 'shineishidu', label: '室内高湿度告警' },
+        { key: 19, iconClass: 'shineiwendu', label: '室内低温告警' },
+        { key: 20, iconClass: 'shineiwendu', label: '室内高温告警' },
+        { key: 21, iconClass: 'shuaidao', label: '摔倒告警' },
+        { key: 22, iconClass: 'weizhi', label: '异常定位告警' },
+        { key: 23, iconClass: 'xiayu', label: '下雨告警' },
+        { key: 24, iconClass: 'yanhuo', label: '烟火告警' },
+        { key: 25, iconClass: 'zudan', label: '阻挡告警' },
+        { key: 26, iconClass: 'component', label: '其他' }
       ],
       switchValue: {
         activeValue: 1,

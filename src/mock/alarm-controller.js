@@ -63,7 +63,14 @@ export default {
             'linkageRobot|0-1': 0,
             'mustConfirm|0-1': 1
           }
-        ]
+        ],
+        'first': true,
+        'last': false,
+        'number': 0,
+        'numberOfElements': 5,
+        'size': 5,
+        'totalElements': 8,
+        'totalPages': 2
       }
     })
   },
