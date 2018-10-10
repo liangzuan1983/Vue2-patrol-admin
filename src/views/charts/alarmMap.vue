@@ -1,6 +1,6 @@
 <template>
   <el-container class="map-container" ref="container" v-loading="maploading">
-    <baidu-map class="bm-view" :scroll-wheel-zoom="scrollWheelZoom" :center="center" :zoom="zoom" :ak="APP_KEY" @ready="handlerMap">
+    <baidu-map class="bm-view" :scroll-wheel-zoom="scrollWheelZoom" :center="center" :zoom="zoom" :ak="APP_KEY" @ready="handlerMap" @click="handleMapClick">
       <!-- 为了让自定义的信息体 与 marker 处于同一层 便于设置zIndex 所以改为markerPane容器 -->
       <my-overlay
         v-for="item in _alarmList" :key="item.id"
@@ -110,6 +110,14 @@ export default {
         this.maploading = false
       }, 1000)
     },
+    handleMapClick() {
+      const markerPane = Array.from(this.$map.getPanes()['markerPane'].children)
+      for (const item of markerPane) {
+        if (item.classList.contains('highlight')) {
+          item.classList.remove('highlight')
+        }
+      }
+    },
     handleAlarmClick(event, lng, lat) {
       if (this.$map) {
         this.panToPoint(lng, lat)
@@ -154,22 +162,19 @@ export default {
         const { alarmList, robotList } = this
         if (Array.isArray(data) && data.length > 0) {
           for (const item of data) {
+            console.log('*****************************')
+            console.log('data:', item)
             console.log('type', item.type)
             if (item.type === ALARM_TYPE) {
-              console.log('ALARM_TYPE', item)
               deal(alarmList, item, flag)
             } else if (item.type === STATUS_TYPE) {
-              console.log('STATUS_TYPE', item)
               deal(robotList, item, flag)
             }
           }
         } else if (typeof data === 'object') {
-          console.log('type', data.type)
           if (data.type === ALARM_TYPE) {
-            console.log('ALARM_TYPE', data)
             deal(alarmList, data, flag)
           } else if (data.type === STATUS_TYPE) {
-            console.log('STATUS_TYPE', data)
             deal(robotList, data, flag)
           }
         }

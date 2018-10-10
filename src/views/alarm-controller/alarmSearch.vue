@@ -85,7 +85,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="告警温度" width="120px">
+      <el-table-column align="center" label="告警值" width="120px">
         <template slot-scope="scope">
           <span>{{scope.row.alarmValue}}</span>
         </template>

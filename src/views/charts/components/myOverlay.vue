@@ -3,7 +3,7 @@
     class="bm-overlay-self"
     ref="customOverlay"
     :pane="MapPane"
-    @click.native="handleClick($event)"
+    @click.native.stop="handleClick($event)"
     @draw="draw">
     <slot></slot>
   </bm-overlay>
