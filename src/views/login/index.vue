@@ -19,19 +19,19 @@
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
+        <el-input name="password" type="password" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on"
           :placeholder="$t('login.password')" />
-        <span class="show-pwd" @click="showPwd">
+        <!-- <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
-        </span>
+        </span> -->
       </el-form-item>
 
       <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
 
-      <div class="tips">
+      <!-- <div class="tips">
         <span>{{$t('login.username')}} : 123456</span>
         <span>{{$t('login.password')}} : 123456</span>
-      </div>
+      </div> -->
     </el-form>
 
   </div>

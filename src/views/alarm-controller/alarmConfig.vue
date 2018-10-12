@@ -57,6 +57,12 @@
         </template>
       </el-table-column>
 
+      <el-table-column align="center" label="持续推送">
+        <template slot-scope="scope">
+          <i :class="scope.row.continuousPush | handleSwitch"></i>
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="低点联动">
         <template slot-scope="scope">
           <i :class="scope.row.linkage | handleSwitch"></i>
@@ -88,7 +94,7 @@
       </el-pagination>
     </div>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="closeOnClickModel" width="600px">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="closeOnClickModel" width="600px" top="10vh">
       <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="告警名称" prop="alarmName">
           <el-input v-model.trim="temp.alarmName"></el-input>
@@ -161,13 +167,25 @@
               v-model="temp.linkage" 
               active-color="#13ce66"
               :active-value="switchValue.activeValue"
-              :inactive-value=switchValue.inactiveValue></el-switch>
+              :inactive-value="switchValue.inactiveValue"></el-switch>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="是否联动机器人" label-width="110px" prop="linkageRobot">
               <el-switch 
               v-model="temp.linkageRobot" 
+              active-color="#13ce66"
+              :active-value="switchValue.activeValue"
+              :inactive-value="switchValue.inactiveValue"></el-switch>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="是否持续推送" prop="linkage">
+              <el-switch 
+              v-model="temp.continuousPush" 
               active-color="#13ce66"
               :active-value="switchValue.activeValue"
               :inactive-value="switchValue.inactiveValue"></el-switch>
@@ -216,6 +234,7 @@ export default {
         linkage: 0,
         linkageDistance: null,
         linkageRobot: 0,
+        continuousPush: 0,
         mustConfirm: 0
       },
       closeOnClickModel: false,

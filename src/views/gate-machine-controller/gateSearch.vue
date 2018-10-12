@@ -239,16 +239,21 @@ export default {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
           const field = ['id', 'cardNumber', 'forWhat', 'followNum', 'forWhatOut', 'followNumOut', 'enterDoorTIME', 'outerDoorTIME', 'enterPlace', 'outerPlace', 'catchPic']
-          const list = this.list
-          const data = this.formatJson(field, list)
+          const field_ZH = ['ID', '门禁卡号', '进门事由', '进门人数', '出门事由', '出门人数', '进门时间', '出门时间', '进门地点', '出门地点', '抓拍照']
 
-          excel.export_json_to_excel({
-            header: field.map((key) => { return CapitalizeFirstLetter(key) }),
-            data,
-            filename: this.filename,
-            autoWidth: this.autoWidth
-          })
-          this.downloadLoading = false
+          const listQuery = Object.assign({}, this.listQuery, { limit: 999999 })
+
+          selectPassPersonInfo(listQuery).then(response => {
+            const list = response.data.content
+            const data = this.formatJson(field, list)
+            excel.export_json_to_excel({
+              header: field_ZH,
+              data,
+              filename: this.filename,
+              autoWidth: this.autoWidth
+            })
+            this.downloadLoading = false
+          }, () => { this.downloadLoading = false })
         })
       }
     },

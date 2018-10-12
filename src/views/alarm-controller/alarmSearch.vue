@@ -61,8 +61,8 @@
           :max='3'
           :texts="alarmLevelOption.texts"
           :text-color="alarmLevelOption.textColor"
-          @change="handleFilter"></el-rate>
-        <span style="" @click="handleAlarmLevel">(&nbsp;选择全部&nbsp;)</span>
+          @change="handleAlarmLevel"></el-rate>
+        <span :class="{ 'is-checked': AlarmLevelAll }" @click="handleAlarmLevel(-1)">(&nbsp;选择全部&nbsp;)</span>
       </div>
     </div>
     
@@ -73,19 +73,19 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="告警代码" width="120px">
+      <el-table-column align="center" label="告警代码" width="100px">
         <template slot-scope="scope">
           <span>{{scope.row.alarmType}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="告警等级" width="120px">
+      <el-table-column align="center" label="告警等级" width="100px">
         <template slot-scope="scope">
           <svg-icon v-for="n in +scope.row.alarmLevel" icon-class="star" class="meta-item__icon" v-bind:class="scope.row.alarmLevel | alarmLevelClass" :key="n"></svg-icon>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="告警值" width="120px">
+      <el-table-column align="center" label="告警值" width="100px">
         <template slot-scope="scope">
           <span>{{scope.row.alarmValue}}</span>
         </template>
@@ -138,7 +138,7 @@
 
 <script>
 import { selectRobotAlarm, selectAlarmConfig } from '@/api/alarm-controller'
-import { parseTime, CapitalizeFirstLetter } from '@/utils'
+import { parseTime } from '@/utils'
 import waves from '@/directive/waves'
 import copyUrl from '@/components/Clipboard/copyUrl'
 export default {
@@ -197,6 +197,7 @@ export default {
       },
       downloadLoading: false,
       filename: '告警查询',
+      AlarmLevelAll: false,
       autoWidth: true
     }
   },
@@ -237,8 +238,13 @@ export default {
       this.listQuery.page = 1
       this.getList()
     },
-    handleAlarmLevel() {
-      this.listQuery.alarmLevel = null
+    handleAlarmLevel(value) {
+      if (+value === -1) {
+        this.listQuery.alarmLevel = null
+        this.AlarmLevelAll = true
+      } else {
+        this.AlarmLevelAll = false
+      }
       this.handleFilter()
     },
     handleSizeChange(val) {
@@ -266,16 +272,21 @@ export default {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
           const field = ['id', 'alarmName', 'alarmType', 'alarmLevel', 'alarmValue', 'alarmBeginTime', 'alarmEndTime', 'confirmComment', 'sn', 'sourceSystemCode']
-          const list = this.list
+          const field_ZH = ['ID', '告警名称', '告警代码', '告警等级', '告警值', '告警开始时间', '告警结束时间', '告警确认描述', '设备编码', '子系统代码']
 
-          const data = this.formatJson(field, list)
-          excel.export_json_to_excel({
-            header: field.map((key) => { return CapitalizeFirstLetter(key) }),
-            data,
-            filename: this.filename,
-            autoWidth: this.autoWidth
-          })
-          this.downloadLoading = false
+          const listQuery = Object.assign({}, this.listQuery, { limit: 999999 })
+
+          selectRobotAlarm(listQuery).then(response => {
+            const list = response.data.content
+            const data = this.formatJson(field, list)
+            excel.export_json_to_excel({
+              header: field_ZH,
+              data,
+              filename: this.filename,
+              autoWidth: this.autoWidth
+            })
+            this.downloadLoading = false
+          }, () => { this.downloadLoading = false })
         })
       }
     },
@@ -342,6 +353,9 @@ $WARM: #E6A23C;
     color: #777;
     cursor: pointer;
     &:hover {
+      color: #409EFF;
+    }
+    &.is-checked {
       color: #409EFF;
     }
   }
