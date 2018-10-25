@@ -153,7 +153,7 @@ export default {
       total: null,
       listQuery: {
         page: 1, // 当前页码
-        limit: 10,
+        limit: 10, // 不传参数，默认20
         unclosed: null,
         alarmType: undefined,
         alarmLevel: 1,
@@ -229,7 +229,7 @@ export default {
     },
     getAlarmTpyeList() {
       this.alarmTypeListLoading = true
-      selectAlarmConfig().then(response => {
+      selectAlarmConfig({ limit: 9999 }).then(response => {
         this.alarmTypeList = response.data.content
         this.alarmTypeListLoading = false
       })

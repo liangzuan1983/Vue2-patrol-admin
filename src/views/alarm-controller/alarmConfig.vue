@@ -45,11 +45,11 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="必须确认">
+      <!-- <el-table-column align="center" label="必须确认">
         <template slot-scope="scope">
           <i :class="scope.row.mustConfirm | handleSwitch"></i>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" label="推送">
         <template slot-scope="scope">
@@ -143,13 +143,15 @@
 
         <el-row>
           <el-col :span="12">
-            <el-form-item label="必须确认" prop="mustConfirm">
-              <el-switch v-model="temp.mustConfirm" 
+            <el-form-item label="是否持续推送" prop="linkage">
+              <el-switch 
+              v-model="temp.continuousPush" 
               active-color="#13ce66"
               :active-value="switchValue.activeValue"
               :inactive-value="switchValue.inactiveValue"></el-switch>
             </el-form-item>
           </el-col>
+
           <el-col :span="12">
             <el-form-item label="是否推送" prop="alarmPush">
               <el-switch v-model="temp.alarmPush" 
@@ -181,17 +183,16 @@
           </el-col>
         </el-row>
 
-        <el-row>
+        <!-- <el-row>
           <el-col :span="12">
-            <el-form-item label="是否持续推送" prop="linkage">
-              <el-switch 
-              v-model="temp.continuousPush" 
+            <el-form-item label="必须确认" prop="mustConfirm">
+              <el-switch v-model="temp.mustConfirm" 
               active-color="#13ce66"
               :active-value="switchValue.activeValue"
               :inactive-value="switchValue.inactiveValue"></el-switch>
             </el-form-item>
           </el-col>
-        </el-row>
+        </el-row> -->
       </el-form>
 
       <div slot="footer" class="dialog-footer">

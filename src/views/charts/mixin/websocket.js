@@ -51,40 +51,41 @@ class MySocket {
     const { url, existingWebsocket, timeoutMs, open, error, message, close } = this._opt
     const self = this
 
-    var hasReturned = false // Execution results for each callback
-    var clock = null
+    let hasReturned = false // Execution results for each callback 每个实例私有变量
+    let clock = null // Timer, after a period of time to determine the state of websocket 每个实例私有变量
 
-    var promise = new Promise((resolve, reject) => {
+    const promise = new Promise((resolve, reject) => {
       /* close the process */
       if (self.closed) {
         if (clock) {
           clearTimeout(clock)
         }
         reject()
-      }
-      /* open the interval for next new WebSocket */
-      clock = setTimeout(function() {
-        /* if had Execution results not rejectInternal */
-        if (!hasReturned && !self.closed) {
-          handle()
-        }
-      }, timeoutMs)
-      if (
-        !existingWebsocket ||
-        existingWebsocket.readyState !== existingWebsocket.OPEN
-      ) {
-        if (existingWebsocket) {
-          existingWebsocket.close()
-        }
-        var websocket = new WebSocket(url)
-        self[ws] = websocket
-
-        websocket.onopen = function() { hasReturned ? websocket.close() : handle() }
-        // websocket.onclose = function() { (!hasReturned) }
-        websocket.onmessage = message
-        // websocket.onerror = function() { (!hasReturned) }
       } else {
-        resolve(existingWebsocket)
+        /* open the interval for next new WebSocket */
+        clock = setTimeout(function() {
+          /* if had Execution results not rejectInternal */
+          if (!hasReturned && !self.closed) {
+            handle()
+          }
+        }, timeoutMs)
+        if (
+          !existingWebsocket ||
+          existingWebsocket.readyState !== existingWebsocket.OPEN
+        ) {
+          if (existingWebsocket) {
+            existingWebsocket.close()
+          }
+          var websocket = new WebSocket(url)
+          self[ws] = websocket
+
+          websocket.onopen = function() { hasReturned ? websocket.close() : handle() }
+          // websocket.onclose = function() { (!hasReturned) }
+          websocket.onmessage = message
+          // websocket.onerror = function() { (!hasReturned) }
+        } else {
+          resolve(existingWebsocket)
+        }
       }
 
       /**
@@ -172,14 +173,12 @@ class MySocket {
       }
     })
 
-    promise.then(
-      function() {
+    promise
+      .then(() => {
         hasReturned = true
-      },
-      function() {
+      }, () => {
         hasReturned = true
-      }
-    )
+      })
 
     return promise
   }
@@ -219,6 +218,7 @@ export default {
       reconnectionAttempts: 50,
       timeoutMs: 8000,
       open: (websocket) => {
+        console.log('IE, 你特么吃屎啦')
         that.$notify({
           title: '建立数据连接',
           message: '连接WebSocket成功',
@@ -237,13 +237,15 @@ export default {
       message: (response) => {
         that.handleWebSocket_msg(response)
       },
-      close(websocket) {}
+      close(websocket) {
+        console.log(132)
+      }
     })
   },
   methods: {
     handleWebSocket_msg(response) {
-      const { returnValue, data } = response
-      if (returnValue) {
+      const { data } = response
+      if (data) {
         this.wsMessage = JSON.parse(data)
       }
     }

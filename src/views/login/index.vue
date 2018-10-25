@@ -38,14 +38,14 @@
 </template>
 
 <script>
-import { isvalidUsername } from '@/utils/validate'
+// import { isvalidUsername } from '@/utils/validate'
 
 export default {
   name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (!isvalidUsername(value)) {
-        callback(new Error('请输入正确的用户名'))
+      if (value.length < 6) {
+        callback(new Error('用户名必须大于六位'))
       } else {
         callback()
       }
@@ -59,8 +59,8 @@ export default {
     }
     return {
       loginForm: {
-        username: '123456',
-        password: '123456'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
