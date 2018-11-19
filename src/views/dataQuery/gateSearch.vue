@@ -118,9 +118,8 @@
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
-import { selectPassPersonInfo } from '@/api/gate-machine-controller'
-import { parseTime, CapitalizeFirstLetter } from '@/utils'
+import { selectPassPersonInfo } from '@/api/dataQuery'
+import { parseTime } from '@/utils'
 import waves from '@/directive/waves'
 import fancyBox from '@/components/fancybox'
 import copyUrl from '@/components/Clipboard/copyUrl'

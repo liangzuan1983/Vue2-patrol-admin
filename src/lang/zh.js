@@ -65,14 +65,16 @@ export default {
     // 自定义业务
     'common-controller': '基础配置',
     'alarm-controller': '告警',
-    'gate-machine-controller': '门岗',
+    dataQuery: '数据查询',
     subSystemConfig: '子系统配置',
     alarmConfig: '告警配置',
     calibration: '人员标定',
     alarmMap: '告警地图',
     alarmMapWPF: '告警地图',
     alarmSearch: '告警查询',
-    gateSearch: '门岗查询',
+    gateSearch: '口部进出查询',
+    personQuery: '人员卡口查询',
+    carQuery: '车辆卡口查询',
     test: '测试'
   },
   navbar: {

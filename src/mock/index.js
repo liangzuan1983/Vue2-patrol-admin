@@ -2,7 +2,7 @@ import Mock from 'mockjs'
 import loginAPI from './login'
 import common from './common-controller'
 import alarm from './alarm-controller'
-import gate from './gate-machine-controller'
+import dataQuery from './dataQuery'
 
 // Mock.setup({
 //   timeout: '350-600'
@@ -20,6 +20,9 @@ Mock.mock(/\/api\/selectSubSystemConfig/, 'get', common.selectSubSystemConfig)
 Mock.mock(/\/api\/selectAlarmConfig/, 'get', alarm.selectAlarmConfig)
 Mock.mock(/\/api\/selectRobotAlarm/, 'get', alarm.selectRobotAlarm)
 
-Mock.mock(/\/api\/selectPassPersonInfo/, 'get', gate.selectPassPersonInfo)
+Mock.mock(/\/api\/selectPassPersonInfo/, 'get', dataQuery.selectPassPersonInfo)
+
+Mock.mock(/\/api\/selectCaptureFacesInfo/, 'get', dataQuery.selectCaptureFacesInfo)
+Mock.mock(/\/api\/selectXXX/, 'get', dataQuery.selectXXX)
 
 export default Mock

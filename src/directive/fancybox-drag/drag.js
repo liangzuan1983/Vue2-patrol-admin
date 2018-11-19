@@ -437,7 +437,6 @@ export default {
         if (from === undefined || to === undefined) {
           return reject()
         }
-        console.log('start')
         /* first situation */
         // do the animate transform(asynchronous)
         // let animationSwitch
@@ -506,7 +505,6 @@ export default {
         const { left, top, scale } = to
         dom.style['webkitTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
         dom.style['msTransform'] = `translate3d(${left}px, ${top}px, 0px) scale(${scale})`
-        console.log('end')
         return resolve()
       })
     })

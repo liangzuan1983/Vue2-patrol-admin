@@ -64,7 +64,7 @@ export default {
     // 自定义业务
     'common-controller': 'BasicConfig',
     'alarm-controller': 'AlarmConfig',
-    'gate-machine-controller': 'GateMachineController',
+    dataQuery: 'DataQuery',
     subSystemConfig: 'SubSystemConfig',
     alarmConfig: 'AlarmConfig',
     calibration: 'Calibration',
@@ -72,6 +72,8 @@ export default {
     alarmMapWPF: 'AlarmMap',
     alarmSearch: 'AlarmSearch',
     gateSearch: 'GateSearch',
+    personQuery: 'PersonQuery',
+    carQuery: 'CarQuery',
     test: 'TEXT'
   },
   navbar: {

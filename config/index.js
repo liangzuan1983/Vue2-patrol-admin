@@ -11,14 +11,14 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/websocket': {
-        target: 'ws://192.168.42.200:2019', // ws://192.168.41.200:2019
+        target: 'ws://192.168.42.200:2019',
         ws: true,
         secure: false,
         logLevel: 'debug',
         changeOrigin: true
       },
       '/api': {
-        target: 'http://192.168.41.41:2020', // http://192.168.41.200:2019
+        target: 'http://192.168.42.200:2019',
         changeOrigin: true,
         pathRewrite: {'^\/api' : ''}
       },
