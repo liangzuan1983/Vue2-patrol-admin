@@ -245,8 +245,12 @@ export default {
   methods: {
     handleWebSocket_msg(response) {
       const { data } = response
-      if (data) {
-        this.wsMessage = JSON.parse(data)
+      try {
+        if (data) {
+          this.wsMessage = JSON.parse(data)
+        }
+      } catch (e) {
+        console.log(e.message)
       }
     }
   }

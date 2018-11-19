@@ -136,7 +136,7 @@
         </el-form-item>
 
          <el-form-item label="联动低点距离" prop="linkageDistance">
-          <el-input v-model.trim="temp.linkageDistance" :disabled="+temp.linkage !== 1"><span slot="suffix">单位：米</span></el-input>
+          <el-input v-model.number="temp.linkageDistance" :disabled="+temp.linkage !== 1"><span slot="suffix">单位：米</span></el-input>
         </el-form-item>
 
           <p>温馨提示：&nbsp;&nbsp;<font class="icon-success">绿色</font>&nbsp;代表<q>启动</q>，<font class="icon-default">浅灰色</font>&nbsp;代表<q>关闭</q></p>
@@ -247,7 +247,7 @@ export default {
       },
       alarmLevelOption: {
         colors: ['#67C23A', '#E6A23C', '#F56C6C'],
-        texts: ['正常', '警告', '严重'],
+        texts: ['一般', '重要', '紧急'],
         textColor: '#909399'
       },
       alarmIconOption: [

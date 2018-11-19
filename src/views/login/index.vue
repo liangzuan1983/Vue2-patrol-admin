@@ -4,6 +4,7 @@
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
 
       <div class="title-container">
+        <img class="user-avatar" src="~assets/images/native/avatar-logo.png" alt="logo">
         <h3 class="title">{{$t('login.title')}}</h3>
       </div>
 
@@ -15,7 +16,7 @@
         />
       </el-form-item>
 
-      <el-form-item prop="password">
+      <el-form-item prop="pasord">
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
@@ -34,6 +35,9 @@
       </div> -->
     </el-form>
 
+    <div class="login-footer">
+      <p id="copyright">Copyright © 广州高新兴机器人有限公司 | <a href="http://www.gosuncn.com/" target="_blank">高新兴科技集团</a> | <a href="http://www.miitbeian.gov.cn/" target="_blank">粤ICP备18085891号</a>&nbsp;</p>
+    </div>
   </div>
 </template>
 
@@ -44,18 +48,20 @@ export default {
   name: 'login',
   data() {
     const validateUsername = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('用户名必须大于六位'))
-      } else {
-        callback()
-      }
+      callback()
+      // if (value.length < 6) {
+      //   callback(new Error('用户名必须大于六位'))
+      // } else {
+      //   callback()
+      // }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码必须大于六位'))
-      } else {
-        callback()
-      }
+      callback()
+      // if (value.length < 6) {
+      //   callback(new Error('密码必须大于六位'))
+      // } else {
+      //   callback()
+      // }
     }
     return {
       loginForm: {
@@ -192,10 +198,20 @@ $light_gray:#eee;
   }
   .title-container {
     position: relative;
+    margin-top: 40px;
+    text-align: center;
+    & > * {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .user-avatar {
+      width: 45px;
+      height: 45px;
+    }
     .title {
       font-size: 26px;
       color: $light_gray;
-      margin: 0px auto 40px auto;
+      margin-left: 20px;
       text-align: center;
       font-weight: bold;
     }
@@ -220,5 +236,18 @@ $light_gray:#eee;
     right: 35px;
     bottom: 28px;
   }
+}
+
+.login-footer {
+  position: fixed;
+  text-align: center;
+  font-size: 12px;
+  color: #eee;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding-bottom: 10px;
+  padding-top: 10px;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 </style>

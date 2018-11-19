@@ -83,7 +83,7 @@ export default {
     theme: '换肤'
   },
   login: {
-    title: '立体巡防系统登录',
+    title: '立体巡防系统',
     logIn: '登录',
     username: '账号',
     password: '密码',

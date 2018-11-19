@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Message, MessageBox } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -8,9 +8,17 @@ const service = axios.create({
   // baseURL: process.env.BASE_API, // api的base_url
   timeout: 5000 // request timeout
 })
-
+/* no-cache for every get request */
+service.defaults.headers.get['Cache-Control'] = 'no-cache'
+service.defaults.headers.get['Pragma'] = 'no-cache'
 // request interceptor
 service.interceptors.request.use(config => {
+  // detect the property 'cache', add a timestamp
+  if (config.hasOwnProperty('cache') && config['cache'] === false) {
+    const url = config.url
+    config.url = url.indexOf('?') === -1 ? url + '?_=' + (new Date()).getTime()
+      : url + '&_=' + (new Date()).getTime()
+  }
   // Do something before request is sent
   if (store.getters.token) {
     // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
@@ -40,10 +48,10 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (res.ret === 50008 || res.ret === 50012 || res.ret === 50014) {
+      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
         // 请自行在引入 MessageBox
         // import { Message, MessageBox } from 'element-ui'
-        Message.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+        MessageBox.confirm('登陆凭据已失效，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',
           type: 'warning'
@@ -53,7 +61,7 @@ service.interceptors.response.use(
           })
         })
       }
-      return Promise.reject('error')
+      return Promise.reject('页面访问不了啦')
     } else {
       return response.data
     }
