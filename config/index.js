@@ -22,6 +22,10 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {'^\/api' : ''}
       },
+      '/GosunImages': {
+        target: 'http://192.168.42.200:2019',
+        changeOrigin: true
+      }
     },
 
     // Various Dev Server settings

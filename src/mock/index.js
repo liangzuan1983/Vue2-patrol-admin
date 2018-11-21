@@ -23,6 +23,6 @@ Mock.mock(/\/api\/selectRobotAlarm/, 'get', alarm.selectRobotAlarm)
 Mock.mock(/\/api\/selectPassPersonInfo/, 'get', dataQuery.selectPassPersonInfo)
 
 Mock.mock(/\/api\/selectCaptureFacesInfo/, 'get', dataQuery.selectCaptureFacesInfo)
-Mock.mock(/\/api\/selectXXX/, 'get', dataQuery.selectXXX)
+Mock.mock(/\/api\/selectCarRecordInfoByParams/, 'get', dataQuery.selectCarRecordInfoByParams)
 
 export default Mock

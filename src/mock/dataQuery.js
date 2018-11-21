@@ -7,23 +7,29 @@ export default {
       'data': {
         'content|5-15': [
           {
+            'id|+1': 100,
+            'name': '@name',
             'cardNumber|100-1500': 1,
-            'catchPic|1': [
+            'forWhatIn': '@name',
+            'sourceSystemCodeIn': '大门',
+            'inTime': '@datetime',
+            'forWhatOut': '@name',
+            'sourceSystemCodeOut': '门岗41.89出口',
+            'outTime': '@datetime',
+            'catchPicIn|1': [
               '',
               'src/assets/images/mock/1.jpg',
               'src/assets/images/mock/2.jpg',
               'src/assets/images/mock/3.jpg',
               'src/assets/images/mock/4.jpg'
             ],
-            'enterDoorTIME': '@datetime',
-            'enterPlace': '大门',
-            'followNum|0-20': 1,
-            'followNumOut|0-20': 1,
-            'forWhat': '@name',
-            'forWhatOut': '@name',
-            'id|+1': 100,
-            'outerDoorTIME': '@datetime',
-            'outerPlace': '门岗41.89出口'
+            'catchPicOut|1': [
+              '',
+              'src/assets/images/mock/1.jpg',
+              'src/assets/images/mock/2.jpg',
+              'src/assets/images/mock/3.jpg',
+              'src/assets/images/mock/4.jpg'
+            ]
           }
         ],
         'first': true,
@@ -71,21 +77,18 @@ export default {
       }
     })
   },
-  selectXXX: config => {
+  selectCarRecordInfoByParams: config => {
     return Mock.mock({
       ret: 1,
       data: {
         'content|5-10': [
           {
             'id|+1': 100,
-            'carNum|100-1500': 1,
-            'category|1': [
-              '白名单',
-              '陌生人'
-            ],
+            'carNumber|100-1500': 1,
+            'carType|0-41': 1,
             'position': '门岗41.89出口',
-            'time': '@datetime',
-            'picture|1': [
+            'captureTime': '@datetime',
+            'capturePic|1': [
               '',
               'src/assets/images/mock/1.jpg',
               'src/assets/images/mock/2.jpg',

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+/* eslint-disable no-unused-vars */
 Vue.use(Router)
 
 /* Layout */
@@ -87,7 +88,7 @@ export const asyncRouterMap = [
   },
   chart,
   dataQuery,
-  iconsRouter,
+  // iconsRouter,
 
   // some website which is not registered will be redirect to 404
   { path: '*', redirect: '/404', hidden: true }

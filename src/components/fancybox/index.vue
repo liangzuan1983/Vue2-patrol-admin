@@ -1,5 +1,5 @@
 <template>
-    <div class="fancybox-thumbnails">
+    <div class="fancybox-thumbnails-component">
       <transition name="fadeLeft-transform" mode="out-in">
         <div v-if="loadingPic" key="loading">
           <svg-icon class="fancybox-thumbnails__loading" icon-class="loading"></svg-icon>
@@ -94,7 +94,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.fancybox-thumbnails {
+.fancybox-thumbnails-component {
+  display: inline-block;
+  margin: 0 3px;
   .fancybox-thumbnails__loading {
     -ms-animation: rotating 2s linear infinite;
     -webkit-animation: rotating 2s linear infinite;

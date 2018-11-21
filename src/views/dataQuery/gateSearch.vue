@@ -5,7 +5,7 @@
         <span class="demonstration">开始时刻</span>
         <el-date-picker
           style="margin: 0 15px"
-          v-model="listQuery.enterDoorTimeBegin"
+          v-model="listQuery.inTime"
           type="datetime"
           placeholder="选择日期时间"
           align="right"
@@ -18,7 +18,7 @@
         <span class="demonstration">结束时刻</span>
         <el-date-picker
           style="margin: 0 15px"
-          v-model="listQuery.enterDoorTimeEnd"
+          v-model="listQuery.outTime"
           type="datetime"
           placeholder="选择日期时间"
           align="right"
@@ -48,21 +48,33 @@
     </div>
     
     <el-table :data="list" :row-key="rowKey" v-loading="listLoading" border fit highlight-current-row style="width: 100%">
+      <el-table-column align="center" label="姓名" width="150px">
+        <template slot-scope="scope">
+          {{scope.row.name}}
+        </template>
+      </el-table-column>
+
       <el-table-column align="center" label="门禁卡号" width="100px">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.cardNumber}}</el-tag>
+          {{scope.row.cardNumber}}
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="进门事由" width="160px">
         <template slot-scope="scope">
-          <span>{{scope.row.forWhat || '暂无描述'}}</span>
+          <span>{{scope.row.forWhatIn || '暂无描述'}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="进门人数" width="100px">
+      <el-table-column align="center" label="进门地点">
         <template slot-scope="scope">
-          <span>{{scope.row.followNum || 0}}</span>
+          <span>{{scope.row.sourceSystemCodeIn || "暂无描述"}}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column align="center" label="进门时间">
+        <template slot-scope="scope">
+          <span>{{scope.row.inTime | parseTime}}</span>
         </template>
       </el-table-column>
 
@@ -72,39 +84,27 @@
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="出门人数" width="100px">
+      <el-table-column align="center" label="出门地点">
         <template slot-scope="scope">
-          <span>{{scope.row.followNumOut || 0}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" label="进门时间">
-        <template slot-scope="scope">
-          <span>{{scope.row.enterDoorTIME | parseTime}}</span>
+          <span>{{scope.row.sourceSystemCodeOut || "暂无描述"}}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="出门时间">
         <template slot-scope="scope">
-          <span>{{scope.row.outerDoorTIME | parseTime}}</span>
+          <span>{{scope.row.outTime | parseTime}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="进门地点">
+      <el-table-column align="center" width="100px" label="进门抓拍照" v-bind:loading="true">
         <template slot-scope="scope">
-          <span>{{scope.row.enterPlace || "暂无描述"}}</span>
+          <fancyBox :url="scope.row.catchPicIn"></fancyBox>
         </template>
       </el-table-column>
 
-      <el-table-column align="center" label="出门地点">
+      <el-table-column align="center" width="100px" label="出门抓拍照" v-bind:loading="true">
         <template slot-scope="scope">
-          <span>{{scope.row.outerPlace || "暂无描述"}}</span>
-        </template>
-      </el-table-column>
-
-      <el-table-column align="center" width="120px" label="抓拍照" v-bind:loading="true">
-        <template slot-scope="scope">
-          <fancyBox :url="scope.row.catchPic"></fancyBox>
+          <fancyBox :url="scope.row.catchPicOut"></fancyBox>
         </template>
       </el-table-column>
 
@@ -142,8 +142,8 @@ export default {
         page: 1, // 当前页码
         limit: 10,
         cardNumber: null,
-        enterDoorTimeBegin: null,
-        enterDoorTimeEnd: null
+        beginTime: null,
+        endTime: null
       },
       cardNumberList: null,
       cardNumberListLoading: true,
@@ -172,7 +172,7 @@ export default {
         }]
       },
       downloadLoading: false,
-      filename: '门岗查询',
+      filename: '口部进出查询',
       autoWidth: true,
       copyUrl: 'http://localhost:9527/#/gate-machine-controller/gateSearch'
     }
@@ -237,8 +237,8 @@ export default {
       } else {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const field = ['id', 'cardNumber', 'forWhat', 'followNum', 'forWhatOut', 'followNumOut', 'enterDoorTIME', 'outerDoorTIME', 'enterPlace', 'outerPlace', 'catchPic']
-          const field_ZH = ['ID', '门禁卡号', '进门事由', '进门人数', '出门事由', '出门人数', '进门时间', '出门时间', '进门地点', '出门地点', '抓拍照']
+          const field = ['id', 'name', 'cardNumber', 'forWhatIn', 'sourceSystemCodeIn', 'inTime', 'forWhatOut', 'sourceSystemCodeOut', 'outTime', 'catchPicIn', 'catchPicOut']
+          const field_ZH = ['ID', '姓名', '门禁卡号', '进门事由', '进门地点', '进门时间', '出门事由', '出门地点', '出门时间', '进门抓拍照', '出门抓拍照']
 
           const listQuery = Object.assign({}, this.listQuery, { limit: 999999 })
 

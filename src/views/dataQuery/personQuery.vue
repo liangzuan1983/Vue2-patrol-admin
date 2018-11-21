@@ -28,7 +28,7 @@
     <el-table :data="list" :row-key="rowKey" v-loading="listLoading" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="姓名" width="150px">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.name}}</el-tag>
+          {{scope.row.name}}
         </template>
       </el-table-column>
       <el-table-column align="center" label="种类" width="160px">
@@ -62,7 +62,6 @@
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
 import { selectCaptureFacesInfo } from '@/api/dataQuery'
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves'
@@ -109,6 +108,9 @@ export default {
         }]
       }
     }
+  },
+  filters: {
+    parseTime
   },
   directives: {
     waves

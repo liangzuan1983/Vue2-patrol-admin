@@ -7,7 +7,7 @@
       </div>
       <div class="filter-item">
         <span>种类</span>
-        <el-input type="text" placeholder="输入相关种类" v-model="listQuery.category" style="width: 200px; margin-left: 15px"  @keyup.enter.native="handleFilter"/>
+        <el-input type="text" placeholder="输入相关种类" v-model="listQuery.type" style="width: 200px; margin-left: 15px"  @keyup.enter.native="handleFilter"/>
       </div>
       <div class="inline-timePick filter-item">
         <span>时刻</span>
@@ -28,12 +28,12 @@
     <el-table :data="list" :row-key="rowKey" v-loading="listLoading" border fit highlight-current-row style="width: 100%">
       <el-table-column align="center" label="车牌号" width="150px">
         <template slot-scope="scope">
-          <el-tag>{{scope.row.carNum}}</el-tag>
+          {{scope.row.carNumber}}
         </template>
       </el-table-column>
       <el-table-column align="center" label="种类" width="160px">
         <template slot-scope="scope">
-          <span>{{scope.row.category || '暂无种类'}}</span>
+          <span>{{scope.row.carType | filterType}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="位置"> 
@@ -43,13 +43,13 @@
       </el-table-column>
       <el-table-column align="center" label="时间">
         <template slot-scope="scope">
-          <span>{{scope.row.time | parseTime}}</span>
+          <span>{{scope.row.captureTime | parseTime}}</span>
         </template>
       </el-table-column>
 
       <el-table-column align="center" width="120px" label="抓拍照" v-bind:loading="true">
         <template slot-scope="scope">
-          <fancyBox :url="scope.row.picture"></fancyBox>
+          <fancyBox :url="scope.row.capturePic"></fancyBox>
         </template>
       </el-table-column>
     </el-table>
@@ -63,7 +63,7 @@
 
 <script>
 /* eslint-disable no-unused-vars */
-import { selectXXX } from '@/api/dataQuery'
+import { selectCarRecordInfoByParams } from '@/api/dataQuery'
 import waves from '@/directive/waves'
 import { parseTime } from '@/utils'
 import fancyBox from '@/components/fancybox'
@@ -81,7 +81,7 @@ export default {
         page: 1, // 当前页码
         limit: 10,
         time: null,
-        category: null,
+        type: null,
         carNum: null
       },
       pickerOptions: {
@@ -110,6 +110,42 @@ export default {
       }
     }
   },
+  filters: {
+    filterType(type) {
+      if (typeof type === 'undefined') return '未识别的车辆类型'
+      const MIME = {
+        '0': '未知',
+        '1': '小型车',
+        '2': '中型车',
+        '3': '大型车',
+        '4': '摩托车',
+        '11': '轿车',
+        '12': '微型面包车',
+        '13': '大客车',
+        '14': '大货车',
+        '15': '三轮车',
+        '16': '二轮车',
+        '17': '行人',
+        '22': '越野车',
+        '23': '商务车',
+        '24': '小货车',
+        '26': '轻型客车',
+        '27': '小型客车',
+        '31': '皮卡',
+        '32': '挂车',
+        '33': '混凝土搅拌车',
+        '34': '罐车',
+        '35': '随车吊',
+        '36': '消防车',
+        '37': '渣土车',
+        '38': '押运车',
+        '39': '工程抢修车',
+        '40': '救援车',
+        '41': '栏板卡车'
+      }
+      return MIME[type] ? MIME[type] : '未识别的车辆类型'
+    }
+  },
   directives: {
     waves
   },
@@ -124,7 +160,7 @@ export default {
       const that = this
       that.listLoading = true
       return new Promise(function(resolve, reject) {
-        selectXXX(that.listQuery).then(response => {
+        selectCarRecordInfoByParams(that.listQuery).then(response => {
           that.list = response.data.content
           that.total = response.data.totalElements
           that.listLoading = false
