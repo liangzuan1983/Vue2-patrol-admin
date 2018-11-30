@@ -43,7 +43,7 @@ export default {
       }
     })
   },
-  selectCaptureFacesInfo: config => {
+  selectPersonFaceInfo: config => {
     return Mock.mock({
       ret: 1,
       data: {
@@ -57,7 +57,9 @@ export default {
             ],
             'position': '门岗41.89出口',
             'time': '@datetime',
-            'picture|1': [
+            'captureBgUrl': '',
+            'registerUrl': '',
+            'captureUrl|1': [
               '',
               'src/assets/images/mock/1.jpg',
               'src/assets/images/mock/2.jpg',

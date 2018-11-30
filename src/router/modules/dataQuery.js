@@ -9,7 +9,8 @@ const dataQuery = {
   meta: { title: 'dataQuery', icon: 'dataQuery' },
   children: [
     { path: 'gateSearch', component: () => import('@/views/dataQuery/gateSearch'), name: 'gateSearch', meta: { title: 'gateSearch', noCache: false }},
-    { path: 'personQuery', component: () => import('@/views/dataQuery/personQuery'), name: 'personQuery', meta: { title: 'personQuery', noCache: false }},
+    { path: 'identifiedPersonQuery', component: () => import('@/views/dataQuery/identifiedPersonQuery'), name: 'identifiedPersonQuery', meta: { title: 'identifiedPersonQuery', noCache: false }},
+    { path: 'unidentifiedPersonQuery', component: () => import('@/views/dataQuery/unidentifiedPersonQuery'), name: 'unidentifiedPersonQuery', meta: { title: 'unidentifiedPersonQuery', noCache: false }},
     { path: 'carQuery', component: () => import('@/views/dataQuery/carQuery'), name: 'carQuery', meta: { title: 'carQuery', noCache: false }}
   ]
 }

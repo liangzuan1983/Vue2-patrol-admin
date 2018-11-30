@@ -1,7 +1,8 @@
 <template>
     <div class="fancybox-thumbnails-component">
       <transition name="fadeLeft-transform" mode="out-in">
-        <div v-if="loadingPic" key="loading">
+        <div v-if="!url" key="null">暂无图片</div>
+        <div v-else-if="loadingPic" key="loading">
           <svg-icon class="fancybox-thumbnails__loading" icon-class="loading"></svg-icon>
         </div>
         <a ref="fancyboxLink" key="loaded" v-else :href="url" class="fancybox-thumbnails__link" @click.prevent="HandleFancyBox($event)">
@@ -102,9 +103,15 @@ export default {
     -webkit-animation: rotating 2s linear infinite;
     animation: rotating 2s linear infinite;
   }
-  .fancybox-thumbnails__loading, .fancybox-thumbnails__img {
+  .fancybox-thumbnails__loading {
     width: 1.4rem;
     height: 1.4rem;
+    color: #999;
+    vertical-align: middle;
+  }
+  .fancybox-thumbnails__img {
+    width: 2.4rem;
+    height: 2.4rem;
     color: #999;
     vertical-align: middle;
   }

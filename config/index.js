@@ -10,6 +10,7 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
+      //websocket
       '/websocket': {
         target: 'ws://192.168.42.200:2019',
         ws: true,
@@ -17,12 +18,14 @@ module.exports = {
         logLevel: 'debug',
         changeOrigin: true
       },
+      // api
       '/api': {
         target: 'http://192.168.42.200:2019',
         changeOrigin: true,
         pathRewrite: {'^\/api' : ''}
       },
-      '/GosunImages': {
+      // static
+      '/**/*.(jpeg|jpg|png|gif|ico|cur|gz|svg|svgz)': {
         target: 'http://192.168.42.200:2019',
         changeOrigin: true
       }
@@ -33,7 +36,7 @@ module.exports = {
     // can be overwritten by process.env.HOST
     // if you want dev by ip, please set host: '0.0.0.0'
     host: '0.0.0.0',
-    port: 9527, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    port: 9528, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: false,
     errorOverlay: true,
     notifyOnErrors: false,

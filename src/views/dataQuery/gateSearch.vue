@@ -29,7 +29,7 @@
 
       <el-autocomplete
         class="inline-input"
-        v-model="listQuery.cardNumber"
+        v-model.number="listQuery.cardNumber"
         :fetch-suggestions="handleAutocomplete"
         placeholder="请输入门禁卡号"
         @select="handleSelect"
@@ -312,22 +312,4 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.table-column-img {
-  width: 1.4rem;
-  height: 1.4rem;
-  color: #999;
-  cursor: pointer;
-  vertical-align: middle;
-}
-
-.table-column-icon {
-  font-size: 18px;
-  vertical-align: middle;
-}
-
-.inline-timePick, .inline-input {
-  display: inline-block;
-  margin-bottom: 10px;
-  vertical-align: middle;
-}
 </style>

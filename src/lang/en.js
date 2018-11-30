@@ -72,7 +72,8 @@ export default {
     alarmMapWPF: 'AlarmMap',
     alarmSearch: 'AlarmSearch',
     gateSearch: 'GateSearch',
-    personQuery: 'PersonQuery',
+    unidentifiedPersonQuery: 'UnidentifiedPersonQuery',
+    identifiedPersonQuery: 'IdentifiedPersonQuery',
     carQuery: 'CarQuery',
     test: 'TEXT'
   },

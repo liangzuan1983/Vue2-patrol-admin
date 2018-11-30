@@ -3,16 +3,22 @@
     <div class="filter-container">
       <div class="filter-item">
         <span>姓名</span>
-        <el-input type="text" placeholder="输入姓名" v-model="listQuery.name" style="width: 200px; margin-left: 15px"  @keyup.enter.native="handleFilter"/>
+        <el-input type="text" placeholder="输入姓名" v-model="listQuery.name" style="width: 200px;"  @keyup.enter.native="handleFilter"/>
       </div>
       <div class="filter-item">
         <span>种类</span>
-        <el-input type="text" placeholder="输入相关种类" v-model="listQuery.category" style="width: 200px; margin-left: 15px"  @keyup.enter.native="handleFilter"/>
+        <el-select v-model="listQuery.category" placeholder="请选择">
+          <el-option
+            v-for="(item, index) in category"
+            :key="index"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
       </div>
       <div class="inline-timePick filter-item">
         <span>时间</span>
         <el-date-picker
-          style="margin-left: 15px"
           v-model="listQuery.time"
           type="datetime"
           placeholder="选择日期时间"
@@ -33,7 +39,7 @@
       </el-table-column>
       <el-table-column align="center" label="种类" width="160px">
         <template slot-scope="scope">
-          <span>{{scope.row.category || '暂无种类'}}</span>
+          <span>{{scope.row.category || parseCategory}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="位置"> 
@@ -49,7 +55,7 @@
 
       <el-table-column align="center" width="120px" label="抓拍照" v-bind:loading="true">
         <template slot-scope="scope">
-          <fancyBox :url="scope.row.picture"></fancyBox>
+          <fancyBox :url="scope.row.captureUrl"></fancyBox>
         </template>
       </el-table-column>
     </el-table>
@@ -71,6 +77,43 @@ export default {
   components: {
     fancyBox
   },
+  filters: {
+    parseCategory(category) {
+      let txt = '未知'
+      if (typeof category === 'undefined') return txt
+
+      const type = [
+        {
+          label: '全部',
+          value: null
+        },
+        {
+          value: 1,
+          label: '白名单人员'
+        }, {
+          value: 2,
+          label: '黑名单人员'
+        }, {
+          value: 3,
+          label: '灰名单人员'
+        }, {
+          value: 4,
+          label: 'VIP人员'
+        }
+      ]
+
+      type.some(item => {
+        if (item.value === +category) {
+          txt = item.label
+        }
+      })
+      if (category !== '') {
+        txt = category
+      }
+      return txt
+    },
+    parseTime
+  },
   data() {
     return {
       list: null,
@@ -80,9 +123,29 @@ export default {
         page: 1, // 当前页码
         limit: 10,
         time: null,
-        category: null,
+        category: '',
+        hasRecognition: '已识别',
         name: null
       },
+      category: [
+        {
+          label: '全部',
+          value: null
+        },
+        {
+          value: 1,
+          label: '白名单人员'
+        }, {
+          value: 2,
+          label: '黑名单人员'
+        }, {
+          value: 3,
+          label: '灰名单人员'
+        }, {
+          value: 4,
+          label: 'VIP人员'
+        }
+      ],
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -108,9 +171,6 @@ export default {
         }]
       }
     }
-  },
-  filters: {
-    parseTime
   },
   directives: {
     waves
@@ -155,27 +215,5 @@ export default {
 .block{}
 .block__element{}
 .block--modifier{} */
-.table-column-img {
-  width: 1.4rem;
-  height: 1.4rem;
-  color: #999;
-  cursor: pointer;
-  vertical-align: middle;
-}
 
-.table-column-icon {
-  font-size: 18px;
-  vertical-align: middle;
-}
-
-.filter-item {
-  margin-right: 10px;
-  margin-left: 10px;
-}
-
-.inline-timePick, .inline-input {
-  display: inline-block;
-  margin-bottom: 10px;
-  vertical-align: middle;
-}
 </style>

@@ -192,3 +192,31 @@ code {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+// form
+.table-column-img {
+  width: 1.4rem;
+  height: 1.4rem;
+  color: #999;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.table-column-icon {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+.filter-item {
+  margin-right: 10px;
+  margin-left: 10px;
+  & > span {
+    margin-right: 15px;
+  }
+}
+
+.inline-timePick, .inline-input {
+  display: inline-block;
+  margin-bottom: 10px;
+  vertical-align: middle;
+}
