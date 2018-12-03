@@ -7,7 +7,7 @@
       </div>
       <div class="filter-item">
         <span>种类</span>
-        <el-select v-model="listQuery.category" placeholder="请选择">
+        <el-select v-model="listQuery.category" placeholder="请选择" @change="handleFilter">
           <el-option
             v-for="(item, index) in category"
             :key="index"
@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column align="center" label="种类" width="160px">
         <template slot-scope="scope">
-          <span>{{scope.row.category || parseCategory}}</span>
+          <span>{{scope.row.category | parseCategory}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="位置"> 
@@ -72,6 +72,44 @@ import { selectCaptureFacesInfo } from '@/api/dataQuery'
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves'
 import fancyBox from '@/components/fancybox'
+
+const MIME = [
+  {
+    label: '全部',
+    value: null
+  },
+  {
+    value: 1,
+    label: '白名单人员'
+  }, {
+    value: 2,
+    label: '黑名单人员'
+  }, {
+    value: 3,
+    label: '灰名单人员'
+  }, {
+    value: 4,
+    label: 'VIP人员'
+  }, {
+    value: 5,
+    label: '一级人员'
+  }, {
+    value: 6,
+    label: '二级人员'
+  }, {
+    value: 7,
+    label: '三级人员'
+  }, {
+    value: 8,
+    label: '四级人员'
+  }, {
+    value: 9,
+    label: '内部人员'
+  }, {
+    value: 10,
+    label: '外部人员'
+  }
+]
 export default {
   name: 'personQuery',
   components: {
@@ -79,37 +117,17 @@ export default {
   },
   filters: {
     parseCategory(category) {
-      let txt = '未知'
+      let txt = '未知人员'
       if (typeof category === 'undefined') return txt
 
-      const type = [
-        {
-          label: '全部',
-          value: null
-        },
-        {
-          value: 1,
-          label: '白名单人员'
-        }, {
-          value: 2,
-          label: '黑名单人员'
-        }, {
-          value: 3,
-          label: '灰名单人员'
-        }, {
-          value: 4,
-          label: 'VIP人员'
-        }
-      ]
+      const type = MIME
 
       type.some(item => {
         if (item.value === +category) {
           txt = item.label
         }
       })
-      if (category !== '') {
-        txt = category
-      }
+
       return txt
     },
     parseTime
@@ -127,25 +145,7 @@ export default {
         hasRecognition: '已识别',
         name: null
       },
-      category: [
-        {
-          label: '全部',
-          value: null
-        },
-        {
-          value: 1,
-          label: '白名单人员'
-        }, {
-          value: 2,
-          label: '黑名单人员'
-        }, {
-          value: 3,
-          label: '灰名单人员'
-        }, {
-          value: 4,
-          label: 'VIP人员'
-        }
-      ],
+      category: MIME,
       pickerOptions: {
         shortcuts: [{
           text: '最近一周',

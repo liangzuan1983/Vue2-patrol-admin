@@ -7,7 +7,7 @@
       </div>
       <div class="filter-item">
         <span>种类</span>
-        <el-select v-model.number="listQuery.type" placeholder="请选择">
+        <el-select v-model="listQuery.type" placeholder="请选择" @change="handleFilter">
           <el-option
             v-for="(item, index) in category"
             :key="index"

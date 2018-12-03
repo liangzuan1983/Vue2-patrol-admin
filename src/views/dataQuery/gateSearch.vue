@@ -5,7 +5,7 @@
         <span class="demonstration">开始时刻</span>
         <el-date-picker
           style="margin: 0 15px"
-          v-model="listQuery.inTime"
+          v-model="listQuery.beginTime"
           type="datetime"
           placeholder="选择日期时间"
           align="right"
@@ -18,7 +18,7 @@
         <span class="demonstration">结束时刻</span>
         <el-date-picker
           style="margin: 0 15px"
-          v-model="listQuery.outTime"
+          v-model="listQuery.endTime"
           type="datetime"
           placeholder="选择日期时间"
           align="right"
