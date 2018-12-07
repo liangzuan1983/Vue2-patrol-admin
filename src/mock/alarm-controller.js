@@ -74,7 +74,7 @@ export default {
       }
     })
   },
-  selectRobotAlarm: config => {
+  selectAlarmRecord: config => {
     return Mock.mock({
       'ret': 1,
       'data': {

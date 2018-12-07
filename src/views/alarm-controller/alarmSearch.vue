@@ -137,7 +137,7 @@
 </template>
 
 <script>
-import { selectRobotAlarm, selectAlarmConfig } from '@/api/alarm-controller'
+import { selectAlarmRecord, selectAlarmConfig } from '@/api/alarm-controller'
 import { parseTime } from '@/utils'
 import waves from '@/directive/waves'
 import copyUrl from '@/components/Clipboard/copyUrl'
@@ -221,7 +221,7 @@ export default {
     },
     getList() {
       this.listLoading = true
-      selectRobotAlarm(this.listQuery).then(response => {
+      selectAlarmRecord(this.listQuery).then(response => {
         this.list = response.data.content
         this.total = response.data.totalElements
         this.listLoading = false
@@ -276,7 +276,7 @@ export default {
 
           const listQuery = Object.assign({}, this.listQuery, { limit: 999999 })
 
-          selectRobotAlarm(listQuery).then(response => {
+          selectAlarmRecord(listQuery).then(response => {
             const list = response.data.content
             const data = this.formatJson(field, list)
             excel.export_json_to_excel({
