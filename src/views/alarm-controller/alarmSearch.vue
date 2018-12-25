@@ -58,7 +58,7 @@
           :colors="alarmLevelOption.colors"
           :low-threshold="1" 
           :high-threshold="3" 
-          :max='3'
+          :max="3"
           :texts="alarmLevelOption.texts"
           :text-color="alarmLevelOption.textColor"
           @change="handleAlarmLevel"></el-rate>
@@ -138,7 +138,7 @@
 
 <script>
 import { selectAlarmRecord, selectAlarmConfig } from '@/api/alarm-controller'
-import { parseTime } from '@/utils'
+import { parseTime, deepClone2 } from '@/utils'
 import waves from '@/directive/waves'
 import copyUrl from '@/components/Clipboard/copyUrl'
 export default {
@@ -156,7 +156,7 @@ export default {
         limit: 10, // 不传参数，默认20
         unclosed: null,
         alarmType: undefined,
-        alarmLevel: 1,
+        alarmLevel: null,
         alarmStartTimeBegin: null,
         alarmStartTimeEnd: null,
         alarmStopTimeBegin: null,
@@ -197,7 +197,7 @@ export default {
       },
       downloadLoading: false,
       filename: '告警查询',
-      AlarmLevelAll: false,
+      AlarmLevelAll: true,
       autoWidth: true
     }
   },
@@ -221,8 +221,13 @@ export default {
     },
     getList() {
       this.listLoading = true
-      selectAlarmRecord(this.listQuery).then(response => {
+      if (this.listQuery.alarmLevel === 0) {
+        this.listQuery.alarmLevel = null
+      }
+      const query = deepClone2(this.listQuery)
+      selectAlarmRecord(query).then(response => {
         this.list = response.data.content
+        // this.list = JSON.stringify(response.data.content)
         this.total = response.data.totalElements
         this.listLoading = false
       })

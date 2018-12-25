@@ -83,7 +83,8 @@ export const asyncRouterMap = [
     meta: { title: 'alarm-controller', icon: 'alarm' },
     children: [
       { path: 'alarmConfig', component: () => import('@/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: 'alarmConfig', noCache: false }},
-      { path: 'alarmSearch', component: () => import('@/views/alarm-controller/alarmSearch'), name: 'alarmSearch', meta: { title: 'alarmSearch', noCache: false }}
+      { path: 'alarmSearch', component: () => import('@/views/alarm-controller/alarmSearch'), name: 'alarmSearch', meta: { title: 'alarmSearch', noCache: false }},
+      { path: 'perimeterCamera', component: () => import('@/views/alarm-controller/perimeterCamera'), name: 'perimeterCamera', meta: { title: 'perimeterCamera', noCache: false }}
     ]
   },
   chart,

@@ -109,14 +109,14 @@
 
         <el-form-item label="告警等级" prop="alarmLevel">
           <el-rate style="margin-top:8px;" 
-          v-model="temp.alarmLevel" 
-          :colors="alarmLevelOption.colors"
-          :low-threshold="1" 
-          :high-threshold="3" 
-          :max='3'
-          show-text
-          :texts="alarmLevelOption.texts"
-          :text-color="alarmLevelOption.textColor"></el-rate>
+            v-model="temp.alarmLevel" 
+            :colors="alarmLevelOption.colors"
+            :low-threshold="1" 
+            :high-threshold="3" 
+            :max='3'
+            show-text
+            :texts="alarmLevelOption.texts"
+            :text-color="alarmLevelOption.textColor"></el-rate>
         </el-form-item>
        
         <el-form-item label="告警图标" prop="iconDisplay"> 

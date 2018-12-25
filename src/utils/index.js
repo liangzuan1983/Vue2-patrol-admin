@@ -270,6 +270,11 @@ export function deepClone(source) {
   return targetObj
 }
 
+/** real deepclone  */
+export function deepClone2(source) {
+  return JSON.parse(JSON.stringify(source))
+}
+
 export function uniqueArr(arr) {
   return Array.from(new Set(arr))
 }

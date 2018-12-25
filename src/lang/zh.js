@@ -73,7 +73,7 @@ export default {
     alarmMapWPF: '告警地图',
     alarmSearch: '告警查询',
     gateSearch: '口部进出查询',
-
+    perimeterCamera: '周界摄像头配置',
     unidentifiedPersonQuery: '未识别人员卡口查询',
     identifiedPersonQuery: '已识别人员卡口查询',
     carQuery: '车辆卡口查询',

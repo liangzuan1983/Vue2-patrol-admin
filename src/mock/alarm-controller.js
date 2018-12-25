@@ -98,5 +98,58 @@ export default {
         ]
       }
     })
+  },
+
+  selectAlarmCameraPresetConfig: config => {
+    return {
+      'ret': 1,
+      'data': {
+        'content': [
+          {
+            'alarmName': '高温告警',
+            'cameraPresetInfo': [
+              { 'cameraId': '4', 'name': '摄像头3',
+                'preset': { 'presetId': '5', 'name': '预置位5' }},
+              { 'cameraId': '4', 'name': '摄像头4',
+                'preset': { 'presetId': '8', 'name': '预置位8' }}],
+            'id': 1
+          }
+        ],
+        'first': false,
+        'last': true,
+        'number': 1,
+        'numberOfElements': 4,
+        'size': 10,
+        'sort': [
+          {
+            'ascending': false,
+            'descending': true,
+            'direction': 'DESC',
+            'ignoreCase': false,
+            'nullHandling': 'NATIVE',
+            'property': 'id'
+          }
+        ],
+        'totalElements': 14,
+        'totalPages': 2
+      }
+    }
+  },
+
+  updateAlarmCameraPresetConfig: config => {
+    return {
+      'ret': 1,
+      'msg': 'success'
+    }
+  },
+
+  selectCameraPreset: config => {
+    return { 'ret': 1, 'data': [
+      { 'cameraId': '4', 'id': 1,
+        'preset': [
+          { 'cameraId': '4', 'id': 1, 'presetId': '5', 'presetName': '嗯嗯嗯' },
+          { 'cameraId': '4', 'id': 2, 'presetId': '8', 'presetName': 'wer额我去额' }
+        ], 'cameraName': '爱仕达' },
+      { 'cameraId': '1', 'id': 2, 'preset': [{ 'cameraId': '1', 'id': 3, 'presetId': '5', 'presetName': '123' }], 'cameraName': '鹅鹅鹅' }] }
   }
 }

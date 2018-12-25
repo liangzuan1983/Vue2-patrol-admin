@@ -71,6 +71,7 @@ export default {
     alarmMap: 'AlarmMap',
     alarmMapWPF: 'AlarmMap',
     alarmSearch: 'AlarmSearch',
+    perimeterCamera: 'PerimeterCamera',
     gateSearch: 'GateSearch',
     unidentifiedPersonQuery: 'UnidentifiedPersonQuery',
     identifiedPersonQuery: 'IdentifiedPersonQuery',
