@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="filter-container">
       <div class="filter-item">
-        <el-input type="number" placeholder="输入周界 ID" v-model.number="listQuery.id" style="width: 200px;"  @keyup.enter.native="handleFilter"/>
+        <el-input placeholder="输入周界名称" v-model.number="listQuery.alarmName" style="width: 200px;"  @keyup.enter.native="handleFilter"/>
       </div>
       <el-button style="margin-left: 10px" class="filter-item" type="primary" size="" v-waves icon="el-icon-search" @click.native="handleFilter">搜索</el-button>
     </div>
@@ -36,6 +36,14 @@
     <!-- Dialog -->
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="closeOnClickModel" width="750px" top="10vh">
       <el-form ref="dataForm" :inline="true" :model="temp" label-width="100px" label-position="right" style="margin:10px;">
+        <el-form-item label="经度" prop="alarmType">
+          <el-input v-model.number="temp.longitude" type="number"></el-input>
+        </el-form-item>
+
+        <el-form-item label="纬度" prop="alarmType">
+          <el-input v-model.number="temp.latitude" type="number"></el-input>
+        </el-form-item>
+
         <!-- presetInfo -->
         <div v-for="(item, index) in temp.cameraPresetInfo" v-bind:key="index">
           <!-- camera -->
@@ -111,10 +119,12 @@ export default {
       listQuery: {
         page: 1, // 当前页码
         limit: 10,
-        id: null
+        alarmName: null
       },
       temp: {
         id: null,
+        longitude: null,
+        latitude: null,
         cameraPresetInfo: [
           {
             name: null,
@@ -196,6 +206,8 @@ export default {
     resetTemp() {
       this.temp = {
         id: null,
+        longitude: null,
+        latitude: null,
         cameraPresetInfo: [
           {
             name: null,

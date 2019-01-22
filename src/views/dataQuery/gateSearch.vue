@@ -132,7 +132,9 @@ export default {
   directives: {
     waves
   },
-  filters: {},
+  filters: {
+    parseTime
+  },
   data() {
     return {
       list: null,

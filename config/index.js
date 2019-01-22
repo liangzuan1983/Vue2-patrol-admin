@@ -23,15 +23,15 @@ module.exports = {
       },
       // api
       '/api': {
-        target: 'http://192.168.41.41:2019',
+        target: 'http://192.168.42.200:2019',
         changeOrigin: true,
         pathRewrite: {'^\/api' : ''}
-      },
-      // static
-      '/**/*.(jpeg|jpg|png|gif|ico|cur|gz|svg|svgz)': {
-        target: 'http://192.168.42.200:2019',
-        changeOrigin: true
       }
+      // static
+      // '/**/*.(jpeg|jpg|png|gif|ico|cur|gz|svg|svgz)': {
+      //   target: 'http://192.168.42.200:2019',
+      //   changeOrigin: true
+      // }
     },
 
     // Various Dev Server settings
