@@ -5,7 +5,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 /* Layout */
-import Layout from '@index/views/layout/Layout'
+import Layout from '@/views/layout/Layout'
 
 /* Router Modules */
 import chart from './modules/chart'
@@ -39,17 +39,17 @@ import { iconsRouter } from './modules/else'
   }
 **/
 export const constantRouterMap = [
-  { path: '/login', component: () => import('@index/views/login/index'), hidden: true },
-  { path: '/authredirect', component: () => import('@index/views/login/authredirect'), hidden: true },
-  { path: '/404', component: () => import('@index/views/errorPage/404'), hidden: true },
-  { path: '/401', component: () => import('@index/views/errorPage/401'), hidden: true },
+  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
+  { path: '/authredirect', component: () => import('@/views/login/authredirect'), hidden: true },
+  { path: '/404', component: () => import('@/views/errorPage/404'), hidden: true },
+  { path: '/401', component: () => import('@/views/errorPage/401'), hidden: true },
   {
     path: '',
     component: Layout,
     redirect: 'dashboard',
     children: [{
       path: 'dashboard',
-      component: () => import('@index/views/dashboard/index'),
+      component: () => import('@/views/dashboard/index'),
       name: 'dashboard',
       meta: { title: 'dashboard', icon: 'dashboard', noCache: true }
     }]
@@ -57,7 +57,7 @@ export const constantRouterMap = [
 ]
 
 export default new Router({
-  mode: 'history', // require service support
+  // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
@@ -71,7 +71,7 @@ export const asyncRouterMap = [
     alwaysShow: true,
     meta: { title: 'common-controller', icon: 'configuration' },
     children: [
-      { path: 'subSystemConfig', component: () => import('@index/views/common-controller/subSystemConfig'), name: 'subSystemConfig', meta: { title: 'subSystemConfig' }}
+      { path: 'subSystemConfig', component: () => import('@/views/common-controller/subSystemConfig'), name: 'subSystemConfig', meta: { title: 'subSystemConfig' }}
     ]
   },
   {
@@ -82,9 +82,9 @@ export const asyncRouterMap = [
     alwaysShow: true,
     meta: { title: 'alarm-controller', icon: 'alarm' },
     children: [
-      { path: 'alarmConfig', component: () => import('@index/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: 'alarmConfig', noCache: false }},
-      { path: 'alarmSearch', component: () => import('@index/views/alarm-controller/alarmSearch'), name: 'alarmSearch', meta: { title: 'alarmSearch', noCache: false }},
-      { path: 'perimeterCamera', component: () => import('@index/views/alarm-controller/perimeterCamera'), name: 'perimeterCamera', meta: { title: 'perimeterCamera', noCache: false }}
+      { path: 'alarmConfig', component: () => import('@/views/alarm-controller/alarmConfig'), name: 'alarmConfig', meta: { title: 'alarmConfig', noCache: false }},
+      { path: 'alarmSearch', component: () => import('@/views/alarm-controller/alarmSearch'), name: 'alarmSearch', meta: { title: 'alarmSearch', noCache: false }},
+      { path: 'perimeterCamera', component: () => import('@/views/alarm-controller/perimeterCamera'), name: 'perimeterCamera', meta: { title: 'perimeterCamera', noCache: false }}
     ]
   },
   chart,

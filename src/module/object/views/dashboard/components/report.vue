@@ -1,12 +1,11 @@
 <template>
-  <div class="app-container">
-    aasdsdsd
+  <div class="report">
   </div>
 </template>
 
 <script>
 export default {
-  name: '',
+  name: 'Report',
   data() {
     return {}
   },
@@ -20,10 +19,10 @@ export default {
 .block{}
 .block__element{}
 .block--modifier{} */
-.app-container {
+.report {
   position: relative;
   width: 100%;
-  height: calc(100vh - 84px);
-  padding: 5px;
+  background: #000;
+  height: 100%;
 }
 </style>

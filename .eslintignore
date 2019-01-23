@@ -1,5 +1,7 @@
 build/*.js
 dist/
 config/*.js
-src/assets
+src/assets/
 node_modules/
+static/
+test/

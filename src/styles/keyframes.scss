@@ -1,0 +1,34 @@
+@keyframes rotating-reverse {
+  0% {
+    -ms-transform: rotateZ(0);
+    -webkit-transform: rotateZ(0);
+    transform: rotateZ(0);
+  }
+  
+  100% {
+    -ms-transform: rotateZ(-360deg);
+    -webkit-transform: rotateZ(-360deg);
+    transform: rotateZ(-360deg);
+  }
+}
+
+@keyframes loading-rotate {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes loading-dash {
+  0% {
+      stroke-dasharray: 1,200;
+      stroke-dashoffset: 0;
+  }
+  50% {
+      stroke-dasharray: 90,150;
+      stroke-dashoffset: -40px;
+  }
+  100% {
+      stroke-dasharray: 90,150;
+      stroke-dashoffset: -120px;
+  }
+}
