@@ -10,6 +10,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const multipageHelper = require('./multipage-helper')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -35,7 +36,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env,
-      LOCAL_ROOT: JSON.stringify("192.168.42.200:2019")
+      LOCAL_ROOT: JSON.stringify("192.168.42.200:2019"),
+      LOCAL_STATIC: JSON.stringify('' + config.build.assetsPublicPath)
     }),
     new UglifyJsPlugin({
       uglifyOptions: {
@@ -110,10 +112,11 @@ const webpackConfig = merge(baseWebpackConfig, {
     // see: https://webpack.js.org/plugins/commons-chunk-plugin/#extra-async-commons-chunk
     new webpack.optimize.CommonsChunkPlugin({
       // the name or list of names must match the name or names of the entry points that create the async chunks
-      name: 'app',
+      // name: 'app',
+      names: Object.keys(multipageHelper.getEntries()), // ['index', 'other']
       async: 'vendor-async',
       children: true,
-      minChunks: 3
+      minChunks: 2
     }),
     // split echarts into its own file
     new webpack.optimize.CommonsChunkPlugin({
@@ -157,7 +160,7 @@ const webpackConfig = merge(baseWebpackConfig, {
         ignore: ['.*']
       }
     ])
-  ]
+  ].concat(multipageHelper.getProdHtmlWebpackPluginList())
 })
 
 if (config.build.productionGzip) {

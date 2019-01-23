@@ -3,6 +3,7 @@ const path = require('path')
 const utils = require('./utils')
 const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
+const multipageHelper = require('./multipage-helper')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -21,9 +22,7 @@ const createLintingRule = () => ({
 
 module.exports = {
   context: path.resolve(__dirname, '../'),
-  entry: {
-    app: ['babel-polyfill', './src/main.js']
-  },
+  entry: multipageHelper.getEntries(),
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
@@ -40,6 +39,8 @@ module.exports = {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
       'assets': resolve('src/assets'),
+      '@index':  resolve('src/module/index'),
+      '@object':  resolve('src/module/object'),
       '@@': resolve('node_modules')
     }
   },

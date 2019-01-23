@@ -8,6 +8,7 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
 const portfinder = require('portfinder')
+const multipageHelper = require('./multipage-helper')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -26,7 +27,14 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   // these devServer options should be customized in /config/index.js
   devServer: {
     clientLogLevel: 'warning',
-    historyApiFallback: true,
+    // historyApiFallback: true,
+    // history more spa 多页面history模式
+    historyApiFallback: {
+      rewrites: [
+        { from: 'index', to: path.posix.join(config.dev.assetsPublicPath, 'index.html') },
+        { from: /\/object/, to: path.posix.join(config.dev.assetsPublicPath, 'object.html') }
+      ],
+    },
     hot: true,
     compress: true,
     host: HOST || config.dev.host,
@@ -43,23 +51,30 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     }
   },
   plugins: [
+    // 不同文件中多次import同一个文件，webpack并不会多次打包，只会在打包后的文件中会多次引用打包后的该文件对应的函数
+    // 建立全局引用 引入外部类库
+    // new webpack.ProvidePlugin({
+    //   $: 'jquery',
+    //   jQuery: 'jquery',
+    // }),
     new webpack.DefinePlugin({
       'process.env': require('../config/dev.env'),
-      LOCAL_ROOT: JSON.stringify("localhost:9527")
+      LOCAL_ROOT: JSON.stringify("localhost:9527"),
+      LOCAL_STATIC: JSON.stringify('' + config.dev.assetsPublicPath)
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(), // HMR shows correct file names in console on update.
     new webpack.NoEmitOnErrorsPlugin(),
     // https://github.com/ampedandwired/html-webpack-plugin
-    new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: 'index.html',
-      inject: true,
-      favicon: resolve('favicon.ico'),
-      title: 'patrolSystem',
-      path: config.dev.assetsPublicPath + config.dev.assetsSubDirectory
-    }),
-  ]
+    // new HtmlWebpackPlugin({
+    //   filename: 'index.html',
+    //   template: 'index.html',
+    //   inject: true,
+    //   favicon: resolve('favicon.ico'),
+    //   title: 'patrolSystem',
+    //   path: config.dev.assetsPublicPath + config.dev.assetsSubDirectory
+    // }),
+  ].concat(multipageHelper.getDevHtmlWebpackPluginList())
 })
 
 module.exports = new Promise((resolve, reject) => {
