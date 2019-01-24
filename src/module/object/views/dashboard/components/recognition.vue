@@ -81,6 +81,7 @@ export default {
       .name {
         position: relative;
         display: inline-block;
+        width: 100%;
       }
     }
   }
