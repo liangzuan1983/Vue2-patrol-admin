@@ -59,16 +59,27 @@ module.exports = {
           resolve('src'), 
           resolve('test'), 
           resolve('node_modules/webpack-dev-server/client'),
-          resolve('node_modules/vue-baidu-map/components')
+          resolve('node_modules/vue-baidu-map/components'),
+          resolve('node_modules/resize-detector')
         ]
       },
       {
         test: /\.svg$/,
-        loader: 'svg-sprite-loader',
         include: [resolve('src/icons')],
-        options: {
-          symbolId: 'icon-[name]'
-        }
+        use: [
+          {
+            loader: 'svg-sprite-loader',
+            options: {
+              symbolId: 'icon-[name]'
+            }
+          },
+          {
+            loader: 'svgo-loader', // 压缩svg 同时删除svg的填充颜色的属性，否则会css样式无效
+            options: {
+              externalConfig: resolve('src/icons/svgo.yml')
+            }
+          }
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,

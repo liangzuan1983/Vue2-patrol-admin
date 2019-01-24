@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import icons from './generateIconsView'
+import icons from '@/utils/generateIconsView'
 import clipboard from '@/utils/clipboard'
 
 export default {

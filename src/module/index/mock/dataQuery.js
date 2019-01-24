@@ -18,17 +18,18 @@ export default {
             'outTime': '@datetime',
             'catchPicIn|1': [
               '',
-              'src/assets/images/mock/1.jpg',
-              'src/assets/images/mock/2.jpg',
-              'src/assets/images/mock/3.jpg',
-              'src/assets/images/mock/4.jpg'
+              '/src/assets/images/mock/1.jpg',
+              '/src/assets/images/mock/2.jpg',
+              '/src/assets/images/mock/3.jpg',
+              '/src/assets/images/mock/4.jpg'
             ],
             'catchPicOut|1': [
               '',
-              'src/assets/images/mock/1.jpg',
-              'src/assets/images/mock/2.jpg',
-              'src/assets/images/mock/3.jpg',
-              'src/assets/images/mock/4.jpg'
+              'sadsadsd',
+              '/src/assets/images/mock/1.jpg',
+              '/src/assets/images/mock/2.jpg',
+              '/src/assets/images/mock/3.jpg',
+              '/src/assets/images/mock/4.jpg'
             ]
           }
         ],
@@ -61,10 +62,10 @@ export default {
             'registerUrl': '',
             'captureUrl|1': [
               '',
-              'src/assets/images/mock/1.jpg',
-              'src/assets/images/mock/2.jpg',
-              'src/assets/images/mock/3.jpg',
-              'src/assets/images/mock/4.jpg'
+              '/src/assets/images/mock/1.jpg',
+              '/src/assets/images/mock/2.jpg',
+              '/src/assets/images/mock/3.jpg',
+              '/src/assets/images/mock/4.jpg'
             ]
           }
         ],
@@ -92,10 +93,10 @@ export default {
             'captureTime': '@datetime',
             'capturePic|1': [
               '',
-              'src/assets/images/mock/1.jpg',
-              'src/assets/images/mock/2.jpg',
-              'src/assets/images/mock/3.jpg',
-              'src/assets/images/mock/4.jpg'
+              '/src/assets/images/mock/1.jpg',
+              '/src/assets/images/mock/2.jpg',
+              '/src/assets/images/mock/3.jpg',
+              '/src/assets/images/mock/4.jpg'
             ]
           }
         ],

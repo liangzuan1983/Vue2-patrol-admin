@@ -1,36 +1,57 @@
 <template>
-    <div class="fancybox-thumbnails-component">
+    <div class="fancybox-thumbnails">
       <transition name="fadeLeft-transform" mode="out-in">
-        <div v-if="!url" key="null">暂无图片</div>
+        <div v-if="!url" key="null">{{errorTxt}}</div>
         <div v-else-if="loadingPic" key="loading">
-          <svg-icon class="fancybox-thumbnails__loading" icon-class="loading"></svg-icon>
+          <svg-icon class="fancybox-thumbnails__loading" icon-class="loading" :style="{width: computedThumbWidth, height: computedThumbWidth}"></svg-icon>
         </div>
-        <a ref="fancyboxLink" key="loaded" v-else :href="url" class="fancybox-thumbnails__link" @click.prevent="HandleFancyBox($event)">
-          <img class="fancybox-thumbnails__img" :src="thumbnailsUrl">
+        <div v-else-if="loadedError" key="loadedError">
+          <svg-icon class="fancybox-thumbnails__loadedError" icon-class="picture_error" :style="{width: computedThumbWidth, height: computedThumbWidth}"></svg-icon>
+        </div>
+        <a v-else key="loadedSuccess" ref="fancyboxLink" :href="url" class="fancybox-thumbnails__link" v-fancybox="open">
+          <img class="fancybox-thumbnails__img" :src="thumbnailsUrl" :style="{width: computedWidth, height: computedHeight}">
         </a>
       </transition>
     </div>
 </template>
 
 <script>
-/* eslint-disable no-unused-vars */
-import fancyBoxMain from './lib'
+import fancybox from '@/directive/fancybox'
 
 export default {
   name: 'fancy-box',
+  directives: { fancybox },
   props: {
     msUrl: {
       type: String
     },
     url: {
       type: String
+    },
+    width: {
+      type: [String, Number],
+      default: '2.4rem'
+    },
+    height: {
+      type: [String, Number],
+      default: '2.4rem'
+    },
+    open: {
+      type: Boolean,
+      default: true
+    },
+    errorTxt: {
+      type: String,
+      default: '暂无图片'
     }
   },
   data() {
     return {
       thumbnail_Width: null,
       thumbnail_Height: null,
-      loadingPic: true
+      loadingPic: true,
+      loadedError: false,
+      isVisible: this.visible
     }
   },
   /* 只是第一次加载的时候调用 */
@@ -40,7 +61,8 @@ export default {
       .then((res) => {
         this.loadingPic = false
       }, () => {
-        this.loadingPic = true
+        this.loadingPic = false
+        this.loadedError = true
       })
   },
   methods: {
@@ -53,7 +75,7 @@ export default {
           self.thumbnail_Height = img.naturalHeight
           resolve(img)
         }
-        img.onerre = (err) => {
+        img.onerror = (err) => {
           reject(err)
         }
         // just simulate the asynchronization of loading image, can delete
@@ -65,18 +87,49 @@ export default {
         }
         // }, 2000)
       })
-    },
-    HandleFancyBox(event) {
-      const target = this.$refs.fancyboxLink
-
-      fancyBoxMain(target, Object.assign({}, {
-        url: this.url
-      }))
     }
   },
   computed: {
     thumbnailsUrl() {
       return this.msUrl ? this.msUrl : this.url
+    },
+    computedWidth() {
+      const { width } = this
+      if (isNaN(width)) {
+        return width
+      } else {
+        return `${width}px`
+      }
+    },
+    computedHeight() {
+      const { height } = this
+      if (isNaN(height)) {
+        return height
+      } else {
+        return `${height}px`
+      }
+    },
+    computedThumbWidth() {
+      const { width } = this
+      if (isNaN(width)) {
+        const num = parseFloat(width)
+        // const suffix = width.slice(num.toString())
+        // return `${num / 4}${suffix}`
+        return `${num / 4}px`
+      } else {
+        return `${width / 4}px`
+      }
+    },
+    computedThumbHeight() {
+      const { height } = this
+      if (isNaN(height)) {
+        const num = parseFloat(height)
+        // const suffix = width.slice(num.toString())
+        // return `${num / 4}${suffix}`
+        return `${num / 4}px`
+      } else {
+        return `${height / 4}px`
+      }
     }
   },
   watch: {
@@ -95,28 +148,32 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-.fancybox-thumbnails-component {
-  display: inline-block;
-  margin: 0 3px;
+.fancybox-thumbnails {
+    position: relative;
+    display: inline-block;
   .fancybox-thumbnails__loading {
     -ms-animation: rotating 2s linear infinite;
     -webkit-animation: rotating 2s linear infinite;
     animation: rotating 2s linear infinite;
   }
-  .fancybox-thumbnails__loading {
+ .fancybox-thumbnails__loading, .fancybox-thumbnails__loadedError {
     width: 1.4rem;
     height: 1.4rem;
+    min-width: 1.4rem;
+    min-height: 1.4rem;
     color: #999;
     vertical-align: middle;
   }
   .fancybox-thumbnails__img {
-    width: 2.4rem;
-    height: 2.4rem;
+    width: 100%;
+    height: 100%;
+    min-width: 2.4rem;
+    min-height: 2.4rem;
     color: #999;
     vertical-align: middle;
+    border-radius: 5px;
   }
   .fancybox-thumbnails__link {
-    display: inline-block;
     cursor: pointer;
   }
 }

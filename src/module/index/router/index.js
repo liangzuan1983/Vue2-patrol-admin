@@ -89,7 +89,7 @@ export const asyncRouterMap = [
   },
   chart,
   dataQuery,
-  // iconsRouter,
+  iconsRouter,
 
   // some website which is not registered will be redirect to 404
   { path: '*', redirect: '/404', hidden: true }

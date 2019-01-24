@@ -17,8 +17,8 @@ Mock.mock(/\/api\/getRoles\b/, 'get', loginAPI.getUserInfo)
 Mock.mock(/\/api\/selectSubSystemConfig\b/, 'get', common.selectSubSystemConfig)
 
 // about alarm module
-Mock.mock(/\/api\/selectAlarmConfi\b/, 'get', alarm.selectAlarmConfig)
-Mock.mock(/\/api\/selectAlar\b/, 'get', alarm.selectAlarmRecord)
+Mock.mock(/\/api\/selectAlarmConfig\b/, 'get', alarm.selectAlarmConfig)
+Mock.mock(/\/api\/selectAlarm\b/, 'get', alarm.selectAlarmRecord)
 
 Mock.mock(/\/api\/selectPassPersonInfo\b/, 'get', dataQuery.selectPassPersonInfo)
 Mock.mock(/\/api\/selectPersonFaceInfo\b/, 'get', dataQuery.selectPersonFaceInfo)

@@ -32,7 +32,7 @@ export default {
   /*84 = navbar + tags-view = 50 +34 */
   height: 100%;
   position: relative;
-  overflow: hidden;
+  overflow: auto;
 }
 </style>
 

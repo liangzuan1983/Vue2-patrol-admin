@@ -15,7 +15,6 @@ export function parseTime(time, cFormat) {
     date = time
   } else {
     if (('' + time).length === 10) time = parseInt(time) * 1000
-    console.log(time)
     date = new Date(time)
     if (isNaN(date.getTime())) {
       date = new Date(time.replace(/-/g, '/'))

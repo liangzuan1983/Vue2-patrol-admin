@@ -1,6 +1,6 @@
 <template>
   <transition name="fancyboxShade" v-on:after-leave="shadeAfterLeave" v-on:after-enter="fadeAfterEnter">
-    <div class="fancybox-mask" v-show="visible" v-on:click="handleTapClosed">
+    <div class="fancybox-mask" v-show="visible" v-on:click.prevent.stop="handleTapClosed">
       <div ref="fancyBoxWrapper" class="fancybox-wrapper">
         <transition name="fade" mode="out-in">
           <div v-if="loadingPic" key="loading" class="fancybox__loading_spinner">
@@ -10,7 +10,7 @@
           <div v-else key="fancyboxImage">  
             <div>
               <img class="fancybox__img" :style="fixStyle" :src="activeUrl"
-              v-fancybox
+              v-fancybox-drag="true"
               :width="width"
               :height="height"
               >
@@ -18,7 +18,7 @@
           </div>
         </transition>
         <div class="fancybox__tool">
-          <svg-icon icon-class="close" v-on:click.prevent="handleTapClosed"></svg-icon>
+          <svg-icon icon-class="close" v-on:click.prevent.stop="handleTapClosed"></svg-icon>
         </div>
       </div>  
     </div>
@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import fancybox from '@/directive/fancybox-drag'
+import fancyboxDrag from '@/directive/fancybox-drag'
 export default {
   name: 'fancy-box-main',
-  directives: { fancybox },
+  directives: { fancyboxDrag },
   props: {
     visible: {
       type: Boolean,
@@ -160,7 +160,7 @@ $svgHeight: 42px;
   height: 100%;
   overflow: hidden;
   background: rgba(7,17,27, .8);
-  z-index: 2002;
+  z-index: 9994;
   .fancybox-wrapper {
     position: fixed;
     left: 0;

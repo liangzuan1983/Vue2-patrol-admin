@@ -1,10 +1,10 @@
 import Vue from 'vue'
-import fancyBoxMain from './fancyBox.vue'
+import fancyBoxMain from '@/components/fancyBox/fancyBox.vue'
 
 /* eslint-disable no-unused-vars */
 const FancyBoxConstructor = Vue.extend(fancyBoxMain)
 
-export default async(el, opt) => {
+export default async(el, opt, content) => {
   const instance = new FancyBoxConstructor({
     // document.createElement('div'), mount to a DOMELement which will be replaced
     mounted() {
@@ -13,12 +13,14 @@ export default async(el, opt) => {
   }).$mount()
   document.body.appendChild(instance.$el)
 
+  el.instance = instance
+
   await new Promise((resolve, reject) => {
     const img = document.createElement('img')
     img.onload = (response) => {
       resolve(img)
     }
-    img.onerre = (err) => {
+    img.onerror = (err) => {
       reject(err)
     }
     /* deal for Failed to execute 'toDataURL' on 'HTMLCanvasElement': Tainted canvases may not be exported */
@@ -81,7 +83,7 @@ export default async(el, opt) => {
     left: c.x,
     scale: 1
   })
-
+  // 结束 加载状态
   instance.loadingPic = false
 
   // done after dom updated
