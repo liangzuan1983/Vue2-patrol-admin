@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { findRobotStatusById } from '@object/api/dashboard'
+import { findRobotStatusList } from '@object/api/dashboard'
 
 import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 import BmMarker from 'vue-baidu-map/components/overlays/Marker.vue'
@@ -36,7 +36,7 @@ export default {
       isLoaded: true,
       APP_KEY: 'CdheGAoG7cgw72buOCzctrBoyuGtf7u7', // 百度API调用的KEY
       scrollWheelZoom: true, // 允许滚动
-      BMZoom: 19, // 百度地图的缩放比例
+      BMZoom: 8, // 百度地图的缩放比例
       robotIcon: {
         url: robotIcon,
         size: { width: 24, height: 24 },
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     fetchSourceData() {
-      findRobotStatusById().then(response => {
+      findRobotStatusList().then(response => {
         if (!Array.isArray(response.data)) return
         this.robotList = response.data
       })

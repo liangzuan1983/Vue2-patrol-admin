@@ -46,9 +46,9 @@ export function patrolReportGroupByDay(params) {
 }
 
 // 查询机器人的告警
-export function findRobotStatusById(params) {
+export function findRobotStatusList(params) {
   return request({
-    url: '/api/findRobotStatusById',
+    url: '/api/findRobotStatusList',
     method: 'get',
     params
   })

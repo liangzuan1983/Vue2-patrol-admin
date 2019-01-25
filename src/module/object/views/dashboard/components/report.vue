@@ -8,7 +8,7 @@
         <el-card class="box-card" v-for="(item, index) in source" :key="index" :body-style="{padding: '0 20px 20px 20px'}">
           <div slot="header" class="clearfix">
             <span>{{ item.robotName }}</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click.stop="handleExpand(item.deviceId)">展开</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text" @click.stop="handleExpand(item.id)">展开</el-button>
           </div>
           <div class="item">{{'巡逻时间：' + item.beginTime + ' 至 ' + item.endTime }}</div>
           <div class="item">{{'巡逻次数：第 ' + item.patrolNumber + ' 次' }}</div>
@@ -24,11 +24,33 @@
         <p>巡逻时间： {{patrolDetail.startTimeText}}  至  {{patrolDetail.endTimeText}}</p>
         <p style="margin-bottom: 5px">巡逻轨迹图片</p>
         <div class="fancybox-panel">
-          <p style="width: 100%; text-align: center;">暂无图片</p>
+          <p v-if="patrolDetail.locusPics && patrolDetail.locusPics.length < 1" style="width: 100%; text-align: center;">暂无图片</p>
+          <el-scrollbar v-else :vertical="false">
+            <div class="fancybox-panel__list">
+              <div class="fancybox-panel__item" v-for="(item, index) in patrolDetail.locusPics" :key="index">
+                <fancyBox :url="item.locusPic" width="200px" height="176px"></fancyBox>
+                <div class="extraText">
+                  <span style="float: left;">{{item.locusName || '无序号'}}</span>
+                  <span style="float: right;">{{item.patrolEndTime || '无时间'}}</span>
+                </div>
+              </div>
+            </div>
+          </el-scrollbar>
         </div>
         <p style="margin-bottom: 5px">告警图片</p>
         <div class="fancybox-panel">
-          <p style="width: 100%; text-align: center;">暂无图片</p>
+          <p v-if="patrolDetail.alarmPics && patrolDetail.alarmPics.length < 1" style="width: 100%; text-align: center;">暂无图片</p>
+          <el-scrollbar v-else :vertical="false">
+            <div class="fancybox-panel__list">
+              <div class="fancybox-panel__item" v-for="(item, index) in patrolDetail.alarmPics" :key="index">
+                <fancyBox :url="item.picInfos[0].picUrl" width="200px" height="176px"></fancyBox>
+                <div class="extraText">
+                  <span style="float: left;">{{item.alarmTypeName || '无序号'}}</span>
+                  <span style="float: right;">{{item.alarmTime || '无时间'}}</span>
+                </div>
+              </div>
+            </div>
+          </el-scrollbar>
         </div>
         <p style="margin-bottom: 5px">巡逻图片</p>
         <div class="fancybox-panel">
@@ -45,6 +67,67 @@
             </div>
           </el-scrollbar>
         </div>
+        <p style="margin-bottom: 5px">仪表记录列表</p>
+        <el-table :data="recordList.rows" header-cell-class-name="header-cell" height="300px" :row-key="rowKey" border fit highlight-current-row style="width: 100%">
+          <el-table-column align="center" label="设备编码">
+            <template slot-scope="scope">{{scope.row.dev_code}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="设备名称">
+            <template slot-scope="scope">{{scope.row.devName}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="面板编码">
+            <template slot-scope="scope">{{scope.row.panelCode}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="面板名称">
+            <template slot-scope="scope">{{scope.row.panelName}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="时间">
+            <template slot-scope="scope">{{scope.row.time}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="图片">
+            <template slot-scope="scope">
+              <fancy-box :url="scope.row.picUrl"></fancy-box>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="目标编号">
+            <template slot-scope="scope">{{scope.row.targetNo}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="目标名称">
+            <template slot-scope="scope">{{scope.row.targetName}}</template>
+          </el-table-column>
+           <el-table-column align="center" label="类型">
+            <template slot-scope="scope">{{scope.row.type}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="当前值">
+            <template slot-scope="scope">{{scope.row.currentValue}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="是否异常">
+            <template slot-scope="scope">{{scope.row.isError}}</template>
+          </el-table-column>
+        </el-table>
+        <p style="margin-bottom: 5px">热成像温度列表</p>
+        <el-table :data="temperatureRecordList.rows" header-cell-class-name="header-cell" height="300px" :row-key="rowKey" border fit highlight-current-row style="width: 100%">
+          <el-table-column align="center" label="检测点编号">
+            <template slot-scope="scope">{{scope.row.targetNo}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="监测点名称">
+            <template slot-scope="scope">{{scope.row.targetName}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="时间">
+            <template slot-scope="scope">{{scope.row.time}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="图片">
+            <template slot-scope="scope">
+              <fancy-box :url="scope.row.picUrl"></fancy-box>
+            </template>
+          </el-table-column>
+          <el-table-column align="center" label="检测值">
+            <template slot-scope="scope">{{scope.row.currentValue}}</template>
+          </el-table-column>
+          <el-table-column align="center" label="是否异常">
+            <template slot-scope="scope">{{scope.row.isError}}</template>
+          </el-table-column>
+        </el-table>
       </el-scrollbar>
     </el-dialog>
   </div>
@@ -77,6 +160,9 @@ export default {
   created() { this.fetchSourceData() },
   mounted() {},
   methods: {
+    rowKey(row) {
+      return row.id
+    },
     fetchSourceData() {
       findAllPatrolReport().then(response => {
         if (!Array.isArray(response.data)) return
@@ -88,15 +174,15 @@ export default {
       this.recordList = {}
       this.temperatureRecordList = {}
     },
-    handleExpand(deviceId) {
-      if (typeof deviceId === 'undefined') return
+    handleExpand(statId) {
+      if (typeof statId === 'undefined') return
       this.reset()
       this.dialogFormVisible = true
       this.$nextTick(() => {
         Promise.all([
-          findPatrolReportDetail({ deviceId }),
-          searchRecordList({ deviceId }),
-          searchTemperatureRecordList({ deviceId })
+          findPatrolReportDetail({ statId }),
+          searchRecordList(),
+          searchTemperatureRecordList()
         ]).then(([response1, response2, response3]) => {
           this.patrolDetail = response1.data
           this.recordList = response2.data
@@ -210,6 +296,12 @@ export default {
         margin-right: 30px;
       }
     }
+  }
+  .el-table {
+    margin-top: 15px;
+  }
+  .header-cell {
+    background-color: rgba(60, 172, 197, 0.4);
   }
 }
 </style>

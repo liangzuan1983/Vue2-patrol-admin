@@ -25,7 +25,8 @@
               <h1>巡逻日报</h1>
             </div>
             <div class="app-component__body">
-              <div class="statistics-tag" v-for="(value, key) in computedPatrolByDay" :key="key">
+              <p v-if="!computedPatrolByDay" style="text-align: center; width: 100%;">暂无数据</p>
+              <div v-else class="statistics-tag" v-for="(value, key) in computedPatrolByDay" :key="key">
                 <div class="statistics-tag__msg">
                   <countTo class="num" :startVal="0" :endVal="value" :duration="duration"></countTo>
                   <span class="subtitle">{{ key | filterName2 }}</span>
@@ -424,7 +425,7 @@ export default {
         this.alarmList = res.data.content
       })
       patrolReportGroupByDay().then(res => {
-        this.patrolByDay = res.data
+        this.patrolByDay = res.data[0]
       })
     },
     formatter(row, column, value) {
@@ -438,7 +439,13 @@ export default {
       return this.patrolByDay.patrolInfo.robotPatrols
     },
     computedPatrolByDay() {
-      if (!this.patrolByDay) return null
+      if (!this.patrolByDay || !this.patrolByDay.patrolInfo) {
+        return {
+          patrol: 0,
+          capture: 0,
+          robotNum: 0
+        }
+      }
       const { patrolTotal: patrol, captureTotal: capture, robotPatrols } = this.patrolByDay.patrolInfo
       return {
         patrol,
@@ -463,8 +470,9 @@ export default {
     computedAlarmTotalOption() {
       const { patrolByDay, alarmTotalOption } = this
 
-      if (!patrolByDay) return alarmTotalOption
+      if (!patrolByDay || !patrolByDay.patrolInfo) return alarmTotalOption
       const { patrolInfo } = patrolByDay
+
       const opt = {
         legend: {
           data: ['高级告警', '中级告警', '低级告警']
