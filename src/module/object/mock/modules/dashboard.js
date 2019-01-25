@@ -33,5 +33,41 @@ export default {
       ret: 1,
       data: [{ 'aerialHeight': '', 'gpsTime': null, 'temperatureAlarm': 0, 'xPosition_m': 0, 'useLaserToGPS': true, 'chargeConnectMode': '0', 'temperature': '33.0℃', 'latitude_L': 39.941239860946744, 'yPosition_m': 0, 'yPositionAerial': '', 'alphaRay2': '', 'electricity': '26%', 'latitudeWGS84': 39.934196, 'longitude': 113.462954, 'poisonGas': '0ppm', 'deviceId': 40, 'orientation': 0, 'PM25': '0μg/m³', 'longitudeWGS84': 116.31976, 'robotModel': '100', 'mileage': '', 'robotSn': 'GSRobot192.168.42.212', 'betaRay2': '', 'ptz': null, 'controlType': 2, 'dwLT': '', 'sH2S': '', 'humidityAlarm': 0, 'humidity': '13.9%', 'workModel': '3', 'lift': { 'robotCode': 'GSRobot192.168.42.212', 'height': 1 }, 'nASL': 0, 'xPosition': '1346.000000', 'azimuth': '', 'latitude': 23.181357, 'dwMTBF': '0', 'lineCode': '', 'prevPosID': '', 'alphaRay': '', 'co2': '0ppm', 'gridWidth': '2048', 'powerTemp': '0.0℃', 'isOnline': '在线', 'neutronRay': '', 'distance': '', 'name': '192.168.42.212', 'ypos': 0, 'extraInfo': '', 'longitude_L': 116.33246608461526, 'powerCount': '', 'betaRay': '', 'dwAWT': '', 'PM10': '0μg/m³', 'ifChargeTask': '0', 'speed': 0, 'nextID': '', 'yPosition': '261.000000', 'naviType': '1', 'xPositionAerial': '', 'mapName': '0117-RTK', 'ip': '192.168.42.212', 'xpos': 0, 'controlIp': '183.6.189.130:212', 'charge': '未充电', 'gridHeight': '1248', 'PM25Alarm': 0, 'address': '', 'workModelText': '一键到达', 'powerAnomaly': '', 'isInventory': '1', 'aerialWidth': '', 'gammaRay': '', 'sSO2': '' }]
     }
+  },
+  findPatrolReportDetail: config => {
+    return {
+      ret: 1,
+      data: { 'endTimeText': '2019-01-24 22:29:59', 'startTime': '2019-01-24 22:27:28', 'startTimeText': '2019-01-24 22:27:28', 'alarmPics': [], 'locusPics': [],
+        'patrolPics': [
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' },
+          { 'patrolId': 206113, 'beaconPoint': '103', 'beaconPointName': '', 'picInfos': [{ 'channelNum': 2, 'picUrl': 'http://www.gosunyun.com:8080/webdav/patrolImage/20190124/49/GSRobot192.168.42.213201901242229130123796835.jpeg', 'patrolPicTime': '22:29:13', 'picName': '' }], 'patrolTime': '2019-01-24 22:29:13' }
+        ], 'name': '192.168.42.213', 'lineName': '多机路径1', 'device_id': 49, 'endTime': '2019-01-24 22:29:59' }
+    }
+  },
+  searchRecordList: config => {
+    return {
+      ret: 1,
+      data: { 'rows': [], 'total': 0, 'pageSize': 20, 'currentPage': 1 }
+    }
+  },
+  searchTemperatureRecordList: config => {
+    return {
+      ret: 1,
+      data: { 'rows': [], 'total': 0, 'pageSize': 20, 'currentPage': 1 }
+    }
   }
 }

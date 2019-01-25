@@ -53,3 +53,30 @@ export function findRobotStatusById(params) {
     params
   })
 }
+
+// 查询巡逻日报 详情
+export function findPatrolReportDetail(params) {
+  return request({
+    url: '/api/findPatrolReportDetail',
+    method: 'get',
+    params
+  })
+}
+
+// 查询仪表记录列表
+export function searchRecordList(params) {
+  return request({
+    url: '/api/searchRecordList',
+    method: 'get',
+    params
+  })
+}
+
+// 查询热成像温度列表
+export function searchTemperatureRecordList(params) {
+  return request({
+    url: '/api/searchTemperatureRecordList',
+    method: 'get',
+    params
+  })
+}
