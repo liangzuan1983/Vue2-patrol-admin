@@ -420,12 +420,18 @@ export default {
     fetchSourceData() {
       getDevicesGroupByStatus().then(res => {
         this.statistics = res.data
+      }, (err) => {
+        console.log(err)
       })
       selectAlarmRecord({ limit: 20 }).then(res => {
         this.alarmList = res.data.content
+      }, (err) => {
+        console.log(err)
       })
       patrolReportGroupByDay().then(res => {
         this.patrolByDay = res.data[0]
+      }, (err) => {
+        console.log(err)
       })
     },
     formatter(row, column, value) {

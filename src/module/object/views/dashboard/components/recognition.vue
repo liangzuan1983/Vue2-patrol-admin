@@ -40,6 +40,8 @@ export default {
       searchFaceRecognitionInfo().then(response => {
         if (!Array.isArray(response.data.rows)) return
         this.source = response.data.rows.splice(0, 4)
+      }, (err) => {
+        console.log(err)
       })
     }
   }

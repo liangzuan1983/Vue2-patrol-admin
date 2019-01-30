@@ -71,6 +71,8 @@ export default {
       findRobotStatusList().then(response => {
         if (!Array.isArray(response.data)) return
         this.robotList = response.data
+      }, (err) => {
+        console.log(err)
       })
     },
     fetchDataByInterval() {

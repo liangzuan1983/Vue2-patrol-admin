@@ -8,7 +8,7 @@
         <el-card class="box-card" v-for="(item, index) in source" :key="index" :body-style="{padding: '0 20px 20px 20px'}">
           <div slot="header" class="clearfix">
             <span>{{ item.robotName }}</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click.stop="handleExpand(item.id)">展开</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text" @click.stop="handleExpand(item.id, item.beginTime, item.endTime)">展开</el-button>
           </div>
           <div class="item">{{'巡逻时间：' + item.beginTime + ' 至 ' + item.endTime }}</div>
           <div class="item">{{'巡逻次数：第 ' + item.patrolNumber + ' 次' }}</div>
@@ -20,8 +20,8 @@
 
     <el-dialog custom-class="report-dialog" :append-to-body="true" title="巡逻报表详情" :visible.sync="dialogFormVisible" :close-on-click-modal="closeOnClickModel" width="80%" top="8vh">
       <el-scrollbar>
-        <p>机器人：{{patrolDetail.name}}</p>
-        <p>巡逻时间： {{patrolDetail.startTimeText}}  至  {{patrolDetail.endTimeText}}</p>
+        <p>机器人：{{patrolDetail.name || '无'}}</p>
+        <p>巡逻时间： {{patrolDetail.startTimeText || '暂无'}}  至  {{patrolDetail.endTimeText || '暂无'}}</p>
         <p style="margin-bottom: 5px">巡逻轨迹图片</p>
         <div class="fancybox-panel">
           <p v-if="patrolDetail.locusPics && patrolDetail.locusPics.length < 1" style="width: 100%; text-align: center;">暂无图片</p>
@@ -174,22 +174,21 @@ export default {
       this.recordList = {}
       this.temperatureRecordList = {}
     },
-    handleExpand(statId) {
+    handleExpand(statId, beginTime, endTime) {
       if (typeof statId === 'undefined') return
       this.reset()
       this.dialogFormVisible = true
       this.$nextTick(() => {
         Promise.all([
           findPatrolReportDetail({ statId }),
-          searchRecordList(),
-          searchTemperatureRecordList()
+          searchRecordList({ beginTime, endTime }),
+          searchTemperatureRecordList({ beginTime, endTime })
         ]).then(([response1, response2, response3]) => {
-          this.patrolDetail = response1.data
+          this.patrolDetail = response1.data[0]
           this.recordList = response2.data
           this.temperatureRecordList = response3.data
-          console.log('1', response1)
-          console.log('2', response2)
-          console.log('3', response3)
+        }, (err) => {
+          console.log(err)
         })
       })
     }
